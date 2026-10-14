@@ -2,6 +2,7 @@ import re
 import sys
 
 from pathlib import Path
+from dataclasses import replace
 
 from sqlfluff.core import Linter
 
@@ -961,6 +962,17 @@ def remove_select_blank_lines(source):
 
 
 def format_sql(source, diagnostics=None):
+    # SQLFluff normalises CR/CRLF before assigning source offsets. Until a
+    # source map exists, do not parse or modify such input (including literals).
+    if "\r" in source:
+        warning = Diagnostic("SQLFMT-E003", source.count("\n", 0, source.index("\r")) + 1,
+                             "CR/CRLF: AST-позиции ненадёжны; исходный SQL сохранён без изменений")
+        if diagnostics is not None:
+            diagnostics.append(warning)
+        else:
+            emit_diagnostics([warning])
+        return source
+
     original_source = source
     source = normalize_groupby_header_comments(source)
     linter = Linter(dialect=DIALECT)
@@ -974,6 +986,32 @@ def format_sql(source, diagnostics=None):
         raise ValueError("Обнаружен нераспознанный SQL. Форматирование отменено.")
 
     edits = []
+    structural_warnings = []
+
+    def add_edits(segment, candidates):
+        """Keep each node's related edits atomic; reserve nested SELECT text."""
+        marker = segment.pos_marker
+        owner = f"{segment.get_type()}[{marker.source_slice.start}:{marker.source_slice.stop}]"
+        group = []
+        for candidate in candidates:
+            edit = (candidate if isinstance(candidate, Edit)
+                    else Edit(*candidate, "LEGACY-AST", owner))
+            if source[edit.start:edit.end] != edit.replacement:
+                group.append(replace(edit, group_id=owner))
+        children = [child for child in walk(segment)
+                    if child is not segment and child.is_type("select_statement")
+                    and child.pos_marker is not None]
+        for edit in group:
+            for child in children:
+                span = child.pos_marker.source_slice
+                if edit.start < span.stop and edit.end > span.start:
+                    structural_warnings.append(Diagnostic(
+                        "SQLFMT-E001", source.count("\n", 0, edit.start) + 1,
+                        f"Правка {edit.rule_id} ({owner}) [{edit.start}:{edit.end}] "
+                        f"затрагивает дочерний SELECT [{span.start}:{span.stop}]; "
+                        "вся группа пропущена"))
+                    return
+        edits.extend(group)
 
     for segment in walk(parsed.tree):
         if segment.is_type(
@@ -989,22 +1027,22 @@ def format_sql(source, diagnostics=None):
             if segment.is_type("from_clause"):
                 gap_edits = clause_gap_edits(source, segment)
                 if gap_edits is not None:
-                    edits.extend((e.start, e.end, e.replacement) for e in gap_edits)
+                    add_edits(segment, gap_edits)
                 continue
 
             if segment.is_type("select_clause") and has_comments:
                 comment_edits = commented_select_edits(source, segment)
                 if comment_edits is not None:
-                    edits.extend((e.start, e.end, e.replacement) for e in comment_edits)
+                    add_edits(segment, comment_edits)
                 else:
                     # Legacy fallback remains guarded until comment ownership
                     # is fully supported by the new AST-based formatter.
-                    edits.extend(format_commented_select(source, segment))
+                    add_edits(segment, format_commented_select(source, segment))
 
             elif segment.is_type("groupby_clause", "orderby_clause") and has_comments:
                 edit = format_commented_group_order(source, segment)
                 if edit is not None:
-                    edits.append(edit)
+                    add_edits(segment, [edit])
             else:
                 # Обычно нормализуем и уже многострочные списки.
                 # Исключение: комментарий после последнего элемента может
@@ -1029,21 +1067,20 @@ def format_sql(source, diagnostics=None):
                     if segment.is_type("select_clause"):
                         gap_edits = select_gap_edits(source, segment)
                         if gap_edits is not None:
-                            edits.extend((e.start, e.end, e.replacement) for e in gap_edits)
+                            add_edits(segment, gap_edits)
                             edit = None
                         else:
                             list_edit = normalize_simple_list(source, segment)
-                            edit = ((list_edit.start, list_edit.end, list_edit.replacement)
-                                    if list_edit is not None else None)
+                            edit = list_edit
                     else:
                         gap_edits = clause_gap_edits(source, segment)
                         if gap_edits is not None:
-                            edits.extend((e.start, e.end, e.replacement) for e in gap_edits)
+                            add_edits(segment, gap_edits)
                             edit = None
                         else:
                             edit = format_list_clause(source, segment)
                     if edit is not None:
-                        edits.append(edit)
+                        add_edits(segment, [edit])
 
         elif segment.is_type("join_clause"):
             has_nested_select = any(
@@ -1051,20 +1088,20 @@ def format_sql(source, diagnostics=None):
             )
 
             if has_nested_select:
-                edits.extend(format_nested_join(source, segment))
+                add_edits(segment, format_nested_join(source, segment))
             else:
                 edit = format_join_clause(source, segment)
                 if edit is not None:
-                    edits.append(edit)
+                    add_edits(segment, [edit])
 
             comment_spacing = format_join_comment_spacing(source, segment)
             if comment_spacing is not None:
-                edits.append(comment_spacing)
+                add_edits(segment, [comment_spacing])
 
         elif segment.is_type("where_clause"):
             edit = format_where_clause(source, segment)
             if edit is not None:
-                edits.append(edit)
+                add_edits(segment, [edit])
 
     # Этап 2: запрещаем AST-правки, затрагивающие комментарии и
     # литералы. Не пытаемся угадать принадлежность комментария.
@@ -1079,14 +1116,13 @@ def format_sql(source, diagnostics=None):
     # сохраняем приоритет короткой правки, но каждое отклонение диагностируем.
     planned, warnings = plan_edits(
         source,
-        [Edit(start, end, replacement, "LEGACY-AST", "formatter")
-         for start, end, replacement in edits],
+        edits,
         protected=[(span.start, span.end) for span in guarded],
     )
     if diagnostics is not None:
-        diagnostics.extend(comment_warnings + warnings)
+        diagnostics.extend(structural_warnings + comment_warnings + warnings)
     else:
-        emit_diagnostics(comment_warnings + warnings)
+        emit_diagnostics(structural_warnings + comment_warnings + warnings)
     result = apply_edits(source, planned)
 
     # Переходный этап 3: legacy-проходы больше не получают права
