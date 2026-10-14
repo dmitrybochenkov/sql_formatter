@@ -5,7 +5,7 @@ comment ownership is checked before proposing related gap edits.
 """
 import re
 from formatter_modules.formatter_edits import Edit
-from formatter_modules.formatter_protection import protected_spans
+from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans
 
 PATTERNS = {
     'groupby_clause': re.compile(r'GROUP\s+BY\b', re.I),
@@ -220,7 +220,7 @@ def commented_clause_gap_edits(source, clause, indent='    ', group=None):
     return edits
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False):
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -230,6 +230,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     include_joins opts flat queries into ordinary, direct JOIN ... ON gaps.
     include_comment_lists enables atomic comment-aware GROUP/ORDER gaps;
     an ambiguous list is left opaque while safe query boundaries are handled.
+    include_having enables HAVING predicates and their nested SELECT context.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -260,7 +261,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             clauses = [s for s in query.segments if s.is_code and not s.is_meta]
             by_type = {s.get_type(): s for s in clauses}
             allowed = {'select_clause', 'from_clause', 'where_clause'}
-            if include_simple and len(queries) == 1:
+            if include_simple and (len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
                     or not {'select_clause', 'from_clause'} <= set(by_type)):
@@ -422,7 +423,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 # Preserve B3.1's conservative refusal across comments in
                 # flat clause boundaries; nested brackets retain B3.2 rules.
                 clause_gap = boundary if len(queries) > 1 else gap
-                if include_comment_lists and right.is_type('groupby_clause', 'orderby_clause'):
+                if ((include_comment_lists and right.is_type('groupby_clause', 'orderby_clause'))
+                        or (include_having and right.is_type('having_clause'))):
                     clause_gap = join_boundary
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
@@ -462,7 +464,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         if item.is_type('comma') and 0 < i < len(items) - 1:
                             gap(stop(items[i - 1]), start(item), '\n' + base + '    ')
                             gap(stop(item), start(items[i + 1]), ' ')
-                # HAVING predicates and GROUP/ORDER expressions are opaque.
+                # HAVING uses its separate comparison-only handler below.
+                # GROUP/ORDER expressions stay opaque.
                 if not clause.is_type('select_clause', 'from_clause', 'where_clause'):
                     continue
                 leaves = [s for s in _owned_walk(clause) if not s.segments
@@ -514,9 +517,66 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         gap(stop(previous), start(operator), spacing)
                     if following is not None and not following.is_type('comment'):
                         gap(stop(operator), start(following), spacing)
+            having_vertical = False
+            having = by_type.get('having_clause')
+            if include_having and having is not None:
+                keyword = next(s for s in having.segments if s.is_type('keyword'))
+                predicate = next(s for s in having.segments
+                                 if s.is_code and not s.is_meta and s is not keyword)
+                # A bracketed predicate is one condition, even when it has ANDs.
+                ands = [s for s in predicate.segments if predicate.is_type('expression')
+                        and s.is_type('binary_operator') and s.raw_upper == 'AND']
+                having_vertical = bool(ands) and not any(
+                    s.is_type('binary_operator') and s.raw_upper == 'OR'
+                    for s in predicate.segments)
+                # Detached comments retain their attachment. Header comments
+                # are handled through separate gaps, never a broad replacement.
+                having_vertical = having_vertical and not any(
+                    start(having) <= p.start < stop(having) for p in ambiguous_comment_spans(source))
+                leaves = [s for s in _owned_walk(predicate) if not s.segments
+                          and not s.is_meta and s.pos_marker
+                          and not s.is_type('whitespace', 'newline')]
+                code_leaves = [s for s in leaves if not s.is_type('comment')]
+                has_prefix = bool(ands) and [s.raw for s in code_leaves
+                                             if stop(s) <= start(ands[0])] == ['1', '=', '1']
+                header_comments = [p for p in protected
+                                   if stop(keyword) <= p.start and p.end <= start(predicate)
+                                   and p.kind in ('line_comment', 'block_comment')]
+                if having_vertical and not has_prefix and header_comments:
+                    points = [(stop(keyword), header_comments[0].start)] + [
+                        (p.end, q.start) for p, q in zip(header_comments, header_comments[1:])
+                    ] + [(header_comments[-1].end, start(predicate))]
+                    for i, (a, b) in enumerate(points):
+                        if i == 0:
+                            gap(a, b, ' 1=1' + (' ' if '\n' not in source[a:b]
+                                                else '\n' + base + '    '))
+                        else:
+                            gap(a, b, '\n' + base + '    ' + ('AND ' if i == len(points) - 1 else ''))
+                else:
+                    gap(stop(keyword), start(predicate),
+                        ' 1=1\n' + base + '    AND ' if having_vertical and not has_prefix else ' ')
+                if having_vertical:
+                    for operator in ands:
+                        previous = next(s for s in reversed(code_leaves) if stop(s) <= start(operator))
+                        following = next(s for s in leaves if start(s) >= stop(operator))
+                        join_boundary(stop(previous), start(operator), '\n' + base + '    ')
+                        if not following.is_type('comment'):
+                            gap(stop(operator), start(following), ' ')
+                for operator in _owned_walk(predicate):
+                    if not operator.is_type('comparison_operator') or operator.raw not in (
+                            '=', '<', '>', '<=', '>=', '<>', '!=', '^='):
+                        continue
+                    spacing = '' if having_vertical and has_prefix and stop(operator) < start(ands[0]) else ' '
+                    previous = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)
+                    following = next((s for s in leaves if start(s) >= stop(operator)), None)
+                    if previous is not None and not previous.is_type('comment'):
+                        gap(stop(previous), start(operator), spacing)
+                    if following is not None and not following.is_type('comment'):
+                        gap(stop(operator), start(following), spacing)
             for clause in clauses:
                 container_level = level + (4 if clause.is_type('select_clause')
-                                           or (clause.is_type('where_clause') and vertical) else 0)
+                                           or (clause.is_type('where_clause') and vertical)
+                                           or (clause.is_type('having_clause') and having_vertical) else 0)
                 for bracket in _owned_walk(clause):
                     if not bracket.is_type('bracketed'):
                         continue

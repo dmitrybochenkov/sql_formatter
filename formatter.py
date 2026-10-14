@@ -814,9 +814,9 @@ def _validation_snapshot(source):
     tree = Linter(dialect=DIALECT).parse_string(source).tree
     if tree is None or any(s.is_type('unparsable') for s in walk(tree)):
         raise ValueError('Не удалось разобрать SQL для проверки сохранности')
-    tokens, comments, wheres, counts = [], [], {}, {}
+    tokens, comments, predicates, counts = [], [], {}, {}
     clause_headers = {'select_clause': 'SELECT', 'from_clause': 'FROM', 'where_clause': 'WHERE'}
-    scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause'}
+    scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause', 'having_clause'}
 
     def collect(node, context=(), parent=None):
         kind = node.get_type()
@@ -824,13 +824,13 @@ def _validation_snapshot(source):
             ordinal = counts.get(kind, 0)
             counts[kind] = ordinal + 1
             context = context + ((kind, ordinal),)
-        if node.is_type('where_clause'):
+        if node.is_type('where_clause', 'having_clause'):
             expression = next((s for s in node.segments if s.is_type('expression')), None)
             operators = [s.raw_upper for s in expression.segments
                          if s.is_type('binary_operator')] if expression is not None else []
             # Direct expression children exclude BETWEEN's keyword AND and
             # ANDs inside brackets/subqueries. Existing prefixes stay exact.
-            wheres[context] = (len(tokens) + 1, 'AND' in operators and 'OR' not in operators)
+            predicates[context] = (len(tokens) + 1, 'AND' in operators and 'OR' not in operators)
         if node.segments:
             for child in node.segments:
                 collect(child, context, node)
@@ -845,13 +845,13 @@ def _validation_snapshot(source):
             tokens.append((kind, node.raw, context, header))
 
     collect(tree)
-    return tokens, comments, wheres
+    return tokens, comments, predicates
 
 
 def validate_sql_unchanged(original, formatted):
     """Validate exact tokens, with two narrowly specified AST exceptions."""
-    before, before_comments, original_wheres = _validation_snapshot(original)
-    after, after_comments, formatted_wheres = _validation_snapshot(formatted)
+    before, before_comments, original_predicates = _validation_snapshot(original)
+    after, after_comments, formatted_predicates = _validation_snapshot(formatted)
     prefix = [('numeric_literal', '1'), ('raw_comparison_operator', '='),
               ('numeric_literal', '1'), ('binary_operator', 'AND')]
 
@@ -862,12 +862,12 @@ def validate_sql_unchanged(original, formatted):
         return values == prefix
 
     removed = set()
-    for context, (offset, eligible) in original_wheres.items():
-        candidate = formatted_wheres.get(context)
+    for context, (offset, eligible) in original_predicates.items():
+        candidate = formatted_predicates.get(context)
         if candidate is None:
             continue
         after_offset = candidate[0]
-        # Only an insertion in this particular WHERE may be discounted.
+        # Only an insertion in this particular WHERE/HAVING may be discounted.
         # Never remove a prefix that was present in the input or accept its
         # deletion. Exact comparison catches duplicates and all other edits.
         if eligible and not has_prefix(before, offset, existing=True) and has_prefix(after, after_offset):
@@ -1038,7 +1038,7 @@ def format_sql(source, diagnostics=None):
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
     nested_edits, nested_statements = nested_query_gap_edits(
-        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True)
+        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True, include_having=True)
     boundary_edits, boundary_warnings = plan_edits(
         source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],

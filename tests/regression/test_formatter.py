@@ -728,7 +728,7 @@ class B41ClauseContextTests(unittest.TestCase):
         ("SELECT a,b FROM t,u WHERE a=1 AND b='x' GROUP BY a,b ORDER BY a DESC,b;",
          GROUP_ORDER.replace('FROM t\n', "FROM t\n    , u\n\nWHERE 1=1\n    AND a = 1\n    AND b = 'x'\n")),
         ('SELECT a FROM t HAVING a>1 AND a<3 ORDER BY a;',
-         'SELECT\n    a\nFROM t\n\nHAVING a>1 AND a<3\n\nORDER BY a\n;\n'),
+         'SELECT\n    a\nFROM t\n\nHAVING 1=1\n    AND a > 1\n    AND a < 3\n\nORDER BY a\n;\n'),
         ('select a from t group by a,b order by a desc,b;',
          'SELECT\n    a\nFROM t\n\ngroup by\n    a\n    , b\n\norder by\n    a desc\n    , b\n;\n'),
         ("SELECT COALESCE(a,b) AS x FROM t GROUP BY COALESCE(a,b),'a,b' ORDER BY x DESC NULLS LAST,a;",
@@ -783,7 +783,7 @@ class B41ClauseContextTests(unittest.TestCase):
                 self.assertIn('FROM users a\n    , payments b\n\n', first)
                 self.assertEqual(format_sql(first, diagnostics=[]), first)
 
-    def test_having_predicate_bytes_are_opaque(self):
+    def test_having_predicate_bytes_are_preserved_with_b44_layout(self):
         from sqlfluff.core import Linter
         from formatter import walk
         source = "SELECT a FROM t WHERE a=1 AND b=2 GROUP BY a HAVING SUM(a+1)>2 AND MAX(b)='  x' ORDER BY a;"
@@ -791,9 +791,11 @@ class B41ClauseContextTests(unittest.TestCase):
         def having(sql):
             return next(s.raw for s in walk(Linter(dialect='teradata').parse_string(sql).tree)
                         if s.is_type('having_clause'))
-        self.assertEqual(having(source), having(first))
+        self.assertEqual(having(first), "HAVING 1=1\n    AND SUM(a+1) > 2\n    AND MAX(b) = '  x'")
+        from formatter import validate_sql_unchanged
+        validate_sql_unchanged(source, first)
         self.assertIn('WHERE 1=1', first)
-        self.assertNotIn('HAVING 1=1', first)
+        self.assertEqual(first.count('HAVING 1=1'), 1)
         self.assertEqual(format_sql(first, diagnostics=[]), first)
 
     def test_window_order_and_other_future_contexts_not_claimed(self):
@@ -1060,6 +1062,148 @@ class B43CommentedClauseTests(unittest.TestCase):
         self.assertEqual(diagnostics, [])
         validate_sql_unchanged(source, actual)
         self.assertEqual(format_sql(actual, diagnostics=[]), actual)
+
+class B44HavingTests(unittest.TestCase):
+    PREFIX = 'SELECT\n    a\nFROM t\n\nGROUP BY a\n\n'
+
+    def check_having(self, predicate, expected_predicate, header='HAVING'):
+        from formatter import validate_sql_unchanged
+        from formatter_modules.formatter_protection import protected_spans
+        source = 'SELECT a FROM t GROUP BY a ' + header + ' ' + predicate + ';'
+        expected = self.PREFIX + header + ' ' + expected_predicate + '\n;\n'
+        diagnostics = []
+        actual = format_sql(source, diagnostics=diagnostics)
+        self.assertEqual(actual, expected)
+        self.assertEqual(diagnostics, [])
+        second = []
+        self.assertEqual(format_sql(actual, diagnostics=second), actual)
+        self.assertEqual(second, [])
+        validate_sql_unchanged(source, actual)
+        def spans(sql):
+            return [(p.kind, sql[p.start:p.end]) for p in protected_spans(sql)]
+        self.assertEqual(spans(source), spans(actual))
+
+    def test_single_and_multiple_conditions(self):
+        self.check_having('COUNT(*)>1', 'COUNT(*) > 1')
+        self.check_having('COUNT(*)>1 AND SUM(a)>2 AND MAX(b)<=9',
+                          '1=1\n    AND COUNT(*) > 1\n    AND SUM(a) > 2\n    AND MAX(b) <= 9')
+
+    def test_between_or_and_brackets(self):
+        for source, expected in (
+            ('SUM(a) BETWEEN 1 AND 2', 'SUM(a) BETWEEN 1 AND 2'),
+            ('(SUM(a)>1 AND MAX(b)>2)', '(SUM(a) > 1 AND MAX(b) > 2)'),
+            ('SUM(a)>1 AND MAX(b)>2 OR MIN(c)>3', 'SUM(a) > 1 AND MAX(b) > 2 OR MIN(c) > 3'),
+            ('SUM(a) BETWEEN 1 AND 2 AND (MAX(b)>2 OR MIN(c)<3)',
+             '1=1\n    AND SUM(a) BETWEEN 1 AND 2\n    AND (MAX(b) > 2 OR MIN(c) < 3)')):
+            with self.subTest(source=source):
+                self.check_having(source, expected)
+
+    def test_case_literals_and_existing_prefix(self):
+        self.check_having("MAX(b)='HAVING AND 1=1' and SUM(a+1)>2",
+                          "1=1\n    AND MAX(b) = 'HAVING AND 1=1'\n    and SUM(a+1) > 2", header='having')
+        self.check_having('1=1 and COUNT(*)>1 AND SUM(a)>2',
+                          '1=1\n    and COUNT(*) > 1\n    AND SUM(a) > 2', header='HaViNg')
+
+    def test_comments_and_header_comments(self):
+        self.check_having("MAX(b)='OK' AND SUM(a)>1 -- left\nAND MIN(c)<9",
+                          "1=1\n    AND MAX(b) = 'OK'\n    AND SUM(a) > 1 -- left\n    AND MIN(c) < 9")
+        self.check_having('SUM(a)>1\n-- next\n/* keep\n bytes */\nAND MAX(b)>2',
+                          '1=1\n    AND SUM(a) > 1\n    -- next\n    /* keep\n bytes */\n    AND MAX(b) > 2')
+        self.check_having('-- header\nSUM(a)>1 AND MAX(b)>2',
+                          '1=1 -- header\n    AND SUM(a) > 1\n    AND MAX(b) > 2')
+        self.check_having('\n-- first\nSUM(a)>1 AND MAX(b)>2',
+                          '1=1\n    -- first\n    AND SUM(a) > 1\n    AND MAX(b) > 2')
+
+    def test_subquery_ands_do_not_trigger_outer_prefix(self):
+        self.check_having('SUM(a)>(SELECT x FROM u WHERE p=1 AND q=2)',
+                          'SUM(a) > (\n    SELECT\n        x\n    FROM u\n\n    WHERE 1=1\n        AND p = 1\n        AND q = 2\n)')
+        self.check_having('SUM(a)>(SELECT x FROM u WHERE p=1) AND MAX(b)>2',
+                          '1=1\n    AND SUM(a) > (\n        SELECT\n            x\n        FROM u\n\n        WHERE p = 1\n    )\n    AND MAX(b) > 2')
+        self.check_having('SUM(a)>(SELECT MAX(x) FROM u HAVING COUNT(*)>1 AND SUM(y)>2)',
+                          'SUM(a) > (\n    SELECT\n        MAX(x)\n    FROM u\n\n    HAVING 1=1\n        AND COUNT(*) > 1\n        AND SUM(y) > 2\n)')
+
+    def test_whitespace_variants_and_both_goldens(self):
+        from tests.contract.test_contract_golden import GOLDEN
+        from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12
+        for cases in (GOLDEN, V12):
+            source, expected = cases['having_two_ands']
+            for variant in (source, source.replace(' HAVING ', '\n        HAVING\n ').replace(' AND ', '\n AND ')):
+                self.assertEqual(format_sql(variant, diagnostics=[]), expected)
+            self.assertEqual(format_sql(expected, diagnostics=[]), expected)
+
+    def test_having_edits_are_atomic(self):
+        from sqlfluff.core import Linter
+        from formatter_modules.formatter_clause_gaps import nested_query_gap_edits
+        from formatter_modules.formatter_edits import plan_edits, Edit
+        from formatter_modules.formatter_protection import protected_spans
+        source = "SELECT a FROM t HAVING MAX(b)='OK' AND SUM(a)>1;"
+        tree = Linter(dialect='teradata').parse_string(source).tree
+        edits, owners = nested_query_gap_edits(source, tree, include_simple=True, include_having=True)
+        self.assertEqual(owners, {0})
+        self.assertEqual(len({e.group_id for e in edits}), 1)
+        spans = [(p.start, p.end) for p in protected_spans(source)]
+        accepted, warnings = plan_edits(source, edits, protected=spans)
+        self.assertEqual(warnings, [])
+        self.assertEqual(len(accepted), len(edits))
+        edit = next(e for e in edits if '1=1' in e.replacement)
+        accepted, warnings = plan_edits(source, edits, protected=spans + [(edit.start, edit.end)])
+        self.assertEqual(accepted, [])
+        self.assertTrue(any(d.code == 'SQLFMT-E002' for d in warnings))
+        accepted, warnings = plan_edits(source, [Edit(edit.start, edit.start, ' ', 'TEST')] + edits)
+        self.assertFalse(any(e.group_id for e in accepted))
+        self.assertTrue(any(d.code == 'SQLFMT-E001' for d in warnings))
+
+
+class B44HavingValidatorTests(unittest.TestCase):
+    def assert_valid(self, before, after):
+        from formatter import validate_sql_unchanged
+        validate_sql_unchanged(before, after)
+
+    def assert_invalid(self, before, after):
+        from formatter import validate_sql_unchanged
+        with self.assertRaises(ValueError):
+            validate_sql_unchanged(before, after)
+
+    def test_only_eligible_having_prefix_is_accepted(self):
+        for header in ('HAVING', 'having', 'HaViNg'):
+            source = f'SELECT a FROM t {header} a>1 and b<3;'
+            self.assert_valid(source, source.replace(header+' ', header+' 1=1 AND '))
+        source = 'SELECT a FROM t WHERE a=1 AND b=2 HAVING COUNT(*)>1 AND SUM(a)>2;'
+        self.assert_valid(source, source.replace('WHERE ', 'WHERE 1=1 AND ').replace('HAVING ', 'HAVING 1=1 AND '))
+
+    def test_single_or_between_and_bracketed_are_ineligible(self):
+        for predicate in ('a>1', 'a BETWEEN 1 AND 2', '(a>1 AND b<3)', 'a>1 AND b<3 OR c=4',
+                          'a>(SELECT x FROM u WHERE p=1 AND q=2)'):
+            source = 'SELECT a FROM t HAVING '+predicate+';'
+            self.assert_invalid(source, source.replace('HAVING ', 'HAVING 1=1 AND '))
+
+    def test_wrong_scopes_and_nested_having(self):
+        source = 'SELECT a FROM t HAVING a>(SELECT MAX(x) FROM u HAVING COUNT(*)>1 AND SUM(y)>2);'
+        self.assert_valid(source, source.replace('HAVING COUNT', 'HAVING 1=1 AND COUNT'))
+        self.assert_invalid(source, source.replace('HAVING a>', 'HAVING 1=1 AND a>'))
+        for source, location in (
+            ('SELECT a FROM t JOIN u ON t.a=u.a AND u.b=2 HAVING a>1 AND a<3;', 'ON '),
+            ('SELECT a FROM t HAVING a>1 AND a<3 QUALIFY a>1 AND b<3;', 'QUALIFY '),
+            ('SELECT a FROM t WHERE b=1 HAVING a>1 AND a<3;', 'WHERE ')):
+            self.assert_invalid(source, source.replace(location, location+'1=1 AND '))
+        source = 'SELECT a FROM t HAVING a>1 AND (b<3 AND c>4);'
+        self.assert_invalid(source, source.replace('(b', '(1=1 AND b'))
+
+    def test_duplicates_removal_changes_and_case_rejected(self):
+        source = "SELECT a FROM t having MAX(b)='OK' and SUM(a)>2;"
+        valid = source.replace('having ', 'having 1=1 AND ')
+        self.assert_valid(source, valid)
+        for candidate in (valid.replace('1=1 AND ', '1=1 AND 1=1 AND '),
+                          valid.replace("'OK'", "'ok'"), valid.replace('SUM(a)>2', 'SUM(a)>3'),
+                          valid.replace(' and SUM(a)>2', ''), valid.replace('having', 'HAVING'),
+                          valid.replace(' and ', ' AND '), valid.replace('MAX(b)', 'MAX(a)'),
+                          valid.replace('1=1', '2=2')):
+            with self.subTest(candidate=candidate):
+                self.assert_invalid(source, candidate)
+        self.assert_invalid(valid, source)
+        self.assert_invalid(valid, valid.replace('1=1 AND ', '1=1 AND 1=1 AND '))
+        commented = source.replace(' and ', ' /* exact */ and ')
+        self.assert_invalid(commented, commented.replace('having ', 'having 1=1 AND ').replace('/* exact */', '/* changed */'))
 
 
 if __name__ == "__main__":
