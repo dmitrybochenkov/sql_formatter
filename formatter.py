@@ -11,7 +11,7 @@ from formatter_modules.formatter_protection import protected_spans, ambiguous_co
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
-from formatter_modules.formatter_clause_gaps import clause_gap_edits
+from formatter_modules.formatter_clause_gaps import clause_gap_edits, simple_query_gap_edits
 from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
 
 DIALECT = "teradata"
@@ -985,8 +985,20 @@ def format_sql(source, diagnostics=None):
     if any(segment.is_type("unparsable") for segment in walk(parsed.tree)):
         raise ValueError("Обнаружен нераспознанный SQL. Форматирование отменено.")
 
+    # Prepare only simple root queries. Reparse after changing whitespace so
+    # all existing renderers and B2 checks use offsets from the same snapshot.
+    boundary_edits, boundary_warnings = plan_edits(
+        source, simple_query_gap_edits(source, parsed.tree),
+        protected=[(span.start, span.end) for span in protected_spans(source)],
+    )
+    if boundary_edits:
+        source = apply_edits(source, boundary_edits)
+        parsed = linter.parse_string(source)
+        if parsed.tree is None or any(s.is_type("unparsable") for s in walk(parsed.tree)):
+            raise ValueError("Не удалось разобрать SQL после оформления границ клауз.")
+
     edits = []
-    structural_warnings = []
+    structural_warnings = list(boundary_warnings)
 
     def add_edits(segment, candidates):
         """Keep each node's related edits atomic; reserve nested SELECT text."""

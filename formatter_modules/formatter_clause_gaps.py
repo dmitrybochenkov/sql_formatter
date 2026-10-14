@@ -70,3 +70,72 @@ def _walk(node):
     yield node
     for child in node.segments:
         yield from _walk(child)
+
+
+def simple_query_gap_edits(source, tree):
+    """Prepare whitespace in top-level SELECT/FROM/WHERE-only statements.
+
+    Run before existing clause renderers so they measure indentation from the
+    final clause lines. Never edit across comments, expressions or literals.
+    """
+    edits = []
+    for statement in tree.segments:
+        if not statement.is_type('statement'):
+            continue
+        query = next((s for s in statement.segments if s.is_type('select_statement')), None)
+        if query is None or query.pos_marker is None:
+            continue
+        nodes = list(_walk(query))
+        if (sum(s.is_type('select_statement') for s in nodes) != 1
+                or any(s.is_type('join_clause', 'over_clause', 'window_specification') for s in nodes)):
+            continue
+        clauses = [s for s in query.segments if s.is_code and not s.is_meta]
+        if ([s.get_type() for s in clauses] not in (
+                ['select_clause', 'from_clause'],
+                ['select_clause', 'from_clause', 'where_clause'])):
+            continue
+        select, from_clause = clauses[:2]
+        # Comma-table lists have conflicting legacy/golden expectations and
+        # remain outside this narrowly scoped pass.
+        if sum(s.is_type('from_expression_element') for s in _walk(from_clause)) != 1:
+            continue
+        start = query.pos_marker.source_slice.start
+        owner = f'simple-select[{start}:{query.pos_marker.source_slice.stop}]'
+
+        def gap(a, b, replacement):
+            raw = source[a:b]
+            if (not raw or raw.isspace()) and raw != replacement:
+                edits.append(Edit(a, b, replacement, 'SIMPLE-GAPS', owner, owner))
+
+        # Root query indentation is canonical, not inherited from random input.
+        line_start = source.rfind('\n', 0, start) + 1
+        gap(line_start, start, '')
+        for left, right in zip(clauses, clauses[1:]):
+            gap(left.pos_marker.source_slice.stop, right.pos_marker.source_slice.start,
+                '\n' if right.is_type('from_clause') else '\n\n')
+
+        # A single FROM target stays beside FROM, including quoted identifiers.
+        keyword = next(s for s in from_clause.segments if s.is_type('keyword'))
+        target = next(s for s in _walk(from_clause) if s.is_type('from_expression_element'))
+        gap(keyword.pos_marker.source_slice.stop, target.pos_marker.source_slice.start, ' ')
+
+        if len(clauses) < 3:
+            continue
+        where = clauses[2]
+        leaves = [s for s in _walk(where) if not s.segments and not s.is_meta
+                  and s.pos_marker and not s.is_type('whitespace', 'newline')]
+        # Comparison operators can contain several raw tokens (>=, <>). Work
+        # with the complete AST operator, never its individual characters.
+        for operator in _walk(where):
+            if not operator.is_type('comparison_operator') or not operator.pos_marker:
+                continue
+            if operator.raw not in ('=', '<', '>', '<=', '>=', '<>', '!=', '^='):
+                continue
+            a, b = operator.pos_marker.source_slice.start, operator.pos_marker.source_slice.stop
+            previous = next((s for s in reversed(leaves) if s.pos_marker.source_slice.stop <= a), None)
+            following = next((s for s in leaves if s.pos_marker.source_slice.start >= b), None)
+            if previous is not None and not previous.is_type('comment', 'inline_comment', 'block_comment'):
+                gap(previous.pos_marker.source_slice.stop, a, ' ')
+            if following is not None and not following.is_type('comment', 'inline_comment', 'block_comment'):
+                gap(b, following.pos_marker.source_slice.start, ' ')
+    return edits

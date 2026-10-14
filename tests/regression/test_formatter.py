@@ -247,8 +247,127 @@ class B2SafetyTests(unittest.TestCase):
         warnings = []
         first = format_sql(source, diagnostics=warnings)
         self.assertEqual(first, format_sql(first, diagnostics=[]))
-        self.assertEqual(first, "SELECT\n    'SELECT x FROM y' AS txt FROM t\n;\n")
+        self.assertEqual(first, "SELECT\n    'SELECT x FROM y' AS txt\nFROM t\n;\n")
         self.assertFalse(any('дочерний SELECT' in d.message for d in warnings))
+
+
+class B31SimpleQueryTests(unittest.TestCase):
+    CASES = [
+        ('SELECT id, name FROM users WHERE active=1;',
+         'SELECT\n    id\n    , name\nFROM users\n\nWHERE active = 1\n;\n'),
+        ('SELECT id FROM users;', 'SELECT\n    id\nFROM users\n;\n'),
+        ('SELECT u.id AS user_id,u.name display_name,u.age FROM users u;',
+         'SELECT\n    u.id AS user_id\n    , u.name display_name\n    , u.age\nFROM users u\n;\n'),
+        ('SELECT DISTINCT id,name FROM users;',
+         'SELECT DISTINCT\n    id\n    , name\nFROM users\n;\n'),
+        ('SELECT *,u.id FROM users u WHERE u.id>=10;',
+         'SELECT\n    *\n    , u.id\nFROM users u\n\nWHERE u.id >= 10\n;\n'),
+        ("SELECT 'a  b' AS txt,id FROM users WHERE name='it''s  fine';",
+         "SELECT\n    'a  b' AS txt\n    , id\nFROM users\n\nWHERE name = 'it''s  fine'\n;\n"),
+        ('SELECT id FROM users WHERE active=1 AND age>18;',
+         'SELECT\n    id\nFROM users\n\nWHERE 1=1\n    AND active = 1\n    AND age > 18\n;\n'),
+        ('SELECT id FROM users WHERE age BETWEEN 1 AND 5;',
+         'SELECT\n    id\nFROM users\n\nWHERE age BETWEEN 1 AND 5\n;\n'),
+    ]
+
+    def test_exact_simple_outputs(self):
+        for source, expected in self.CASES:
+            with self.subTest(source=source):
+                self.assertEqual(format_sql(source, diagnostics=[]), expected)
+
+    def test_simple_idempotence_independently(self):
+        # Do not hide second-pass failures behind exact-output assertions.
+        for source, _ in self.CASES:
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_simple_token_preservation_independently(self):
+        from formatter import validate_sql_unchanged, sql_tokens
+        for source, _ in self.CASES:
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                validate_sql_unchanged(source, first)
+                self.assertEqual(sql_tokens(source)[1], sql_tokens(first)[1])
+                self.assertFalse(any(d.code in ('SQLFMT-E001', 'SQLFMT-E002')
+                                     for d in self._diagnostics(source)))
+
+    @staticmethod
+    def _diagnostics(source):
+        diagnostics = []
+        format_sql(source, diagnostics=diagnostics)
+        return diagnostics
+
+    def test_whitespace_variants_have_one_result(self):
+        expected = self.CASES[0][1]
+        for source in (
+            'SELECT id,name FROM users WHERE active=1;',
+            '  SELECT  id ,  name\n\n  FROM   users\n WHERE active = 1 ;',
+            '\tSELECT\n id\n, name\n\nFROM\n users\n\n\nWHERE active=1\n;',
+        ):
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertEqual(first, expected)
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_comparison_operators_remain_whole(self):
+        from formatter import sql_tokens
+        for operator in ('=', '<', '>', '<=', '>=', '<>', '!='):
+            source = f'SELECT id FROM users WHERE age{operator}18;'
+            with self.subTest(operator=operator):
+                first = format_sql(source, diagnostics=[])
+                self.assertIn(f'WHERE age {operator} 18\n;', first)
+                self.assertEqual(sql_tokens(source), sql_tokens(first))
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_comment_attachment_and_literal_bytes(self):
+        from formatter import sql_tokens
+        cases = [
+            ("SELECT id, -- identifier\n name FROM users WHERE name='a  b';",
+             'id -- identifier\n    , name\nFROM users'),
+            ('SELECT\n-- identifier\nid FROM users;',
+             'SELECT\n    -- identifier\n    id\nFROM users'),
+            ('SELECT id -- final field\nFROM users\n-- active only\nWHERE active=1;',
+             'id -- final field\nFROM users\n-- active only\nWHERE active = 1'),
+            ('SELECT id FROM users WHERE active/* keep */=1;',
+             'active/* keep */= 1'),
+        ]
+        for source, fragment in cases:
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertIn(fragment, first)
+                self.assertEqual(sql_tokens(source), sql_tokens(first))
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_new_pass_skips_out_of_scope_constructs(self):
+        from sqlfluff.core import Linter
+        from formatter_modules.formatter_clause_gaps import simple_query_gap_edits
+        cases = [
+            'WITH c AS (SELECT id FROM t) SELECT id FROM c;',
+            'SELECT id FROM t WHERE id IN (SELECT id FROM u);',
+            'SELECT t.id FROM t JOIN u ON t.id=u.id;',
+            'SELECT id FROM t QUALIFY ROW_NUMBER() OVER (ORDER BY id)=1;',
+            'SELECT ROW_NUMBER() OVER (ORDER BY id) FROM t;',
+            'SELECT id FROM t GROUP BY id;',
+            'SELECT id FROM t UNION ALL SELECT id FROM u;',
+            'SELECT a.id FROM a,b;',
+        ]
+        for source in cases:
+            with self.subTest(source=source):
+                tree = Linter(dialect='teradata').parse_string(source).tree
+                self.assertEqual(simple_query_gap_edits(source, tree), [])
+
+    def test_boundary_pass_edits_only_whitespace(self):
+        from sqlfluff.core import Linter
+        from formatter_modules.formatter_clause_gaps import simple_query_gap_edits
+        source = '  SELECT id, name FROM users WHERE active>=1;'
+        tree = Linter(dialect='teradata').parse_string(source).tree
+        edits = simple_query_gap_edits(source, tree)
+        self.assertTrue(edits)
+        for edit in edits:
+            self.assertFalse(source[edit.start:edit.end].strip())
+            self.assertFalse(edit.replacement.strip())
+            self.assertIsNotNone(edit.group_id)
 
 if __name__ == "__main__":
     unittest.main()
