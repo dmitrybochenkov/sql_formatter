@@ -149,10 +149,12 @@ def _owned_walk(node):
             yield from _owned_walk(child)
 
 
-def nested_query_gap_edits(source, tree):
-    """Prepare supported nested queries using AST context, not input columns.
+def nested_query_gap_edits(source, tree, include_simple=False):
+    """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
+    include_simple extends the same rules to flat queries and FROM lists;
+    the default retains the B3.2 helper's supported scope.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -166,7 +168,7 @@ def nested_query_gap_edits(source, tree):
             continue
         nodes = list(_walk(root))
         queries = [s for s in nodes if s.is_type('select_statement')]
-        if len(queries) < 2 or any(s.is_type(
+        if (len(queries) < 2 and not include_simple) or any(s.is_type(
                 'join_clause', 'over_clause', 'window_specification',
                 'set_expression', 'with_compound_statement') for s in nodes):
             continue
@@ -177,8 +179,9 @@ def nested_query_gap_edits(source, tree):
                     ['select_clause', 'from_clause'],
                     ['select_clause', 'from_clause', 'where_clause']):
                 break
-            if sum(s.is_type('from_expression_element')
-                   for s in _owned_walk(clauses[1])) != 1:
+            if (sum(s.is_type('from_expression_element')
+                    for s in _owned_walk(clauses[1])) != 1
+                    and not (include_simple and len(queries) == 1)):
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
@@ -203,6 +206,16 @@ def nested_query_gap_edits(source, tree):
         def gap(a, b, replacement):
             raw = source[a:b]
             if (not raw or raw.isspace()) and raw != replacement:
+                # B2 correctly rejects an insertion at a replacement's start.
+                # A compact `(select` needs one combined header edit instead.
+                if a == b:
+                    for i, edit in enumerate(edits):
+                        if (edit.group_id == group and edit.rule_id == 'CLAUSE-CASE'
+                                and edit.start == a
+                                and edit.replacement == source[edit.start:edit.end].upper()):
+                            edits[i] = Edit(a, edit.end, replacement + edit.replacement,
+                                            'CLAUSE-CASE', group, group)
+                            return
                 edits.append(Edit(a, b, replacement, 'NESTED-GAPS', group, group))
 
         def boundary(a, b, replacement):
@@ -234,14 +247,50 @@ def nested_query_gap_edits(source, tree):
         def render(query, level):
             clauses = clauses_by_id[id(query)]
             base = ' ' * level
+            for clause in clauses:
+                keyword = next(s for s in clause.segments if s.is_type('keyword'))
+                if keyword.raw_upper in ('SELECT', 'FROM', 'WHERE') and keyword.raw != keyword.raw_upper:
+                    for i, edit in enumerate(edits):
+                        if (edit.group_id == group and edit.rule_id == 'NESTED-GAPS'
+                                and edit.start == edit.end == start(keyword)):
+                            edits[i] = Edit(start(keyword), stop(keyword), edit.replacement + keyword.raw_upper,
+                                            'CLAUSE-CASE', group, group)
+                            break
+                    else:
+                        edits.append(Edit(start(keyword), stop(keyword), keyword.raw_upper,
+                                          'CLAUSE-CASE', group, group))
             for left, right in zip(clauses, clauses[1:]):
-                boundary(stop(left), start(right),
-                         ('\n' if right.is_type('from_clause') else '\n\n') + base)
+                # Preserve B3.1's conservative refusal across comments in
+                # flat clause boundaries; nested brackets retain B3.2 rules.
+                clause_gap = boundary if len(queries) > 1 else gap
+                clause_gap(stop(left), start(right),
+                           ('\n' if right.is_type('from_clause') else '\n\n') + base)
             from_clause = clauses[1]
             keyword = next(s for s in from_clause.segments if s.is_type('keyword'))
             target = next(s for s in _owned_walk(from_clause)
                           if s.is_type('from_expression_element'))
             gap(stop(keyword), start(target), ' ')
+            # Direct FROM expressions only: commas inside expressions are not
+            # table separators. Keep the first target beside its header.
+            targets = [s for s in from_clause.segments if s.is_type('from_expression')]
+            commas = [s for s in from_clause.segments if s.is_type('comma')]
+            if len(targets) > 1 and len(commas) == len(targets) - 1:
+                for left, comma, right in zip(targets, commas, targets[1:]):
+                    gap(stop(left), start(comma), '\n' + base + '    ')
+                    gap(stop(comma), start(right), ' ')
+            for clause in clauses:
+                leaves = [s for s in _owned_walk(clause) if not s.segments
+                          and not s.is_meta and s.pos_marker
+                          and not s.is_type('whitespace', 'newline')]
+                for operator in _owned_walk(clause):
+                    if not (operator.is_type('binary_operator') and operator.raw in ('+', '-', '*', '/', '%', '||')):
+                        continue
+                    previous = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)
+                    following = next((s for s in leaves if start(s) >= stop(operator)), None)
+                    if previous is not None and not previous.is_type('comment'):
+                        gap(stop(previous), start(operator), ' ')
+                    if following is not None and not following.is_type('comment'):
+                        gap(stop(operator), start(following), ' ')
             vertical = False
             if len(clauses) == 3:
                 where = clauses[2]
@@ -275,9 +324,9 @@ def nested_query_gap_edits(source, tree):
                     spacing = '' if vertical and has_prefix and stop(operator) < start(ands[0]) else ' '
                     previous = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)
                     following = next((s for s in leaves if start(s) >= stop(operator)), None)
-                    if previous is not None:
+                    if previous is not None and not previous.is_type('comment'):
                         gap(stop(previous), start(operator), spacing)
-                    if following is not None:
+                    if following is not None and not following.is_type('comment'):
                         gap(stop(operator), start(following), spacing)
             for clause in clauses:
                 container_level = level + (4 if clause.is_type('select_clause')

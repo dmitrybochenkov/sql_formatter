@@ -81,6 +81,22 @@ def commented_select_edits(source, clause):
                     edits.append(Edit(comment.end, right, '\n' + indent + ', ',
                                       'COMMENT-LIST', 'leading-comma-after-comment'))
                     continue
+        # A trailing comma before standalone comments belongs to the next
+        # field's delimiter. Move it through whitespace-only atomic edits.
+        if (all(ce <= p.start for p in gap_comments)
+                and not before.strip()
+                and re.fullmatch(r'[ \t]*\n[ \t]*', source[ce:gap_comments[0].start])
+                and _standalone_chain(source, gap_comments, ce, right)):
+            edits.append(Edit(left, gap_comments[0].start, '\n' + indent,
+                              'COMMENT-LIST', 'remove-comma-before-comment'))
+            _indent_comment_chain(source, gap_comments, right, indent, edits)
+            # The last helper edit has this exact end range. Replace it so
+            # the comma insertion cannot conflict with a whitespace edit.
+            last = gap_comments[-1]
+            edits = [e for e in edits if not (e.start == last.end and e.end == right)]
+            edits.append(Edit(last.end, right, '\n' + indent + ', ',
+                              'COMMENT-LIST', 'comma-after-standalone-comments'))
+            continue
         # Standalone comments immediately above the next item, with a
         # leading comma before the item, are unambiguously attached to it.
         if (cs > left and ce <= right and

@@ -11,7 +11,7 @@ from formatter_modules.formatter_protection import protected_spans, ambiguous_co
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
-from formatter_modules.formatter_clause_gaps import clause_gap_edits, simple_query_gap_edits, nested_query_gap_edits
+from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits
 from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
 
 DIALECT = "teradata"
@@ -809,42 +809,87 @@ def remove_formatter_where_prefix(tokens):
     return result
 
 
+def _validation_snapshot(source):
+    """Keep clause ownership alongside exact tokens; never casefold SQL text."""
+    tree = Linter(dialect=DIALECT).parse_string(source).tree
+    if tree is None or any(s.is_type('unparsable') for s in walk(tree)):
+        raise ValueError('Не удалось разобрать SQL для проверки сохранности')
+    tokens, comments, wheres, counts = [], [], {}, {}
+    clause_headers = {'select_clause': 'SELECT', 'from_clause': 'FROM', 'where_clause': 'WHERE'}
+    scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause'}
+
+    def collect(node, context=(), parent=None):
+        kind = node.get_type()
+        if kind in scoped:
+            ordinal = counts.get(kind, 0)
+            counts[kind] = ordinal + 1
+            context = context + ((kind, ordinal),)
+        if node.is_type('where_clause'):
+            expression = next((s for s in node.segments if s.is_type('expression')), None)
+            operators = [s.raw_upper for s in expression.segments
+                         if s.is_type('binary_operator')] if expression is not None else []
+            # Direct expression children exclude BETWEEN's keyword AND and
+            # ANDs inside brackets/subqueries. Existing prefixes stay exact.
+            wheres[context] = (len(tokens) + 1, 'AND' in operators and 'OR' not in operators)
+        if node.segments:
+            for child in node.segments:
+                collect(child, context, node)
+        elif node.is_meta or node.is_type('whitespace', 'newline', 'end_of_file'):
+            return
+        elif node.is_type('comment'):
+            comments.append(node.raw)
+        else:
+            header = (parent is not None and parent.get_type() in clause_headers
+                      and node.is_type('keyword')
+                      and node.raw_upper == clause_headers[parent.get_type()])
+            tokens.append((kind, node.raw, context, header))
+
+    collect(tree)
+    return tokens, comments, wheres
+
+
 def validate_sql_unchanged(original, formatted):
-    """Проверяет сохранность SQL-токенов и комментариев."""
-    import difflib
+    """Validate exact tokens, with two narrowly specified AST exceptions."""
+    before, before_comments, original_wheres = _validation_snapshot(original)
+    after, after_comments, formatted_wheres = _validation_snapshot(formatted)
+    prefix = [('numeric_literal', '1'), ('raw_comparison_operator', '='),
+              ('numeric_literal', '1'), ('binary_operator', 'AND')]
 
-    before_tokens, before_comments = sql_tokens(original)
-    after_tokens, after_comments = sql_tokens(formatted)
+    def has_prefix(tokens, offset, existing=False):
+        values = [(t[0], t[1]) for t in tokens[offset:offset + 4]]
+        if existing and len(values) == 4 and values[3][0] == 'binary_operator':
+            values[3] = (values[3][0], values[3][1].upper())
+        return values == prefix
 
-    # Нормализуем служебный WHERE 1=1 AND с обеих сторон.
-    normalized_before = remove_formatter_where_prefix(before_tokens)
-    normalized_after = remove_formatter_where_prefix(after_tokens)
+    removed = set()
+    for context, (offset, eligible) in original_wheres.items():
+        candidate = formatted_wheres.get(context)
+        if candidate is None:
+            continue
+        after_offset = candidate[0]
+        # Only an insertion in this particular WHERE may be discounted.
+        # Never remove a prefix that was present in the input or accept its
+        # deletion. Exact comparison catches duplicates and all other edits.
+        if eligible and not has_prefix(before, offset, existing=True) and has_prefix(after, after_offset):
+            removed.update(range(after_offset, after_offset + 4))
+    after = [t for i, t in enumerate(after) if i not in removed]
 
-    # Проверяем SQL-токены.
-    if normalized_before != normalized_after:
-        diff = "".join(
-            difflib.unified_diff(
-                [f"{kind}: {value!r}\n" for kind, value in normalized_before],
-                [f"{kind}: {value!r}\n" for kind, value in normalized_after],
-                fromfile="Исходный SQL",
-                tofile="Отформатированный SQL",
-            )
-        )
+    def same(left, right):
+        if left == right:
+            return True
+        kind, raw, context, header = left
+        return (header and right[3] and kind == right[0] == 'keyword'
+                and context == right[2] and raw.upper() == right[1])
 
-        raise ValueError("Форматирование изменило SQL-токены!\n" + diff)
-
-    # Проверяем сохранность и порядок комментариев.
+    if len(before) != len(after) or any(not same(a, b) for a, b in zip(before, after)):
+        import difflib
+        diff = ''.join(difflib.unified_diff(
+            [f'{t[0]}: {t[1]!r} ({t[2]})\n' for t in before],
+            [f'{t[0]}: {t[1]!r} ({t[2]})\n' for t in after],
+            fromfile='Исходный SQL', tofile='Отформатированный SQL'))
+        raise ValueError('Форматирование изменило SQL-токены или их принадлежность!\n' + diff)
     if before_comments != after_comments:
-        diff = "".join(
-            difflib.unified_diff(
-                [f"{comment!r}\n" for comment in before_comments],
-                [f"{comment!r}\n" for comment in after_comments],
-                fromfile="Исходные комментарии",
-                tofile="Отформатированные комментарии",
-            )
-        )
-
-        raise ValueError("Форматирование изменило комментарии!\n" + diff)
+        raise ValueError('Форматирование изменило комментарии!')
 
 
 def normalize_groupby_header_comments(source):
@@ -992,9 +1037,9 @@ def format_sql(source, diagnostics=None):
 
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
-    nested_edits, nested_statements = nested_query_gap_edits(source, parsed.tree)
+    nested_edits, nested_statements = nested_query_gap_edits(source, parsed.tree, include_simple=True)
     boundary_edits, boundary_warnings = plan_edits(
-        source, simple_query_gap_edits(source, parsed.tree) + nested_edits,
+        source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
     )
     rejected_groups = ({e.group_id for e in nested_edits}
@@ -1011,8 +1056,20 @@ def format_sql(source, diagnostics=None):
     nested_wheres = {id(s) for i, statement in enumerate(statements)
                      if i in nested_statements for s in walk(statement)
                      if s.is_type('where_clause')}
+    nested_froms = {id(s) for i, statement in enumerate(statements)
+                   if i in nested_statements for s in walk(statement)
+                   if s.is_type('from_clause')}
     edits = []
     structural_warnings = list(boundary_warnings)
+    for segment in walk(parsed.tree):
+        if id(segment) not in nested_wheres:
+            continue
+        expression = next(s for s in segment.segments if s.is_type('expression'))
+        operators = {s.raw_upper for s in expression.segments if s.is_type('binary_operator')}
+        if {'AND', 'OR'} <= operators:
+            structural_warnings.append(Diagnostic(
+                'SQLFMT-W001', source.count('\n', 0, segment.pos_marker.source_slice.start) + 1,
+                'Смешанные AND/OR верхнего уровня: WHERE не перестраивается'))
 
     def add_edits(segment, candidates):
         """Keep each node's related edits atomic; reserve nested SELECT text."""
@@ -1051,6 +1108,8 @@ def format_sql(source, diagnostics=None):
             )
 
             if segment.is_type("from_clause"):
+                if id(segment) in nested_froms:
+                    continue
                 gap_edits = clause_gap_edits(source, segment)
                 if gap_edits is not None:
                     add_edits(segment, gap_edits)

@@ -529,5 +529,192 @@ class B32NestedQueryTests(unittest.TestCase):
                 self.assertEqual(nested_query_gap_edits(source, Linter(dialect='teradata').parse_string(source).tree), ([], set()))
 
 
+
+class B33BasicClauseTests(unittest.TestCase):
+    CASES = [
+        ('select id from users where active = 1;',
+         'SELECT\n    id\nFROM users\n\nWHERE active = 1\n;\n'),
+        ('SeLeCt Id from Users WhErE active=1;',
+         'SELECT\n    Id\nFROM Users\n\nWHERE active = 1\n;\n'),
+        ("select 'select FROM where' AS \"where\",MixedName from MixedTable where MixedName='WHERE';",
+         "SELECT\n    'select FROM where' AS \"where\"\n    , MixedName\nFROM MixedTable\n\nWHERE MixedName = 'WHERE'\n;\n"),
+        ('SELECT a.id,b.name FROM a,b;',
+         'SELECT\n    a.id\n    , b.name\nFROM a\n    , b\n;\n'),
+        ('SELECT id,\n-- first\n-- second\nname FROM users;',
+         'SELECT\n    id\n    -- first\n    -- second\n    , name\nFROM users\n;\n'),
+        ("SELECT id FROM t WHERE active=1 AND (country='RU' OR country='BY');",
+         "SELECT\n    id\nFROM t\n\nWHERE 1=1\n    AND active = 1\n    AND (country = 'RU' OR country = 'BY')\n;\n"),
+        ('SELECT x+y AS total,-x AS neg,COUNT(*) AS n FROM t;',
+         'SELECT\n    x + y AS total\n    , -x AS neg\n    , COUNT(*) AS n\nFROM t\n;\n'),
+        ('select distinct Id from Users where a=1 and b=2;',
+         'SELECT distinct\n    Id\nFROM Users\n\nWHERE 1=1\n    AND a = 1\n    and b = 2\n;\n'),
+    ]
+
+    def test_exact_basic_outputs(self):
+        for source, expected in self.CASES:
+            with self.subTest(source=source):
+                self.assertEqual(format_sql(source, diagnostics=[]), expected)
+
+    def test_basic_idempotence_independently(self):
+        for source, _ in self.CASES:
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertEqual(first, format_sql(first, diagnostics=[]))
+
+    def test_basic_validation_independently(self):
+        from formatter import validate_sql_unchanged
+        for source, _ in self.CASES:
+            with self.subTest(source=source):
+                validate_sql_unchanged(source, format_sql(source, diagnostics=[]))
+
+    def test_all_nine_former_basic_failures_match_existing_goldens(self):
+        from tests.contract.test_contract_golden import GOLDEN
+        from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12
+        from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE
+        for collection in (GOLDEN, V12):
+            for name in ('from_multiple_tables', 'comment_above_element', 'where_or_inside_parentheses'):
+                source, expected = collection[name]
+                with self.subTest(name=name, collection=id(collection)):
+                    actual = format_sql(source, diagnostics=[])
+                    self.assertEqual(actual, expected)
+                    self.assertEqual(format_sql(actual, diagnostics=[]), actual)
+        source, expected = EDGE['consecutive_comment_lines']
+        self.assertEqual(format_sql(source, diagnostics=[]), expected)
+        self.assertIn('x + y', format_sql('SELECT x+y AS total FROM t;', diagnostics=[]))
+        warnings = []
+        source = 'SELECT id FROM t WHERE a=1 AND b=2 OR c=3;'
+        actual = format_sql(source, diagnostics=warnings)
+        self.assertTrue(any(d.code == 'SQLFMT-W001' for d in warnings))
+        self.assertNotIn('WHERE 1=1', actual)
+        self.assertEqual(format_sql(actual, diagnostics=[]), actual)
+
+    def test_nested_mixed_case_headers_and_prefix_are_stable(self):
+        from formatter import validate_sql_unchanged
+        source = 'select id from t where a=1 AND id IN (sElEcT x from u where b=2 AND c=3);'
+        warnings = []
+        first = format_sql(source, diagnostics=warnings)
+        self.assertEqual(warnings, [])
+        self.assertEqual(first.count('WHERE 1=1'), 2)
+        self.assertIn('        SELECT\n            x\n        FROM u', first)
+        validate_sql_unchanged(source, first)
+        self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_compact_header_boundaries_are_atomic_and_stable(self):
+        from formatter import validate_sql_unchanged
+        for source in ('select id from t where id IN (select x from u);',
+                       'select q.x from(select x from u) q;'):
+            with self.subTest(source=source):
+                warnings = []
+                first = format_sql(source, diagnostics=warnings)
+                self.assertEqual(warnings, [])
+                self.assertIn('\nFROM ', first)
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+                validate_sql_unchanged(source, first)
+
+    def test_operator_spacing_preserves_comments_literals_and_unary_signs(self):
+        from formatter import sql_tokens, validate_sql_unchanged
+        for source in (
+                "SELECT x/* keep */+y, -x, x*-2, 'a+b' AS txt FROM t;",
+                'SELECT x -- attached to x\n+y FROM t;',
+                'SELECT x+y*z/2, x||y FROM t WHERE a+1>=2;',
+                'SELECT id FROM t WHERE a -- attached to a\n=1;',
+                'SELECT id FROM t WHERE a=/* keep */1;'):
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertEqual(sql_tokens(source), sql_tokens(first))
+                validate_sql_unchanged(source, first)
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+    def test_prefix_stays_single_and_between_is_not_an_and_chain(self):
+        for source, count in (
+                ('SELECT id FROM t WHERE a BETWEEN 1 AND 2;', 0),
+                ('SELECT id FROM t WHERE a=1;', 0),
+                ('SELECT id FROM t WHERE a BETWEEN 1 AND 2 AND b=3;', 1),
+                ('SELECT id FROM t WHERE 1=1 AND a=1 AND b=2;', 1),
+                ('SELECT id FROM t WHERE 1=1 and a=1;', 1),
+                ('SELECT id FROM t WHERE id IN (SELECT x FROM u WHERE a=1 AND b=2);', 1)):
+            with self.subTest(source=source):
+                first = format_sql(source, diagnostics=[])
+                self.assertEqual(first.count('WHERE 1=1'), count)
+                self.assertEqual(format_sql(first, diagnostics=[]), first)
+
+
+class B33StrictValidatorTests(unittest.TestCase):
+    def assertAccepted(self, source, candidate):
+        from formatter import validate_sql_unchanged
+        validate_sql_unchanged(source, candidate)
+
+    def assertRejected(self, source, candidate):
+        from formatter import validate_sql_unchanged
+        with self.assertRaises(ValueError):
+            validate_sql_unchanged(source, candidate)
+
+    def test_only_ast_clause_headers_can_be_uppercased(self):
+        source = "select distinct Id as Alias from MixedTable where Id in ('select FROM WHERE');"
+        self.assertAccepted(source, source)
+        self.assertAccepted(source, source.replace('select distinct', 'SELECT distinct')
+                            .replace('from MixedTable', 'FROM MixedTable').replace('where Id', 'WHERE Id'))
+        for old, new in (('distinct', 'DISTINCT'), (' as ', ' AS '), (' in ', ' IN '),
+                         ('Id', 'ID'), ('Alias', 'ALIAS'), ('MixedTable', 'MIXEDTABLE'),
+                         ("'select FROM WHERE'", "'SELECT FROM WHERE'")):
+            with self.subTest(old=old):
+                self.assertRejected(source, source.replace(old, new))
+        self.assertRejected('SELECT id FROM t;', 'select id FROM t;')
+        self.assertRejected('sEleCt id FROM t;', 'Select id FROM t;')
+        self.assertRejected('SEL id FROM t;', 'SELECT id FROM t;')
+        self.assertRejected('SELECT "where" FROM t;', 'SELECT "WHERE" FROM t;')
+        self.assertRejected('SELECT id FROM t -- where\n;', 'SELECT id FROM t -- WHERE\n;')
+
+    def test_tokens_order_types_and_clause_ownership_remain_strict(self):
+        source = 'SELECT id FROM t WHERE a=1 AND b=2;'
+        for candidate in (
+                'SELECT id FROM t HAVING a=1 AND b=2;',
+                'SELECT id FROM t WHERE b=2 AND a=1;',
+                'SELECT id FROM t WHERE a=1 OR b=2;',
+                'SELECT id FROM t WHERE a=1;',
+                "SELECT id FROM t WHERE a='1' AND b=2;",
+                'SELECT id FROM t WHERE 2=2 AND a=1 AND b=2;',
+                'SELECT id FROM t WHERE 1=1 AND a=1 AND b=3;'):
+            with self.subTest(candidate=candidate):
+                self.assertRejected(source, candidate)
+
+    def test_exact_prefix_allowed_for_eligible_where_only(self):
+        for expression in ('a=1 AND b=2', "a=1 AND (b='x' OR b='y')",
+                           'a BETWEEN 1 AND 2 AND b=3'):
+            with self.subTest(expression=expression):
+                self.assertAccepted('SELECT id FROM t WHERE ' + expression + ';',
+                                    'SELECT id FROM t WHERE 1=1 AND ' + expression + ';')
+
+    def test_prefix_rejected_for_single_between_or_and_wrong_locations(self):
+        for expression in ('a=1', 'a BETWEEN 1 AND 2', 'a=1 OR b=2',
+                           'a=1 AND b=2 OR c=3', '(a=1 AND b=2)',
+                           'id IN (SELECT x FROM u WHERE a=1 AND b=2)'):
+            with self.subTest(expression=expression):
+                self.assertRejected('SELECT id FROM t WHERE ' + expression + ';',
+                                    'SELECT id FROM t WHERE 1=1 AND ' + expression + ';')
+        self.assertRejected('SELECT a=1 AND b=2 FROM t;', 'SELECT 1=1 AND a=1 AND b=2 FROM t;')
+        self.assertRejected('SELECT id FROM t WHERE a=1 AND b=2;',
+                            'SELECT id FROM t WHERE a=1 AND 1=1 AND b=2;')
+        self.assertRejected('SELECT id FROM t WHERE a=1 AND b=2;',
+                            'SELECT id FROM t WHERE 1=1 and a=1 AND b=2;')
+
+    def test_existing_prefix_cannot_be_removed_or_duplicated(self):
+        for conjunction in ('AND', 'and'):
+            source = f'SELECT id FROM t WHERE 1=1 {conjunction} a=1 AND b=2;'
+            self.assertAccepted(source, source)
+            self.assertRejected(source, 'SELECT id FROM t WHERE a=1 AND b=2;')
+            self.assertRejected(source, source.replace('WHERE ', 'WHERE 1=1 AND '))
+
+    def test_nested_where_eligibility_does_not_leak_to_parent_or_sibling(self):
+        source = ('SELECT id FROM t WHERE id IN (SELECT x FROM u WHERE a=1 AND b=2) '
+                  'OR id IN (SELECT y FROM v WHERE c=3);')
+        allowed = source.replace('WHERE a=1', 'WHERE 1=1 AND a=1')
+        self.assertAccepted(source, allowed)
+        self.assertRejected(source, allowed.replace('WHERE id', 'WHERE 1=1 AND id'))
+        self.assertRejected(source, allowed.replace('WHERE c=3', 'WHERE 1=1 AND c=3'))
+        both = 'SELECT id FROM t WHERE z=0 AND id IN (SELECT x FROM u WHERE a=1 AND b=2);'
+        self.assertAccepted(both, both.replace('WHERE ', 'WHERE 1=1 AND '))
+
+
 if __name__ == "__main__":
     unittest.main()
