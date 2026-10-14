@@ -152,12 +152,12 @@ def _owned_walk(node):
 
 
 def commented_clause_gap_edits(source, clause, indent='    ', group=None):
-    """Direct GROUP/ORDER separators only; return None before any partial edit.
+    """Direct GROUP/ORDER/PARTITION separators; refuse before any partial edit.
 
     Expressions and ORDER modifiers are opaque. Comment ownership is inferred
     only from uninterrupted standalone chains or one trailing comment.
     """
-    if not clause.is_type('groupby_clause', 'orderby_clause'):
+    if not clause.is_type('groupby_clause', 'orderby_clause', 'partitionby_clause'):
         return None
     code = [s for s in clause.segments if s.is_code and not s.is_meta]
     if len(code) < 3:
@@ -220,7 +220,23 @@ def commented_clause_gap_edits(source, clause, indent='    ', group=None):
     return edits
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False, include_sets=False):
+def window_specification_parts(window):
+    """Recognize inline OVER only; named/unknown windows have no layout contract."""
+    code = [s for s in window.segments if s.is_code and not s.is_meta]
+    if len(code) != 2 or not code[0].is_type('keyword') or not code[1].is_type('bracketed'):
+        return None
+    bracket = code[1]
+    content = [s for s in bracket.segments if s.is_code and not s.is_meta
+               and not s.is_type('start_bracket', 'end_bracket')]
+    if content and (len(content) != 1 or not content[0].is_type('window_specification')):
+        return None
+    parts = [s for s in content[0].segments if s.is_code and not s.is_meta] if content else []
+    if any(not s.is_type('partitionby_clause', 'orderby_clause', 'frame_clause') for s in parts):
+        return None
+    return code[0], bracket, parts
+
+
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False, include_sets=False, include_windows=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -233,6 +249,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     include_having enables HAVING predicates and their nested SELECT context.
     include_cte enables a top-level WITH container around the same query rules.
     include_sets enables AST set containers and their independent SELECT branches.
+    include_windows enables SELECT-owned OVER specifications with opaque frames.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -271,8 +288,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         joins = [s for s in nodes if s.is_type('join_clause')]
         if joins and (not include_joins or not include_simple):
             continue
-        if (len(queries) < 2 and not include_simple) or any(s.is_type(
-                'over_clause', 'window_specification') or (s.is_type('set_expression') and not include_sets) or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
+        if (len(queries) < 2 and not include_simple) or any((s.is_type(
+                'over_clause', 'window_specification') and not include_windows) or (s.is_type('set_expression') and not include_sets) or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
             continue
         # Only ordinary JOIN ... ON is owned here; USING and other forms
         # retain their existing fallback. Never claim a JOIN with a subquery.
@@ -301,6 +318,20 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
+            continue
+        windows = [s for s in nodes if s.is_type('over_clause')]
+        owned_windows = [s for query in queries for clause in clauses_by_id[id(query)]
+                         if clause.is_type('select_clause') for s in _owned_walk(clause)
+                         if s.is_type('over_clause')]
+        if {id(s) for s in windows} != {id(s) for s in owned_windows}:
+            continue  # QUALIFY and windows outside SELECT are not owned here.
+        window_parts = {}
+        for window in windows:
+            parts = window_specification_parts(window)
+            if parts is None:
+                break
+            window_parts[id(window)] = parts
+        if len(window_parts) != len(windows):
             continue
         if joins:
             direct_joins = []
@@ -461,6 +492,37 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                                 gap(stop(operator), start(after), ' ')
                         previous = node
 
+        def render_windows(clause, level):
+            base = ' ' * level
+            for window in (s for s in _owned_walk(clause) if s.is_type('over_clause')):
+                keyword, bracket, parts = window_parts[id(window)]
+                opening = next(s for s in bracket.segments if s.is_type('start_bracket'))
+                closing = next(s for s in bracket.segments if s.is_type('end_bracket'))
+                gap(stop(keyword), start(opening), ' ')
+                if not parts:
+                    boundary(stop(opening), start(closing), '\n' + base)
+                    continue
+                boundary(stop(opening), start(parts[0]), '\n' + base + '    ')
+                for left, right in zip(parts, parts[1:]):
+                    boundary(stop(left), start(right), '\n' + base + '    ')
+                boundary(stop(parts[-1]), start(closing), '\n' + base)
+                for part in parts:
+                    if part.is_type('partitionby_clause', 'orderby_clause'):
+                        candidates = commented_clause_gap_edits(source, part, base + '        ', group)
+                        if candidates is not None:
+                            edits.extend(candidates)
+                # Frame contents and function arguments are deliberately opaque.
+
+        def arithmetic_walk(node):
+            yield node
+            window_function = node.is_type('function') and any(
+                s.is_type('over_clause') for s in node.segments)
+            for child in node.segments:
+                if child.is_type('select_statement', 'over_clause') or (
+                        window_function and child.is_type('function_contents')):
+                    continue
+                yield from arithmetic_walk(child)
+
         def owned_brackets(node):
             # A set container, like a SELECT, owns its descendants. Visiting
             # its bracketed branches here again would duplicate atomic edits.
@@ -538,6 +600,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         gap(stop(left), start(comma), '\n' + base + '    ')
                         gap(stop(comma), start(right), ' ')
             for clause in clauses:
+                if clause.is_type('select_clause') and windows:
+                    render_windows(clause, level + 4)
                 if clause.is_type('groupby_clause', 'orderby_clause') and include_comment_lists:
                     candidates = commented_clause_gap_edits(source, clause, base + '    ', group)
                     if candidates is not None:
@@ -562,10 +626,10 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 # GROUP/ORDER expressions stay opaque.
                 if not clause.is_type('select_clause', 'from_clause', 'where_clause'):
                     continue
-                leaves = [s for s in _owned_walk(clause) if not s.segments
+                leaves = [s for s in arithmetic_walk(clause) if not s.segments
                           and not s.is_meta and s.pos_marker
                           and not s.is_type('whitespace', 'newline')]
-                for operator in _owned_walk(clause):
+                for operator in arithmetic_walk(clause):
                     if not (operator.is_type('binary_operator') and operator.raw in ('+', '-', '*', '/', '%', '||')):
                         continue
                     previous = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)

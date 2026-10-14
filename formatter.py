@@ -11,7 +11,7 @@ from formatter_modules.formatter_protection import protected_spans, ambiguous_co
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
-from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits
+from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits, window_specification_parts
 from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
 
 DIALECT = "teradata"
@@ -1035,10 +1035,25 @@ def format_sql(source, diagnostics=None):
     if any(segment.is_type("unparsable") for segment in walk(parsed.tree)):
         raise ValueError("Обнаружен нераспознанный SQL. Форматирование отменено.")
 
+    # An unsupported SELECT window must not fall through to the legacy ORDER
+    # list renderer: it cannot infer named-window ownership or indentation.
+    unsupported_window = next((window for clause in walk(parsed.tree)
+                               if clause.is_type('select_clause') for window in walk(clause)
+                               if window.is_type('over_clause')
+                               and window_specification_parts(window) is None), None)
+    if unsupported_window is not None:
+        warning = Diagnostic('SQLFMT-E004', unsupported_window.pos_marker.line_no,
+                             'Неподдерживаемая AST-форма окна OVER; исходный SQL сохранён без изменений')
+        if diagnostics is not None:
+            diagnostics.append(warning)
+        else:
+            emit_diagnostics([warning])
+        return original_source
+
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
     nested_edits, nested_statements = nested_query_gap_edits(
-        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True, include_having=True, include_cte=True, include_sets=True)
+        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True, include_having=True, include_cte=True, include_sets=True, include_windows=True)
     boundary_edits, boundary_warnings = plan_edits(
         source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
@@ -1062,7 +1077,7 @@ def format_sql(source, diagnostics=None):
                    if s.is_type('from_clause')}
     basic_lists = {id(s) for i, statement in enumerate(statements)
                    if i in nested_statements for s in walk(statement)
-                   if s.is_type('groupby_clause', 'orderby_clause')}
+                   if s.is_type('groupby_clause', 'orderby_clause', 'partitionby_clause')}
     basic_joins = {id(s) for i, statement in enumerate(statements)
                    if i in nested_statements for s in walk(statement)
                    if s.is_type('join_clause')}
@@ -1112,7 +1127,7 @@ def format_sql(source, diagnostics=None):
 
     for segment in walk(parsed.tree):
         if id(segment) in basic_lists:
-            continue  # Prepared by the AST gap pass; never includes OVER.
+            continue  # Prepared by its AST context, including owned window lists.
         if segment.is_type(
             "select_clause",
             "groupby_clause",
