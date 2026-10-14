@@ -4,9 +4,9 @@ import sys
 from pathlib import Path
 from dataclasses import replace
 
-from sqlfluff.core import Linter
+from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines
 
-from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits, Diagnostic
+from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits, Diagnostic, line_number
 from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
@@ -283,7 +283,7 @@ def format_commented_group_order(source, clause):
 
 def clean_blank_line_whitespace(source):
     """Очищает пустые строки, не затрагивая литералы и комментарии SQL."""
-    parsed = Linter(dialect=DIALECT).parse_string(source)
+    parsed = source_linter().parse_string(source)
     if parsed.tree is None:
         raise ValueError("Не удалось разобрать SQL перед очисткой пустых строк.")
     if any(seg.is_type("unparsable") for seg in walk(parsed.tree)):
@@ -699,7 +699,7 @@ def format_clause_spacing(source):
 
 def format_semicolons(source):
     """Переносит настоящие SQL-разделители на отдельную строку."""
-    linter = Linter(dialect=DIALECT)
+    linter = source_linter()
     parsed = linter.parse_string(source)
 
     if parsed.tree is None:
@@ -747,7 +747,7 @@ def format_semicolons(source):
 
 def sql_tokens(source):
     """Возвращает SQL-токены и комментарии отдельно."""
-    parsed = Linter(dialect=DIALECT).parse_string(source)
+    parsed = source_linter().parse_string(source)
 
     if parsed.tree is None:
         raise ValueError("Не удалось разобрать SQL")
@@ -811,7 +811,7 @@ def remove_formatter_where_prefix(tokens):
 
 def _validation_snapshot(source):
     """Keep clause ownership alongside exact tokens; never casefold SQL text."""
-    tree = Linter(dialect=DIALECT).parse_string(source).tree
+    tree = source_linter().parse_string(source).tree
     if tree is None or any(s.is_type('unparsable') for s in walk(tree)):
         raise ValueError('Не удалось разобрать SQL для проверки сохранности')
     tokens, comments, predicates, counts = [], [], {}, {}
@@ -850,6 +850,12 @@ def _validation_snapshot(source):
 
 def validate_sql_unchanged(original, formatted):
     """Validate exact tokens, with two narrowly specified AST exceptions."""
+    # Lexical spans represent complete protected units, even when SQLFluff
+    # splits a block comment into comment/newline/comment AST segments.
+    def protected_values(sql):
+        return [(span.kind, sql[span.start:span.end]) for span in protected_spans(sql)]
+    if protected_values(original) != protected_values(formatted):
+        raise ValueError('Форматирование изменило защищённые участки SQL!')
     before, before_comments, original_predicates = _validation_snapshot(original)
     after, after_comments, formatted_predicates = _validation_snapshot(formatted)
     prefix = [('numeric_literal', '1'), ('raw_comparison_operator', '='),
@@ -899,7 +905,7 @@ def normalize_groupby_header_comments(source):
     Проверяем, что это реальный SQL-комментарий по позициям AST, а не текст
     внутри строкового литерала. Содержимое комментария не изменяется.
     """
-    parsed = Linter(dialect=DIALECT).parse_string(source)
+    parsed = source_linter().parse_string(source)
     if parsed.tree is None:
         return source
 
@@ -934,7 +940,7 @@ def normalize_select_field_indents(source):
     Не перемещает SQL, запятые или комментарии; изменяет только
     горизонтальные отступы в начале строк с элементами списка.
     """
-    parsed = Linter(dialect=DIALECT).parse_string(source)
+    parsed = source_linter().parse_string(source)
     if parsed.tree is None or any(seg.is_type("unparsable") for seg in walk(parsed.tree)):
         return source
 
@@ -972,7 +978,7 @@ def normalize_select_field_indents(source):
 
 def remove_select_blank_lines(source):
     """Удаляет пустые строки только внутри SELECT, не трогая литералы/комментарии."""
-    parsed = Linter(dialect=DIALECT).parse_string(source)
+    parsed = source_linter().parse_string(source)
     if parsed.tree is None or any(seg.is_type("unparsable") for seg in walk(parsed.tree)):
         return source
 
@@ -1012,20 +1018,10 @@ def remove_select_blank_lines(source):
 
 
 def format_sql(source, diagnostics=None):
-    # SQLFluff normalises CR/CRLF before assigning source offsets. Until a
-    # source map exists, do not parse or modify such input (including literals).
-    if "\r" in source:
-        warning = Diagnostic("SQLFMT-E003", source.count("\n", 0, source.index("\r")) + 1,
-                             "CR/CRLF: AST-позиции ненадёжны; исходный SQL сохранён без изменений")
-        if diagnostics is not None:
-            diagnostics.append(warning)
-        else:
-            emit_diagnostics([warning])
-        return source
-
     original_source = source
+    source = normalize_external_newlines(source)
     source = normalize_groupby_header_comments(source)
-    linter = Linter(dialect=DIALECT)
+    linter = source_linter()
     parsed = linter.parse_string(source)
 
     if parsed.tree is None:
@@ -1087,7 +1083,7 @@ def format_sql(source, diagnostics=None):
         for clause in walk(statement):
             if id(clause) in basic_lists and commented_clause_gap_edits(source, clause) is None:
                 structural_warnings.append(Diagnostic(
-                    'SQLFMT-C001', source.count('\n', 0, clause.pos_marker.source_slice.start) + 1,
+                    'SQLFMT-C001', line_number(source, clause.pos_marker.source_slice.start),
                     'Принадлежность комментариев списка неоднозначна; список сохранён без изменений'))
     nested_qualifies = {id(s) for i, statement in enumerate(statements)
                         if i in nested_statements for s in walk(statement)
@@ -1100,7 +1096,7 @@ def format_sql(source, diagnostics=None):
                      if s.is_type('binary_operator')} if expression is not None else set()
         if {'AND', 'OR'} <= operators:
             structural_warnings.append(Diagnostic(
-                'SQLFMT-W001', source.count('\n', 0, segment.pos_marker.source_slice.start) + 1,
+                'SQLFMT-W001', line_number(source, segment.pos_marker.source_slice.start),
                 'Смешанные AND/OR верхнего уровня: ' +
                 ('QUALIFY' if id(segment) in nested_qualifies else 'WHERE') + ' не перестраивается'))
 
@@ -1122,7 +1118,7 @@ def format_sql(source, diagnostics=None):
                 span = child.pos_marker.source_slice
                 if edit.start < span.stop and edit.end > span.start:
                     structural_warnings.append(Diagnostic(
-                        "SQLFMT-E001", source.count("\n", 0, edit.start) + 1,
+                        "SQLFMT-E001", line_number(source, edit.start),
                         f"Правка {edit.rule_id} ({owner}) [{edit.start}:{edit.end}] "
                         f"затрагивает дочерний SELECT [{span.start}:{span.stop}]; "
                         "вся группа пропущена"))
@@ -1232,7 +1228,7 @@ def format_sql(source, diagnostics=None):
     guarded = protected_spans(source)
     ambiguous = ambiguous_comment_spans(source)
     comment_warnings = [
-        Diagnostic("SQLFMT-C001", source.count("\n", 0, span.start) + 1,
+        Diagnostic("SQLFMT-C001", line_number(source, span.start),
                    "Комментарий отделён пустой строкой от следующего элемента; принадлежность не определена")
         for span in ambiguous
     ]
@@ -1271,9 +1267,9 @@ def format_sql(source, diagnostics=None):
 
 def main():
     # Настраиваем UTF-8 только для CLI, не меняя stdout при импорте.
-    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", newline="")
     filename = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("input.sql")
-    source = filename.read_text(encoding="utf-8-sig")
+    source = filename.read_bytes().decode("utf-8-sig")
 
     diagnostics = []
     result = format_sql(source, diagnostics=diagnostics)

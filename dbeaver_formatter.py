@@ -12,7 +12,7 @@ def main():
     path = Path(sys.argv[1])
 
     try:
-        source = path.read_text(encoding="utf-8-sig")
+        source = path.read_bytes().decode("utf-8-sig")
 
         # # Сохраняем входной SQL для диагностики.
         # debug_path = Path(__file__).resolve().parent / "dbeaver_debug.sql"

@@ -21,8 +21,8 @@ def protected_spans(sql: str) -> list[ProtectedSpan]:
     while i < n:
         start = i
         if sql.startswith('--', i):
-            end = sql.find('\n', i)
-            i = n if end < 0 else end
+            ends = [end for end in (sql.find('\r', i), sql.find('\n', i)) if end >= 0]
+            i = min(ends) if ends else n
             spans.append(ProtectedSpan(start, i, 'line_comment'))
         elif sql.startswith('/*', i):
             end = sql.find('*/', i + 2)

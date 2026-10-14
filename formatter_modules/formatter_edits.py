@@ -28,7 +28,7 @@ class Diagnostic:
 
 
 def line_number(source: str, offset: int) -> int:
-    return source.count("\n", 0, offset) + 1
+    return source[:offset].replace("\r\n", "\n").replace("\r", "\n").count("\n") + 1
 
 
 def edits_overlap(left: Edit, right: Edit) -> bool:

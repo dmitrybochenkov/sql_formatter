@@ -163,38 +163,38 @@ class FormatterTests(unittest.TestCase):
 
 
 class B2SafetyTests(unittest.TestCase):
-    def test_cr_inputs_are_returned_verbatim_on_both_calls(self):
-        from unittest.mock import patch
+    def test_cr_inputs_preserve_protected_bytes_on_both_calls(self):
+        from formatter import validate_sql_unchanged
+        from formatter_modules.formatter_protection import protected_spans
         cases = [
-            "SELECT id,\r\n name FROM users;",
-            "SELECT 'first\r\n  last' AS txt FROM t;",
-            "SELECT 'first\rlast' AS txt FROM t;",
-            "SELECT a -- keep\r\nFROM t;\r\n",
-            "SELECT /* keep\r\n  comment */ a FROM t;",
-            "SELECT a\nFROM t\rWHERE a=1;",
-            "SELECT a FROM t;\r",
+            ("SELECT id,\r\n name FROM users;", "SELECT\n    id\n    , name\nFROM users\n;\n"),
+            ("SELECT 'first\r\n  last' AS txt FROM t;", "SELECT\n    'first\r\n  last' AS txt\nFROM t\n;\n"),
+            ("SELECT 'first\rlast' AS txt FROM t;", "SELECT\n    'first\rlast' AS txt\nFROM t\n;\n"),
+            ("SELECT a -- keep\r\nFROM t;\r\n", "SELECT\n    a -- keep\nFROM t\n;\n"),
+            ("SELECT /* keep\r\n  comment */ a FROM t;", "SELECT /* keep\r\n  comment */ a\nFROM t\n;\n"),
+            ("SELECT a\nFROM t\rWHERE a=1;", "SELECT\n    a\nFROM t\n\nWHERE a = 1\n;\n"),
+            ("SELECT a FROM t;\r", "SELECT\n    a\nFROM t\n;\n"),
         ]
-        for source in cases:
+        for source, expected in cases:
             with self.subTest(source=source):
-                # Refuse before even the preliminary AST-based normalizer.
-                with patch('formatter.normalize_groupby_header_comments') as normalize:
-                    first_diagnostics, second_diagnostics = [], []
-                    first = format_sql(source, diagnostics=first_diagnostics)
-                    second = format_sql(first, diagnostics=second_diagnostics)
-                    normalize.assert_not_called()
-                self.assertEqual(first.encode('utf-8'), source.encode('utf-8'))
-                self.assertEqual(second, first)
-                self.assertEqual(first_diagnostics, second_diagnostics)
-                self.assertEqual([d.code for d in first_diagnostics], ['SQLFMT-E003'])
+                first_diagnostics, second_diagnostics = [], []
+                first = format_sql(source, diagnostics=first_diagnostics)
+                second = format_sql(first, diagnostics=second_diagnostics)
+                self.assertEqual(first, expected)
+                self.assertEqual(second.encode('utf-8'), first.encode('utf-8'))
+                validate_sql_unchanged(source, first)
+                self.assertEqual([(p.kind, source[p.start:p.end]) for p in protected_spans(source)],
+                                 [(p.kind, first[p.start:p.end]) for p in protected_spans(first)])
+                self.assertFalse(any(d.code == 'SQLFMT-E003' for d in first_diagnostics + second_diagnostics))
 
-    def test_cr_warning_goes_to_stderr_without_stdout(self):
+    def test_cr_formatting_keeps_stdout_clean(self):
         import contextlib
         import io
         output, errors = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
-            self.assertEqual(format_sql('SELECT 1;\r\n'), 'SELECT 1;\r\n')
+            self.assertEqual(format_sql('SELECT a FROM t;\r\n'), 'SELECT\n    a\nFROM t\n;\n')
         self.assertEqual(output.getvalue(), '')
-        self.assertIn('SQLFMT-E003', errors.getvalue())
+        self.assertEqual(errors.getvalue(), '')
 
     def test_nested_select_overlap_is_stable_and_preserves_sql(self):
         from formatter import sql_tokens, validate_sql_unchanged, remove_formatter_where_prefix
