@@ -236,7 +236,7 @@ def window_specification_parts(window):
     return code[0], bracket, parts
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False, include_sets=False, include_windows=False):
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False, include_sets=False, include_windows=False, include_qualify=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -250,6 +250,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     include_cte enables a top-level WITH container around the same query rules.
     include_sets enables AST set containers and their independent SELECT branches.
     include_windows enables SELECT-owned OVER specifications with opaque frames.
+    include_qualify enables a separate predicate layout without synthetic tokens.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -302,6 +303,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             clauses = [s for s in query.segments if s.is_code and not s.is_meta]
             by_type = {s.get_type(): s for s in clauses}
             allowed = {'select_clause', 'from_clause', 'where_clause'}
+            if include_qualify:
+                allowed.add('qualify_clause')
             if include_simple and (cte_mode or set_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
@@ -321,10 +324,11 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             continue
         windows = [s for s in nodes if s.is_type('over_clause')]
         owned_windows = [s for query in queries for clause in clauses_by_id[id(query)]
-                         if clause.is_type('select_clause') for s in _owned_walk(clause)
+                         if (clause.is_type('select_clause') or
+                             (include_qualify and clause.is_type('qualify_clause'))) for s in _owned_walk(clause)
                          if s.is_type('over_clause')]
         if {id(s) for s in windows} != {id(s) for s in owned_windows}:
-            continue  # QUALIFY and windows outside SELECT are not owned here.
+            continue  # Windows outside the explicitly supported clauses remain opaque.
         window_parts = {}
         for window in windows:
             parts = window_specification_parts(window)
@@ -492,9 +496,9 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                                 gap(stop(operator), start(after), ' ')
                         previous = node
 
-        def render_windows(clause, level):
-            base = ' ' * level
+        def render_windows(clause, level, continuations=()):
             for window in (s for s in _owned_walk(clause) if s.is_type('over_clause')):
+                base = ' ' * (level + (4 if any(start(a) < start(window) for a in continuations) else 0))
                 keyword, bracket, parts = window_parts[id(window)]
                 opening = next(s for s in bracket.segments if s.is_type('start_bracket'))
                 closing = next(s for s in bracket.segments if s.is_type('end_bracket'))
@@ -579,7 +583,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 clause_gap = boundary if len(queries) > 1 else gap
                 if ((include_comment_lists and right.is_type('groupby_clause', 'orderby_clause'))
                         or (include_having and right.is_type('having_clause'))
-                        or right.is_type('where_clause')):
+                        or right.is_type('where_clause')
+                        or (include_qualify and right.is_type('qualify_clause'))):
                     clause_gap = join_boundary
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
@@ -741,6 +746,53 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         gap(stop(previous), start(operator), spacing)
                     if following is not None and not following.is_type('comment'):
                         gap(stop(operator), start(following), spacing)
+            qualify = by_type.get('qualify_clause')
+            if include_qualify and qualify is not None:
+                keyword = next(s for s in qualify.segments if s.is_type('keyword'))
+                predicate = next(s for s in qualify.segments
+                                 if s.is_code and not s.is_meta and s is not keyword)
+                ands = [s for s in predicate.segments if predicate.is_type('expression')
+                        and s.is_type('binary_operator') and s.raw_upper == 'AND']
+                direct_or = any(s.is_type('binary_operator') and s.raw_upper == 'OR'
+                                for s in predicate.segments)
+                owned_comments = {s.pos_marker.source_slice.start for s in _owned_walk(qualify)
+                                  if s.is_type('comment') and s.pos_marker}
+                vertical_qualify = bool(ands) and not direct_or and not any(
+                    p.start in owned_comments for p in ambiguous_comment_spans(source))
+
+                def predicate_nodes(node):
+                    yield node
+                    # Function arguments/frames and child query predicates have
+                    # their own AST ownership. Never rewrite their comparisons.
+                    if node.is_type('function', 'select_statement', 'set_expression'):
+                        return
+                    for child in node.segments:
+                        yield from predicate_nodes(child)
+
+                nodes = list(predicate_nodes(predicate))
+                leaves = [s for s in nodes if s.pos_marker and not s.is_meta
+                          and not s.is_type('whitespace', 'newline')
+                          and (not s.segments or s.is_type('function', 'select_statement', 'set_expression'))]
+                code_leaves = [s for s in leaves if not s.is_type('comment')]
+                gap(stop(keyword), start(predicate), ' ')
+                if vertical_qualify:
+                    for operator in ands:
+                        previous = next(s for s in reversed(code_leaves) if stop(s) <= start(operator))
+                        following = next(s for s in leaves if start(s) >= stop(operator))
+                        join_boundary(stop(previous), start(operator), '\n' + base + '    ')
+                        if not following.is_type('comment'):
+                            gap(stop(operator), start(following), ' ')
+                for operator in nodes:
+                    if not operator.is_type('comparison_operator') or operator.raw not in (
+                            '=', '<', '>', '<=', '>=', '<>', '!=', '^='):
+                        continue
+                    previous = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)
+                    following = next((s for s in leaves if start(s) >= stop(operator)), None)
+                    if previous is not None and not previous.is_type('comment'):
+                        gap(stop(previous), start(operator), ' ')
+                    if following is not None and not following.is_type('comment'):
+                        gap(stop(operator), start(following), ' ')
+                render_windows(qualify, level, ands if vertical_qualify else ())
             for clause in clauses:
                 container_level = level + (4 if clause.is_type('select_clause')
                                            or (clause.is_type('where_clause') and vertical)

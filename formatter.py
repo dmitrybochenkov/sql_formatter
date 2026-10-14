@@ -1035,10 +1035,10 @@ def format_sql(source, diagnostics=None):
     if any(segment.is_type("unparsable") for segment in walk(parsed.tree)):
         raise ValueError("Обнаружен нераспознанный SQL. Форматирование отменено.")
 
-    # An unsupported SELECT window must not fall through to the legacy ORDER
+    # An unsupported SELECT/QUALIFY window must not reach the legacy ORDER
     # list renderer: it cannot infer named-window ownership or indentation.
     unsupported_window = next((window for clause in walk(parsed.tree)
-                               if clause.is_type('select_clause') for window in walk(clause)
+                               if clause.is_type('select_clause', 'qualify_clause') for window in walk(clause)
                                if window.is_type('over_clause')
                                and window_specification_parts(window) is None), None)
     if unsupported_window is not None:
@@ -1053,7 +1053,7 @@ def format_sql(source, diagnostics=None):
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
     nested_edits, nested_statements = nested_query_gap_edits(
-        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True, include_having=True, include_cte=True, include_sets=True, include_windows=True)
+        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True, include_having=True, include_cte=True, include_sets=True, include_windows=True, include_qualify=True)
     boundary_edits, boundary_warnings = plan_edits(
         source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
@@ -1089,8 +1089,11 @@ def format_sql(source, diagnostics=None):
                 structural_warnings.append(Diagnostic(
                     'SQLFMT-C001', source.count('\n', 0, clause.pos_marker.source_slice.start) + 1,
                     'Принадлежность комментариев списка неоднозначна; список сохранён без изменений'))
+    nested_qualifies = {id(s) for i, statement in enumerate(statements)
+                        if i in nested_statements for s in walk(statement)
+                        if s.is_type('qualify_clause')}
     for segment in walk(parsed.tree):
-        if id(segment) not in nested_wheres:
+        if id(segment) not in nested_wheres | nested_qualifies:
             continue
         expression = next((s for s in segment.segments if s.is_type('expression')), None)
         operators = {s.raw_upper for s in expression.segments
@@ -1098,7 +1101,8 @@ def format_sql(source, diagnostics=None):
         if {'AND', 'OR'} <= operators:
             structural_warnings.append(Diagnostic(
                 'SQLFMT-W001', source.count('\n', 0, segment.pos_marker.source_slice.start) + 1,
-                'Смешанные AND/OR верхнего уровня: WHERE не перестраивается'))
+                'Смешанные AND/OR верхнего уровня: ' +
+                ('QUALIFY' if id(segment) in nested_qualifies else 'WHERE') + ' не перестраивается'))
 
     def add_edits(segment, candidates):
         """Keep each node's related edits atomic; reserve nested SELECT text."""
