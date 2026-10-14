@@ -245,7 +245,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         nodes = list(_walk(root))
         queries = [s for s in nodes if s.is_type('select_statement')]
         joins = [s for s in nodes if s.is_type('join_clause')]
-        if joins and (not include_joins or not include_simple or len(queries) != 1):
+        if joins and (not include_joins or not include_simple):
             continue
         if (len(queries) < 2 and not include_simple) or any(s.is_type(
                 'over_clause', 'window_specification',
@@ -253,7 +253,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             continue
         # Only ordinary JOIN ... ON is owned here; USING and other forms
         # retain their existing fallback. Never claim a JOIN with a subquery.
-        if any(not any(s.is_type('join_on_condition') for s in join.segments)
+        if any(any(s.is_type('select_statement') for s in _walk(join))
+               or not any(s.is_type('join_on_condition') for s in join.segments)
                for join in joins):
             continue
         clauses_by_id = {}
@@ -272,13 +273,15 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 break
             if (sum(s.is_type('from_expression_element')
                     for s in _owned_walk(by_type['from_clause'])) != 1
-                    and not (include_simple and len(queries) == 1)):
+                    and not (include_simple and (len(queries) == 1 or (joins and query is root)))):
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
             continue
         if joins:
             from_clause = next(s for s in clauses_by_id[id(root)] if s.is_type('from_clause'))
+            if any(s.is_type('select_statement') for s in _walk(from_clause)):
+                continue  # A derived FROM target is still outside ordinary JOIN support.
             direct_joins = [s for expr in from_clause.segments if expr.is_type('from_expression')
                             for s in expr.segments if s.is_type('join_clause')]
             if {id(s) for s in joins} != {id(s) for s in direct_joins}:
@@ -420,11 +423,12 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         edits.append(Edit(start(keyword), stop(keyword), keyword.raw_upper,
                                           'CLAUSE-CASE', group, group))
             for left, right in zip(clauses, clauses[1:]):
-                # Preserve B3.1's conservative refusal across comments in
-                # flat clause boundaries; nested brackets retain B3.2 rules.
+                # Use comment-aware gaps only for supported block boundaries;
+                # nested brackets retain their existing attachment rules.
                 clause_gap = boundary if len(queries) > 1 else gap
                 if ((include_comment_lists and right.is_type('groupby_clause', 'orderby_clause'))
-                        or (include_having and right.is_type('having_clause'))):
+                        or (include_having and right.is_type('having_clause'))
+                        or right.is_type('where_clause')):
                     clause_gap = join_boundary
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
@@ -483,29 +487,39 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             vertical = False
             where = by_type.get('where_clause')
             if where is not None:
-                expression = next(s for s in where.segments if s.is_type('expression'))
+                keyword = next(s for s in where.segments if s.is_type('keyword'))
+                expression = next(s for s in where.segments
+                                  if s.is_code and not s.is_meta and s is not keyword)
                 ands = [s for s in expression.segments
-                        if s.is_type('binary_operator') and s.raw_upper == 'AND']
+                        if expression.is_type('expression')
+                        and s.is_type('binary_operator') and s.raw_upper == 'AND']
                 vertical = bool(ands) and not any(
                     s.is_type('binary_operator') and s.raw_upper == 'OR'
                     for s in expression.segments)
-                vertical = vertical and not any(s.is_type('comment') for s in _walk(where))
+                # Only this WHERE's comments can affect its restructuring.
+                # Child SELECTs own their own predicates and comments.
+                owned_comments = {s.pos_marker.source_slice.start for s in _owned_walk(where)
+                                  if s.is_type('comment') and s.pos_marker}
+                vertical = vertical and not any(p.start in owned_comments
+                                               for p in ambiguous_comment_spans(source))
+                vertical = vertical and not source[stop(keyword):start(expression)].strip()
                 leaves = [s for s in _owned_walk(expression)
                           if not s.segments and not s.is_meta and s.pos_marker
                           and not s.is_type('whitespace', 'newline')]
                 prefix = []
+                code_leaves = [s for s in leaves if not s.is_type('comment')]
                 if ands:
-                    prefix = [s.raw for s in leaves if stop(s) <= start(ands[0])]
+                    prefix = [s.raw for s in code_leaves if stop(s) <= start(ands[0])]
                 has_prefix = prefix == ['1', '=', '1']
-                keyword = next(s for s in where.segments if s.is_type('keyword'))
                 gap(stop(keyword), start(expression),
                     ' 1=1\n' + base + '    AND ' if vertical and not has_prefix else ' ')
                 if vertical:
                     for operator in ands:
-                        previous = next(s for s in reversed(leaves) if stop(s) <= start(operator))
+                        previous = next(s for s in reversed(code_leaves) if stop(s) <= start(operator))
                         following = next(s for s in leaves if start(s) >= stop(operator))
-                        gap(stop(previous), start(operator), '\n' + base + '    ')
-                        gap(stop(operator), start(following), ' ')
+                        join_boundary(stop(previous), start(operator), '\n' + base + '    ')
+                        if not following.is_type('comment'):
+                            gap(stop(operator), start(following), ' ')
                 for operator in _owned_walk(expression):
                     if not operator.is_type('comparison_operator') or operator.raw not in (
                             '=', '<', '>', '<=', '>=', '<>', '!=', '^='):

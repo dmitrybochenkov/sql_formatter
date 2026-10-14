@@ -1077,8 +1077,9 @@ def format_sql(source, diagnostics=None):
     for segment in walk(parsed.tree):
         if id(segment) not in nested_wheres:
             continue
-        expression = next(s for s in segment.segments if s.is_type('expression'))
-        operators = {s.raw_upper for s in expression.segments if s.is_type('binary_operator')}
+        expression = next((s for s in segment.segments if s.is_type('expression')), None)
+        operators = {s.raw_upper for s in expression.segments
+                     if s.is_type('binary_operator')} if expression is not None else set()
         if {'AND', 'OR'} <= operators:
             structural_warnings.append(Diagnostic(
                 'SQLFMT-W001', source.count('\n', 0, segment.pos_marker.source_slice.start) + 1,
