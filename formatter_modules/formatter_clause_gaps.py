@@ -220,7 +220,7 @@ def commented_clause_gap_edits(source, clause, indent='    ', group=None):
     return edits
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False):
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False, include_sets=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -232,6 +232,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     an ambiguous list is left opaque while safe query boundaries are handled.
     include_having enables HAVING predicates and their nested SELECT context.
     include_cte enables a top-level WITH container around the same query rules.
+    include_sets enables AST set containers and their independent SELECT branches.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -241,23 +242,27 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     statements = [s for s in tree.segments if s.is_type('statement')]
     for index, statement in enumerate(statements):
         root = next((s for s in statement.segments if s.is_type('select_statement')), None)
+        if root is None and include_sets:
+            root = next((s for s in statement.segments if s.is_type('set_expression')), None)
         if root is None and include_cte:
             root = next((s for s in statement.segments if s.is_type('with_compound_statement')), None)
         if root is None:
             continue
         cte_mode = root.is_type('with_compound_statement')
+        query_types = ('select_statement', 'set_expression') if include_sets else ('select_statement',)
+        set_mode = include_sets and any(s.is_type('set_expression') for s in _walk(root))
         ctes, cte_commas, main_query = [], [], None
         if cte_mode:
             code = [s for s in root.segments if s.is_code and not s.is_meta]
             ctes = [s for s in code if s.is_type('common_table_expression')]
             cte_commas = [s for s in code if s.is_type('comma')]
-            mains = [s for s in code if s.is_type('select_statement')]
+            mains = [s for s in code if s.is_type(*query_types)]
             if (not ctes or len(mains) != 1 or len(cte_commas) != len(ctes) - 1
                     or any(s is not code[0] and not s.is_type(
-                        'common_table_expression', 'comma', 'select_statement') for s in code)):
+                        'common_table_expression', 'comma', *query_types) for s in code)):
                 continue
             if any(not any(s.is_type('bracketed') and any(
-                    child.is_type('select_statement') for child in s.segments)
+                    child.is_type(*query_types) for child in s.segments)
                     for s in cte.segments) for cte in ctes):
                 continue
             main_query = mains[0]
@@ -267,8 +272,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         if joins and (not include_joins or not include_simple):
             continue
         if (len(queries) < 2 and not include_simple) or any(s.is_type(
-                'over_clause', 'window_specification',
-                'set_expression') or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
+                'over_clause', 'window_specification') or (s.is_type('set_expression') and not include_sets) or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
             continue
         # Only ordinary JOIN ... ON is owned here; USING and other forms
         # retain their existing fallback. Never claim a JOIN with a subquery.
@@ -281,11 +285,11 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             clauses = [s for s in query.segments if s.is_code and not s.is_meta]
             by_type = {s.get_type(): s for s in clauses}
             allowed = {'select_clause', 'from_clause', 'where_clause'}
-            if include_simple and (cte_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
+            if include_simple and (cte_mode or set_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
                     or 'select_clause' not in by_type
-                    or (not cte_mode and 'from_clause' not in by_type)):
+                    or (not (cte_mode or set_mode) and 'from_clause' not in by_type)):
                 break
             # Preserve the helper's previous scope unless explicitly enabled.
             if not include_comment_lists and any(s.is_type('comment') for clause in clauses
@@ -293,14 +297,14 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 break
             if ('from_clause' in by_type and sum(s.is_type('from_expression_element')
                     for s in _owned_walk(by_type['from_clause'])) != 1
-                    and not (include_simple and (cte_mode or len(queries) == 1 or (joins and query is root)))):
+                    and not (include_simple and (cte_mode or set_mode or len(queries) == 1 or (joins and query is root)))):
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
             continue
         if joins:
             direct_joins = []
-            for query in (queries if cte_mode else [root]):
+            for query in (queries if cte_mode or set_mode else [root]):
                 from_clause = next((s for s in clauses_by_id[id(query)] if s.is_type('from_clause')), None)
                 if from_clause is None:
                     continue
@@ -316,14 +320,40 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         def locate(node, bracket=None):
             if node.is_type('bracketed'):
                 bracket = node
-            if node.is_type('select_statement') and node is not root:
+            if node.is_type(*query_types):
                 if bracket is not None:
                     bracket_queries[id(bracket)] = node
+                # Branches of a set belong to that set, not its outer bracket.
+                # Expression wrappers around scalar SELECTs remain transparent.
+                bracket = None
             for child in node.segments:
                 locate(child, bracket)
 
         locate(root)
-        if len(bracket_queries) != len(queries) - 1:
+        if not set_mode and len(bracket_queries) != len(queries) - 1:
+            continue
+        # Only alternating AST branches/operators, with an optional global ORDER.
+        # Unsupported tails and wrappers remain outside this atomic pass.
+        valid_sets = True
+        for node in (s for s in nodes if s.is_type('set_expression')):
+            parts = [s for s in node.segments if s.is_code and not s.is_meta]
+            if parts and parts[-1].is_type('orderby_clause'):
+                parts = parts[:-1]
+            if len(parts) < 3 or len(parts) % 2 == 0:
+                valid_sets = False
+                break
+            for i, part in enumerate(parts):
+                if i % 2:
+                    valid = part.is_type('set_operator') and [s.raw_upper for s in part.segments
+                        if s.is_code and not s.is_meta] in (
+                        ['UNION'], ['UNION', 'ALL'], ['UNION', 'DISTINCT'],
+                        ['INTERSECT'], ['INTERSECT', 'ALL'], ['EXCEPT'], ['EXCEPT', 'ALL'])
+                else:
+                    valid = part.is_type(*query_types) or (
+                        part.is_type('bracketed') and id(part) in bracket_queries)
+                if not valid:
+                    valid_sets = False
+        if not valid_sets:
             continue
         group = f'nested-select:{index}'
         handled.add(index)
@@ -431,7 +461,41 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                                 gap(stop(operator), start(after), ' ')
                         previous = node
 
+        def owned_brackets(node):
+            # A set container, like a SELECT, owns its descendants. Visiting
+            # its bracketed branches here again would duplicate atomic edits.
+            for child in node.segments:
+                if child.is_type(*query_types):
+                    continue
+                if child.is_type('bracketed'):
+                    yield child
+                yield from owned_brackets(child)
+
         def render(query, level):
+            if query.is_type('bracketed'):
+                child = bracket_queries[id(query)]
+                opening = next(s for s in query.segments if s.is_type('start_bracket'))
+                closing = next(s for s in query.segments if s.is_type('end_bracket'))
+                boundary(stop(opening), start(child), '\n' + ' ' * (level + 4))
+                boundary(stop(child), start(closing), '\n' + ' ' * level)
+                render(child, level + 4)
+                return
+            if query.is_type('set_expression'):
+                parts = [s for s in query.segments if s.is_code and not s.is_meta]
+                for left, right in zip(parts, parts[1:]):
+                    join_boundary(stop(left), start(right), '\n\n' + ' ' * level)
+                for part in parts:
+                    if part.is_type('set_operator'):
+                        keywords = [s for s in part.segments if s.is_code and not s.is_meta]
+                        for left, right in zip(keywords, keywords[1:]):
+                            gap(stop(left), start(right), ' ')
+                    elif part.is_type('orderby_clause'):
+                        candidates = commented_clause_gap_edits(source, part, ' ' * (level + 4), group)
+                        if candidates is not None:
+                            edits.extend(candidates)
+                    else:
+                        render(part, level)
+                return
             clauses = clauses_by_id[id(query)]
             by_type = {s.get_type(): s for s in clauses}
             base = ' ' * level
@@ -617,9 +681,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 container_level = level + (4 if clause.is_type('select_clause')
                                            or (clause.is_type('where_clause') and vertical)
                                            or (clause.is_type('having_clause') and having_vertical) else 0)
-                for bracket in _owned_walk(clause):
-                    if not bracket.is_type('bracketed'):
-                        continue
+                for bracket in owned_brackets(clause):
                     child = bracket_queries.get(id(bracket))
                     if child is None:
                         continue
