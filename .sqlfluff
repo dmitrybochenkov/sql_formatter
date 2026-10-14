@@ -1,0 +1,19 @@
+[sqlfluff]
+dialect = teradata
+templater = raw
+max_line_length = 120
+exclude_rules = AL01, ST05
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = upper
+
+[sqlfluff:rules:layout.commas]
+line_position = leading
+spacing_after = single
