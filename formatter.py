@@ -11,7 +11,7 @@ from formatter_modules.formatter_protection import protected_spans, ambiguous_co
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
-from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits
+from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits
 from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
 
 DIALECT = "teradata"
@@ -1038,7 +1038,7 @@ def format_sql(source, diagnostics=None):
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
     nested_edits, nested_statements = nested_query_gap_edits(
-        source, parsed.tree, include_simple=True, include_joins=True)
+        source, parsed.tree, include_simple=True, include_joins=True, include_comment_lists=True)
     boundary_edits, boundary_warnings = plan_edits(
         source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
@@ -1068,6 +1068,12 @@ def format_sql(source, diagnostics=None):
                    if s.is_type('join_clause')}
     edits = []
     structural_warnings = list(boundary_warnings)
+    for statement in statements:
+        for clause in walk(statement):
+            if id(clause) in basic_lists and commented_clause_gap_edits(source, clause) is None:
+                structural_warnings.append(Diagnostic(
+                    'SQLFMT-C001', source.count('\n', 0, clause.pos_marker.source_slice.start) + 1,
+                    'Принадлежность комментариев списка неоднозначна; список сохранён без изменений'))
     for segment in walk(parsed.tree):
         if id(segment) not in nested_wheres:
             continue

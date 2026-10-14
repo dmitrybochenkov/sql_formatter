@@ -1,7 +1,7 @@
 """Conservative AST-anchored gap formatting for GROUP BY, ORDER BY, FROM.
 
-Only direct commas are list separators. Expressions are never rewritten; any
-comment, multiline expression, or ambiguous clause structure is skipped.
+Only direct commas are list separators. Expressions are never rewritten;
+comment ownership is checked before proposing related gap edits.
 """
 import re
 from formatter_modules.formatter_edits import Edit
@@ -151,7 +151,76 @@ def _owned_walk(node):
             yield from _owned_walk(child)
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False):
+def commented_clause_gap_edits(source, clause, indent='    ', group=None):
+    """Direct GROUP/ORDER separators only; return None before any partial edit.
+
+    Expressions and ORDER modifiers are opaque. Comment ownership is inferred
+    only from uninterrupted standalone chains or one trailing comment.
+    """
+    if not clause.is_type('groupby_clause', 'orderby_clause'):
+        return None
+    code = [s for s in clause.segments if s.is_code and not s.is_meta]
+    if len(code) < 3:
+        return None
+    start = lambda s: s.pos_marker.source_slice.start
+    stop = lambda s: s.pos_marker.source_slice.stop
+    if group is None:
+        group = f'comment-list:{start(clause)}:{stop(clause)}'
+    comments = [p for p in protected_spans(source)
+                if p.kind in ('line_comment', 'block_comment')]
+    edits = []
+
+    def propose(a, b, replacement):
+        if source[a:b] != replacement:
+            edits.append(Edit(a, b, replacement, 'COMMENT-CLAUSE-GAPS', clause.get_type(), group))
+
+    def region(a, b, comma=None, header=False):
+        spans = [p for p in comments if a <= p.start and p.end <= b]
+        points = ([(a, spans[0].start)]
+                  + [(p.end, q.start) for p, q in zip(spans, spans[1:])]
+                  + [(spans[-1].end, b)]) if spans else [(a, b)]
+        raw = []
+        for x, y in points:
+            text = source[x:y]
+            if comma is not None and x <= start(comma) < stop(comma) <= y:
+                text = source[x:start(comma)] + source[stop(comma):y]
+            if text.strip():
+                return False
+            raw.append(text)
+        if not spans:
+            multiline = not header or any(s.is_type('comma') for s in code)
+            propose(a, b, ('\n' + indent if multiline else ' ') + (', ' if comma else ''))
+            return True
+        trailing = '\n' not in raw[0]
+        if trailing:
+            # A trailing+standalone chain is deliberately not guessed.
+            if header or len(spans) != 1 or raw[-1].count('\n') > 1:
+                return False
+            if spans[0].kind == 'line_comment' and '\n' not in raw[-1]:
+                return False
+        elif any(text.count('\n') != 1 for text in raw[1:]):
+            return False
+        for i, (x, y) in enumerate(points):
+            replacement = ' ' if trailing and i == 0 else '\n' + indent
+            if i == len(points) - 1 and comma is not None:
+                replacement += ', '
+            propose(x, y, replacement)
+        return True
+
+    # No keyword rewriting: preserve the spelling of GROUP, ORDER and BY.
+    if source[stop(code[0]):start(code[1])].strip():
+        return None
+    propose(stop(code[0]), start(code[1]), ' ')
+    if not region(stop(code[1]), start(code[2]), header=True):
+        return None
+    for i, node in enumerate(code[2:], 2):
+        if node.is_type('comma'):
+            if i == len(code) - 1 or not region(stop(code[i - 1]), start(code[i + 1]), node):
+                return None
+    return edits
+
+
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -159,6 +228,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     plus comment-free GROUP/ORDER lists and opaque HAVING boundaries;
     the default retains the B3.2 helper's supported scope.
     include_joins opts flat queries into ordinary, direct JOIN ... ON gaps.
+    include_comment_lists enables atomic comment-aware GROUP/ORDER gaps;
+    an ambiguous list is left opaque while safe query boundaries are handled.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -194,9 +265,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
                     or not {'select_clause', 'from_clause'} <= set(by_type)):
                 break
-            # Commented GROUP/ORDER lists belong to B4.3. Do not silently
-            # claim them or change their legacy fallback in B4.1.
-            if any(s.is_type('comment') for clause in clauses
+            # Preserve the helper's previous scope unless explicitly enabled.
+            if not include_comment_lists and any(s.is_type('comment') for clause in clauses
                    if clause.is_type('groupby_clause', 'orderby_clause') for s in _walk(clause)):
                 break
             if (sum(s.is_type('from_expression_element')
@@ -352,6 +422,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 # Preserve B3.1's conservative refusal across comments in
                 # flat clause boundaries; nested brackets retain B3.2 rules.
                 clause_gap = boundary if len(queries) > 1 else gap
+                if include_comment_lists and right.is_type('groupby_clause', 'orderby_clause'):
+                    clause_gap = join_boundary
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
             from_clause = by_type['from_clause']
@@ -370,6 +442,11 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                     gap(stop(left), start(comma), '\n' + base + '    ')
                     gap(stop(comma), start(right), ' ')
             for clause in clauses:
+                if clause.is_type('groupby_clause', 'orderby_clause') and include_comment_lists:
+                    candidates = commented_clause_gap_edits(source, clause, base + '    ', group)
+                    if candidates is not None:
+                        edits.extend(candidates)
+                    continue  # A refused list has no partial or legacy edits.
                 if clause.is_type('groupby_clause', 'orderby_clause'):
                     # Direct AST commas delimit complete items, including
                     # ORDER modifiers. Function arguments are never split.
