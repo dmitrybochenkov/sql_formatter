@@ -11,7 +11,7 @@ from formatter_modules.formatter_protection import protected_spans, ambiguous_co
 from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
-from formatter_modules.formatter_clause_gaps import clause_gap_edits, simple_query_gap_edits
+from formatter_modules.formatter_clause_gaps import clause_gap_edits, simple_query_gap_edits, nested_query_gap_edits
 from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
 
 DIALECT = "teradata"
@@ -945,6 +945,10 @@ def remove_select_blank_lines(source):
             continue
         begin = clause.pos_marker.source_slice.start
         end = clause.pos_marker.source_slice.stop
+        # A scalar subquery has its own clause spacing; its blank lines are
+        # not gaps between fields of the containing SELECT list.
+        children = [seg.pos_marker.source_slice for seg in walk(clause)
+                    if seg.is_type("select_statement") and seg.pos_marker]
         # Удаляем только целиком пустую строку, включая её перевод строки.
         # Не трогаем строки с SQL, комментариями и содержимым литералов.
         first_line_end = source.find("\n", begin, end)
@@ -953,7 +957,8 @@ def remove_select_blank_lines(source):
         for match in re.finditer(r"(?m)^[^\S\r\n]*\r?\n", source[first_line_end + 1:end]):
             a = first_line_end + 1 + match.start()
             b = first_line_end + 1 + match.end()
-            if not any(a < stop and b > start for start, stop in protected):
+            if (not any(a < stop and b > start for start, stop in protected)
+                    and not any(a < span.stop and b > span.start for span in children)):
                 edits.add((a, b))
 
     for a, b in sorted(edits, reverse=True):
@@ -985,18 +990,27 @@ def format_sql(source, diagnostics=None):
     if any(segment.is_type("unparsable") for segment in walk(parsed.tree)):
         raise ValueError("Обнаружен нераспознанный SQL. Форматирование отменено.")
 
-    # Prepare only simple root queries. Reparse after changing whitespace so
+    # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
+    nested_edits, nested_statements = nested_query_gap_edits(source, parsed.tree)
     boundary_edits, boundary_warnings = plan_edits(
-        source, simple_query_gap_edits(source, parsed.tree),
+        source, simple_query_gap_edits(source, parsed.tree) + nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
     )
+    rejected_groups = ({e.group_id for e in nested_edits}
+                       - {e.group_id for e in boundary_edits})
+    nested_statements = {i for i in nested_statements
+                         if f'nested-select:{i}' not in rejected_groups}
     if boundary_edits:
         source = apply_edits(source, boundary_edits)
         parsed = linter.parse_string(source)
         if parsed.tree is None or any(s.is_type("unparsable") for s in walk(parsed.tree)):
             raise ValueError("Не удалось разобрать SQL после оформления границ клауз.")
 
+    statements = [s for s in parsed.tree.segments if s.is_type('statement')]
+    nested_wheres = {id(s) for i, statement in enumerate(statements)
+                     if i in nested_statements for s in walk(statement)
+                     if s.is_type('where_clause')}
     edits = []
     structural_warnings = list(boundary_warnings)
 
@@ -1111,6 +1125,8 @@ def format_sql(source, diagnostics=None):
                 add_edits(segment, [comment_spacing])
 
         elif segment.is_type("where_clause"):
+            if id(segment) in nested_wheres:
+                continue  # Already handled by narrow, atomic AST gap edits.
             edit = format_where_clause(source, segment)
             if edit is not None:
                 add_edits(segment, [edit])
