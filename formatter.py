@@ -1,8 +1,6 @@
 import re
 import sys
 
-# Всегда выводим SQL в UTF-8, независимо от кодировки Windows.
-sys.stdout.reconfigure(encoding="utf-8")
 from pathlib import Path
 
 from sqlfluff.core import Linter
@@ -1112,6 +1110,8 @@ def format_sql(source, diagnostics=None):
 
 
 def main():
+    # Настраиваем UTF-8 только для CLI, не меняя stdout при импорте.
+    sys.stdout.reconfigure(encoding="utf-8")
     filename = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("input.sql")
     source = filename.read_text(encoding="utf-8-sig")
 

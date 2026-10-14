@@ -172,6 +172,32 @@ class ContractEdgeGoldenTests(unittest.TestCase):
             format_sql("SELECT id FROM users;")
         self.assertEqual(buffer.getvalue(), "")
 
+    def test_import_preserves_stdout(self):
+        project_root = Path(__file__).resolve().parents[2]
+        for stream_setup in (
+            "io.StringIO()",
+            "io.TextIOWrapper(io.BytesIO(), encoding='ascii')",
+        ):
+            with self.subTest(stream=stream_setup):
+                script = (
+                    "import io, sys\n"
+                    f"stream = {stream_setup}\n"
+                    "sys.stdout = stream\n"
+                    "encoding = stream.encoding\n"
+                    "import formatter\n"
+                    "import dbeaver_formatter\n"
+                    "assert sys.stdout is stream\n"
+                    "assert stream.encoding == encoding\n"
+                    "assert stream.tell() == 0\n"
+                )
+                completed = subprocess.run(
+                    [sys.executable, "-c", script], cwd=project_root,
+                    capture_output=True, text=True, encoding="utf-8", check=False,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                self.assertEqual(completed.stdout, "")
+                self.assertEqual(completed.stderr, "")
+
 
 class ContractWarningTests(unittest.TestCase):
     """CLI diagnostics; warnings must not contaminate stdout.

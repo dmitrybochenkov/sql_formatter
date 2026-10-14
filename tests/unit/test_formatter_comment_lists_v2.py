@@ -1,5 +1,5 @@
 import unittest
-from test_formatter_comment_lists import clause
+from .test_formatter_comment_lists import clause
 from formatter_modules.formatter_comment_lists_v2 import commented_select_edits
 from formatter_modules.formatter_edits import apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans
