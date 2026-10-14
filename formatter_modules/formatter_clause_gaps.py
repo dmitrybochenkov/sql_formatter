@@ -220,7 +220,7 @@ def commented_clause_gap_edits(source, clause, indent='    ', group=None):
     return edits
 
 
-def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False):
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False, include_comment_lists=False, include_having=False, include_cte=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
@@ -231,6 +231,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     include_comment_lists enables atomic comment-aware GROUP/ORDER gaps;
     an ambiguous list is left opaque while safe query boundaries are handled.
     include_having enables HAVING predicates and their nested SELECT context.
+    include_cte enables a top-level WITH container around the same query rules.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -240,8 +241,26 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
     statements = [s for s in tree.segments if s.is_type('statement')]
     for index, statement in enumerate(statements):
         root = next((s for s in statement.segments if s.is_type('select_statement')), None)
+        if root is None and include_cte:
+            root = next((s for s in statement.segments if s.is_type('with_compound_statement')), None)
         if root is None:
             continue
+        cte_mode = root.is_type('with_compound_statement')
+        ctes, cte_commas, main_query = [], [], None
+        if cte_mode:
+            code = [s for s in root.segments if s.is_code and not s.is_meta]
+            ctes = [s for s in code if s.is_type('common_table_expression')]
+            cte_commas = [s for s in code if s.is_type('comma')]
+            mains = [s for s in code if s.is_type('select_statement')]
+            if (not ctes or len(mains) != 1 or len(cte_commas) != len(ctes) - 1
+                    or any(s is not code[0] and not s.is_type(
+                        'common_table_expression', 'comma', 'select_statement') for s in code)):
+                continue
+            if any(not any(s.is_type('bracketed') and any(
+                    child.is_type('select_statement') for child in s.segments)
+                    for s in cte.segments) for cte in ctes):
+                continue
+            main_query = mains[0]
         nodes = list(_walk(root))
         queries = [s for s in nodes if s.is_type('select_statement')]
         joins = [s for s in nodes if s.is_type('join_clause')]
@@ -249,7 +268,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             continue
         if (len(queries) < 2 and not include_simple) or any(s.is_type(
                 'over_clause', 'window_specification',
-                'set_expression', 'with_compound_statement') for s in nodes):
+                'set_expression') or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
             continue
         # Only ordinary JOIN ... ON is owned here; USING and other forms
         # retain their existing fallback. Never claim a JOIN with a subquery.
@@ -262,28 +281,34 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             clauses = [s for s in query.segments if s.is_code and not s.is_meta]
             by_type = {s.get_type(): s for s in clauses}
             allowed = {'select_clause', 'from_clause', 'where_clause'}
-            if include_simple and (len(queries) == 1 or (include_having and 'having_clause' in by_type)):
+            if include_simple and (cte_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
-                    or not {'select_clause', 'from_clause'} <= set(by_type)):
+                    or 'select_clause' not in by_type
+                    or (not cte_mode and 'from_clause' not in by_type)):
                 break
             # Preserve the helper's previous scope unless explicitly enabled.
             if not include_comment_lists and any(s.is_type('comment') for clause in clauses
                    if clause.is_type('groupby_clause', 'orderby_clause') for s in _walk(clause)):
                 break
-            if (sum(s.is_type('from_expression_element')
+            if ('from_clause' in by_type and sum(s.is_type('from_expression_element')
                     for s in _owned_walk(by_type['from_clause'])) != 1
-                    and not (include_simple and (len(queries) == 1 or (joins and query is root)))):
+                    and not (include_simple and (cte_mode or len(queries) == 1 or (joins and query is root)))):
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
             continue
         if joins:
-            from_clause = next(s for s in clauses_by_id[id(root)] if s.is_type('from_clause'))
-            if any(s.is_type('select_statement') for s in _walk(from_clause)):
-                continue  # A derived FROM target is still outside ordinary JOIN support.
-            direct_joins = [s for expr in from_clause.segments if expr.is_type('from_expression')
-                            for s in expr.segments if s.is_type('join_clause')]
+            direct_joins = []
+            for query in (queries if cte_mode else [root]):
+                from_clause = next((s for s in clauses_by_id[id(query)] if s.is_type('from_clause')), None)
+                if from_clause is None:
+                    continue
+                local_joins = [s for expr in from_clause.segments if expr.is_type('from_expression')
+                               for s in expr.segments if s.is_type('join_clause')]
+                if local_joins and any(s.is_type('select_statement') for s in _walk(from_clause)):
+                    break  # Derived targets remain outside ordinary JOIN support.
+                direct_joins.extend(local_joins)
             if {id(s) for s in joins} != {id(s) for s in direct_joins}:
                 continue  # Parenthesized JOIN trees are outside this pass.
         bracket_queries = {}
@@ -432,21 +457,22 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                     clause_gap = join_boundary
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
-            from_clause = by_type['from_clause']
-            keyword = next(s for s in from_clause.segments if s.is_type('keyword'))
-            target = next(s for s in _owned_walk(from_clause)
-                          if s.is_type('from_expression_element'))
-            gap(stop(keyword), start(target), ' ')
-            if joins:
-                render_joins(from_clause, base)
-            # Direct FROM expressions only: commas inside expressions are not
-            # table separators. Keep the first target beside its header.
-            targets = [s for s in from_clause.segments if s.is_type('from_expression')]
-            commas = [s for s in from_clause.segments if s.is_type('comma')]
-            if len(targets) > 1 and len(commas) == len(targets) - 1:
-                for left, comma, right in zip(targets, commas, targets[1:]):
-                    gap(stop(left), start(comma), '\n' + base + '    ')
-                    gap(stop(comma), start(right), ' ')
+            from_clause = by_type.get('from_clause')
+            if from_clause is not None:
+                keyword = next(s for s in from_clause.segments if s.is_type('keyword'))
+                target = next(s for s in _owned_walk(from_clause)
+                              if s.is_type('from_expression_element'))
+                gap(stop(keyword), start(target), ' ')
+                if joins:
+                    render_joins(from_clause, base)
+                # Direct FROM expressions only: commas inside expressions are not
+                # table separators. Keep the first target beside its header.
+                targets = [s for s in from_clause.segments if s.is_type('from_expression')]
+                commas = [s for s in from_clause.segments if s.is_type('comma')]
+                if len(targets) > 1 and len(commas) == len(targets) - 1:
+                    for left, comma, right in zip(targets, commas, targets[1:]):
+                        gap(stop(left), start(comma), '\n' + base + '    ')
+                        gap(stop(comma), start(right), ' ')
             for clause in clauses:
                 if clause.is_type('groupby_clause', 'orderby_clause') and include_comment_lists:
                     candidates = commented_clause_gap_edits(source, clause, base + '    ', group)
@@ -604,5 +630,49 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                     render(child, container_level + 4)
 
         gap(source.rfind('\n', 0, start(root)) + 1, start(root), '')
-        render(root, 0)
+        if cte_mode:
+            keyword = next(s for s in root.segments if s.is_type('keyword'))
+            gap(stop(keyword), start(ctes[0]), ' ')
+            for cte in ctes:
+                header = [s for s in cte.segments if s.is_code and not s.is_meta]
+                bracket = next(s for s in header if s.is_type('bracketed'))
+                child = bracket_queries[id(bracket)]
+                for left, right in zip(header, header[1:]):
+                    if not right.is_type('cte_column_list'):
+                        gap(stop(left), start(right), ' ')
+                opening = next(s for s in bracket.segments if s.is_type('start_bracket'))
+                closing = next(s for s in bracket.segments if s.is_type('end_bracket'))
+                boundary(stop(opening), start(child), '\n    ')
+                boundary(stop(child), start(closing), '\n')
+                render(child, 4)
+            for left, comma, right in zip(ctes, cte_commas, ctes[1:]):
+                a, b = stop(left), start(right)
+                comments = [p for p in protected if a <= p.start and p.end <= b
+                            and p.kind in ('line_comment', 'block_comment')]
+                points = ([(a, comments[0].start)] + [
+                    (p.end, q.start) for p, q in zip(comments, comments[1:])
+                ] + [(comments[-1].end, b)]) if comments else [(a, b)]
+                raw = [source[x:start(comma)] + source[stop(comma):y]
+                       if x <= start(comma) < stop(comma) <= y else source[x:y] for x, y in points]
+                if any(t.strip() for t in raw):
+                    continue
+                trailing = bool(comments) and '\n' not in raw[0]
+                if comments and (any(t.count('\n') != 1 for t in raw[1:])
+                                 or (trailing and len(comments) != 1)):
+                    continue  # Keep an ambiguous separator and its comments intact.
+                for i, (x, y) in enumerate(points):
+                    if not comments:
+                        replacement = '\n\n, '
+                    elif i == 0:
+                        replacement = ' ' if trailing else '\n\n'
+                    elif i == len(points) - 1:
+                        replacement = '\n\n, ' if trailing else '\n, '
+                    else:
+                        replacement = '\n'
+                    if source[x:y] != replacement:
+                        edits.append(Edit(x, y, replacement, 'CTE-GAPS', group, group))
+            join_boundary(stop(ctes[-1]), start(main_query), '\n\n')
+            render(main_query, 0)
+        else:
+            render(root, 0)
     return edits, handled
