@@ -52,8 +52,10 @@ def clause_gap_edits(source, clause):
     if base.strip() or '\t' in base:
         return None
     title = ' '.join(raw[:match.end()].split()).upper()
-    if kind == 'from_clause' and len(items) == 1:
+    if kind == 'from_clause':
         rendered = title + ' ' + items[0]
+        for item in items[1:]:
+            rendered += '\n' + base + '    , ' + item
     elif kind != 'from_clause' and len(items) == 1:
         rendered = title + ' ' + items[0]
     else:
@@ -153,7 +155,8 @@ def nested_query_gap_edits(source, tree, include_simple=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
-    include_simple extends the same rules to flat queries and FROM lists;
+    include_simple extends the same rules to flat queries and FROM lists,
+    plus comment-free GROUP/ORDER lists and opaque HAVING boundaries;
     the default retains the B3.2 helper's supported scope.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
@@ -175,12 +178,20 @@ def nested_query_gap_edits(source, tree, include_simple=False):
         clauses_by_id = {}
         for query in queries:
             clauses = [s for s in query.segments if s.is_code and not s.is_meta]
-            if [s.get_type() for s in clauses] not in (
-                    ['select_clause', 'from_clause'],
-                    ['select_clause', 'from_clause', 'where_clause']):
+            by_type = {s.get_type(): s for s in clauses}
+            allowed = {'select_clause', 'from_clause', 'where_clause'}
+            if include_simple and len(queries) == 1:
+                allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
+            if (len(by_type) != len(clauses) or not set(by_type) <= allowed
+                    or not {'select_clause', 'from_clause'} <= set(by_type)):
+                break
+            # Commented GROUP/ORDER lists belong to B4.3. Do not silently
+            # claim them or change their legacy fallback in B4.1.
+            if any(s.is_type('comment') for clause in clauses
+                   if clause.is_type('groupby_clause', 'orderby_clause') for s in _walk(clause)):
                 break
             if (sum(s.is_type('from_expression_element')
-                    for s in _owned_walk(clauses[1])) != 1
+                    for s in _owned_walk(by_type['from_clause'])) != 1
                     and not (include_simple and len(queries) == 1)):
                 break
             clauses_by_id[id(query)] = clauses
@@ -246,6 +257,7 @@ def nested_query_gap_edits(source, tree, include_simple=False):
 
         def render(query, level):
             clauses = clauses_by_id[id(query)]
+            by_type = {s.get_type(): s for s in clauses}
             base = ' ' * level
             for clause in clauses:
                 keyword = next(s for s in clause.segments if s.is_type('keyword'))
@@ -265,7 +277,7 @@ def nested_query_gap_edits(source, tree, include_simple=False):
                 clause_gap = boundary if len(queries) > 1 else gap
                 clause_gap(stop(left), start(right),
                            ('\n' if right.is_type('from_clause') else '\n\n') + base)
-            from_clause = clauses[1]
+            from_clause = by_type['from_clause']
             keyword = next(s for s in from_clause.segments if s.is_type('keyword'))
             target = next(s for s in _owned_walk(from_clause)
                           if s.is_type('from_expression_element'))
@@ -279,6 +291,24 @@ def nested_query_gap_edits(source, tree, include_simple=False):
                     gap(stop(left), start(comma), '\n' + base + '    ')
                     gap(stop(comma), start(right), ' ')
             for clause in clauses:
+                if clause.is_type('groupby_clause', 'orderby_clause'):
+                    # Direct AST commas delimit complete items, including
+                    # ORDER modifiers. Function arguments are never split.
+                    code = [s for s in clause.segments if s.is_code and not s.is_meta]
+                    first_keyword, second_keyword = code[:2]
+                    items = code[2:]
+                    commas = [s for s in items if s.is_type('comma')]
+                    gap(stop(first_keyword), start(second_keyword), ' ')
+                    if items:
+                        gap(stop(second_keyword), start(items[0]),
+                            '\n' + base + '    ' if commas else ' ')
+                    for i, item in enumerate(items):
+                        if item.is_type('comma') and 0 < i < len(items) - 1:
+                            gap(stop(items[i - 1]), start(item), '\n' + base + '    ')
+                            gap(stop(item), start(items[i + 1]), ' ')
+                # HAVING predicates and GROUP/ORDER expressions are opaque.
+                if not clause.is_type('select_clause', 'from_clause', 'where_clause'):
+                    continue
                 leaves = [s for s in _owned_walk(clause) if not s.segments
                           and not s.is_meta and s.pos_marker
                           and not s.is_type('whitespace', 'newline')]
@@ -292,8 +322,8 @@ def nested_query_gap_edits(source, tree, include_simple=False):
                     if following is not None and not following.is_type('comment'):
                         gap(stop(operator), start(following), ' ')
             vertical = False
-            if len(clauses) == 3:
-                where = clauses[2]
+            where = by_type.get('where_clause')
+            if where is not None:
                 expression = next(s for s in where.segments if s.is_type('expression'))
                 ands = [s for s in expression.segments
                         if s.is_type('binary_operator') and s.raw_upper == 'AND']

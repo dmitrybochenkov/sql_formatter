@@ -29,7 +29,7 @@ class ClauseGapTests(unittest.TestCase):
     def test_from_single(self):
         self.check('FROM    users t', 'from_clause', 'FROM users t')
     def test_from_multiple(self):
-        self.check('FROM users a, payments b', 'from_clause', 'FROM\n    users a\n    , payments b', (12,))
+        self.check('FROM users a, payments b', 'from_clause', 'FROM users a\n    , payments b', (12,))
     def test_comment_skipped(self):
         sql = 'GROUP BY a -- note\n, b'
         self.assertIsNone(clause_gap_edits(sql, clause(sql,'groupby_clause',(19,))))

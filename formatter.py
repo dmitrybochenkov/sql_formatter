@@ -1059,6 +1059,9 @@ def format_sql(source, diagnostics=None):
     nested_froms = {id(s) for i, statement in enumerate(statements)
                    if i in nested_statements for s in walk(statement)
                    if s.is_type('from_clause')}
+    basic_lists = {id(s) for i, statement in enumerate(statements)
+                   if i in nested_statements for s in walk(statement)
+                   if s.is_type('groupby_clause', 'orderby_clause')}
     edits = []
     structural_warnings = list(boundary_warnings)
     for segment in walk(parsed.tree):
@@ -1097,6 +1100,8 @@ def format_sql(source, diagnostics=None):
         edits.extend(group)
 
     for segment in walk(parsed.tree):
+        if id(segment) in basic_lists:
+            continue  # Prepared by the AST gap pass; never includes OVER.
         if segment.is_type(
             "select_clause",
             "groupby_clause",
