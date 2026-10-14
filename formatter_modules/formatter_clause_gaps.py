@@ -151,13 +151,14 @@ def _owned_walk(node):
             yield from _owned_walk(child)
 
 
-def nested_query_gap_edits(source, tree, include_simple=False):
+def nested_query_gap_edits(source, tree, include_simple=False, include_joins=False):
     """Prepare supported queries using AST context, not input columns.
 
     Return edits and statement indexes whose WHERE clauses this pass owns.
     include_simple extends the same rules to flat queries and FROM lists,
     plus comment-free GROUP/ORDER lists and opaque HAVING boundaries;
     the default retains the B3.2 helper's supported scope.
+    include_joins opts flat queries into ordinary, direct JOIN ... ON gaps.
     All changes for one statement form a B2 atomic group. Expressions, comment
     bytes and literal bytes are never replaced. Existing comment/OR refusal
     for boolean restructuring is intentionally retained.
@@ -171,9 +172,17 @@ def nested_query_gap_edits(source, tree, include_simple=False):
             continue
         nodes = list(_walk(root))
         queries = [s for s in nodes if s.is_type('select_statement')]
+        joins = [s for s in nodes if s.is_type('join_clause')]
+        if joins and (not include_joins or not include_simple or len(queries) != 1):
+            continue
         if (len(queries) < 2 and not include_simple) or any(s.is_type(
-                'join_clause', 'over_clause', 'window_specification',
+                'over_clause', 'window_specification',
                 'set_expression', 'with_compound_statement') for s in nodes):
+            continue
+        # Only ordinary JOIN ... ON is owned here; USING and other forms
+        # retain their existing fallback. Never claim a JOIN with a subquery.
+        if any(not any(s.is_type('join_on_condition') for s in join.segments)
+               for join in joins):
             continue
         clauses_by_id = {}
         for query in queries:
@@ -197,6 +206,12 @@ def nested_query_gap_edits(source, tree, include_simple=False):
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
             continue
+        if joins:
+            from_clause = next(s for s in clauses_by_id[id(root)] if s.is_type('from_clause'))
+            direct_joins = [s for expr in from_clause.segments if expr.is_type('from_expression')
+                            for s in expr.segments if s.is_type('join_clause')]
+            if {id(s) for s in joins} != {id(s) for s in direct_joins}:
+                continue  # Parenthesized JOIN trees are outside this pass.
         bracket_queries = {}
 
         def locate(node, bracket=None):
@@ -255,6 +270,68 @@ def nested_query_gap_edits(source, tree, include_simple=False):
         def stop(node):
             return node.pos_marker.source_slice.stop
 
+        def join_boundary(a, b, replacement):
+            comments = [p for p in protected if a <= p.start and p.end <= b
+                        and p.kind in ('line_comment', 'block_comment')]
+            if not comments:
+                gap(a, b, replacement)
+                return
+            if '\n' not in replacement:
+                return  # Never collapse a line comment's terminating newline.
+            points = [(a, comments[0].start)] + [
+                (p.end, q.start) for p, q in zip(comments, comments[1:])
+            ] + [(comments[-1].end, b)]
+            if any(source[x:y].strip() for x, y in points):
+                return
+            # A blank below a comment makes its attachment ambiguous.
+            if any(source[x:y].count('\n') > 1 for x, y in points[1:]):
+                return
+            indent = replacement.rsplit('\n', 1)[-1]
+            trailing = '\n' not in source[points[0][0]:points[0][1]]
+            for position, (x, y) in enumerate(points):
+                if position == 0 and trailing:
+                    continue
+                gap(x, y, replacement if position == (1 if trailing else 0)
+                    else '\n' + indent)
+
+        def render_joins(from_clause, base):
+            for from_expression in from_clause.segments:
+                if not from_expression.is_type('from_expression'):
+                    continue
+                previous = None
+                for node in from_expression.segments:
+                    if node.is_type('from_expression_element'):
+                        previous = node
+                    elif node.is_type('join_clause'):
+                        if previous is not None:
+                            join_boundary(stop(previous), start(node), '\n\n' + base)
+                        code = [s for s in node.segments if s.is_code and not s.is_meta]
+                        for left, right in zip(code, code[1:]):
+                            join_boundary(stop(left), start(right),
+                                          '\n' + base if right.is_type('join_on_condition') else ' ')
+                        on = next(s for s in code if s.is_type('join_on_condition'))
+                        keyword = next(s for s in on.segments if s.is_type('keyword'))
+                        expression = next(s for s in on.segments if s.is_type('expression'))
+                        gap(stop(keyword), start(expression), ' ')
+                        leaves = [s for s in _owned_walk(expression) if not s.segments
+                                  and not s.is_meta and s.pos_marker
+                                  and not s.is_type('whitespace', 'newline')]
+                        vertical = not any(s.is_type('binary_operator') and s.raw_upper == 'OR'
+                                           for s in expression.segments)
+                        for operator in _owned_walk(expression):
+                            is_and = (vertical and operator in expression.segments
+                                      and operator.is_type('binary_operator') and operator.raw_upper == 'AND')
+                            if not is_and and not (operator.is_type('comparison_operator') and operator.raw in (
+                                    '=', '<', '>', '<=', '>=', '<>', '!=', '^=')):
+                                continue
+                            before = next((s for s in reversed(leaves) if stop(s) <= start(operator)), None)
+                            after = next((s for s in leaves if start(s) >= stop(operator)), None)
+                            if before is not None and (is_and or not before.is_type('comment')):
+                                gap(stop(before), start(operator), '\n' + base + '    ' if is_and else ' ')
+                            if after is not None and not after.is_type('comment'):
+                                gap(stop(operator), start(after), ' ')
+                        previous = node
+
         def render(query, level):
             clauses = clauses_by_id[id(query)]
             by_type = {s.get_type(): s for s in clauses}
@@ -282,6 +359,8 @@ def nested_query_gap_edits(source, tree, include_simple=False):
             target = next(s for s in _owned_walk(from_clause)
                           if s.is_type('from_expression_element'))
             gap(stop(keyword), start(target), ' ')
+            if joins:
+                render_joins(from_clause, base)
             # Direct FROM expressions only: commas inside expressions are not
             # table separators. Keep the first target beside its header.
             targets = [s for s in from_clause.segments if s.is_type('from_expression')]

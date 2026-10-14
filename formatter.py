@@ -1037,7 +1037,8 @@ def format_sql(source, diagnostics=None):
 
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
-    nested_edits, nested_statements = nested_query_gap_edits(source, parsed.tree, include_simple=True)
+    nested_edits, nested_statements = nested_query_gap_edits(
+        source, parsed.tree, include_simple=True, include_joins=True)
     boundary_edits, boundary_warnings = plan_edits(
         source, nested_edits,
         protected=[(span.start, span.end) for span in protected_spans(source)],
@@ -1062,6 +1063,9 @@ def format_sql(source, diagnostics=None):
     basic_lists = {id(s) for i, statement in enumerate(statements)
                    if i in nested_statements for s in walk(statement)
                    if s.is_type('groupby_clause', 'orderby_clause')}
+    basic_joins = {id(s) for i, statement in enumerate(statements)
+                   if i in nested_statements for s in walk(statement)
+                   if s.is_type('join_clause')}
     edits = []
     structural_warnings = list(boundary_warnings)
     for segment in walk(parsed.tree):
@@ -1173,6 +1177,8 @@ def format_sql(source, diagnostics=None):
                         add_edits(segment, [edit])
 
         elif segment.is_type("join_clause"):
+            if id(segment) in basic_joins:
+                continue  # Narrow atomic JOIN/ON edits already applied.
             has_nested_select = any(
                 seg.is_type("select_statement") for seg in walk(segment)
             )
