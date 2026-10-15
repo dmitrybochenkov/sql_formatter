@@ -61,6 +61,47 @@ def format_bytes(original):
         errors.close()
 
 
+# Both explicit profile IDs deliberately use the same stable B8 engine.
+PROFILE_FORMATTERS = {'personal': format_bytes, 'corporate': format_bytes}
+
+
+def select_and_format_bytes(original):
+    """Keep cancellation and GUI failures outside the noninteractive engine."""
+    output = io.TextIOWrapper(io.BytesIO(), encoding='utf-8')
+    errors = io.TextIOWrapper(io.BytesIO(), encoding='utf-8')
+    try:
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            from dbeaver_profile_selector import select_profile
+            profile = select_profile()
+            output.flush()
+            errors.flush()
+            if output.buffer.getvalue() or errors.buffer.getvalue():
+                log_event('ADAPTER-GUI-OUTPUT', 'UnexpectedOutput')
+                return original
+            if profile is None:
+                log_event('ADAPTER-CANCEL', 'Cancelled')
+                return original
+            if profile not in PROFILE_FORMATTERS:
+                log_event('ADAPTER-GUI', 'InvalidProfile')
+                return original
+            log_event('ADAPTER-PROFILE', profile)
+            result = PROFILE_FORMATTERS[profile](original)
+            if not isinstance(result, bytes):
+                raise TypeError('Profile formatter must return bytes')
+            output.flush()
+            errors.flush()
+            if output.buffer.getvalue() or errors.buffer.getvalue():
+                log_event('ADAPTER-GUI-OUTPUT', 'UnexpectedOutput')
+                return original
+            return result
+    except (Exception, SystemExit, KeyboardInterrupt):
+        log_event('ADAPTER-GUI', 'SelectionOrDispatchError')
+        return original
+    finally:
+        output.close()
+        errors.close()
+
+
 def main():
     # Silence even native writes/import failures. Only the saved descriptor may
     # carry the completed result. Do not reconfigure streams during import.
@@ -81,7 +122,7 @@ def main():
         except Exception:
             log_event('ADAPTER-READ', 'ReadError')
             return 1
-        result = format_bytes(original)
+        result = select_and_format_bytes(original)
         try:
             remaining = memoryview(result)
             while remaining:

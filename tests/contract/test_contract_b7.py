@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 import dbeaver_adapter as adapter
 from formatter import format_sql, validate_sql_unchanged
+from tests.adapter_runner import adapter_command
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -30,7 +31,7 @@ class B7AdapterTests(unittest.TestCase):
     def run_adapter(self, raw, script=None, merge=False):
         path = self.base / 'запрос с пробелом.sql'
         path.write_bytes(raw)
-        result = subprocess.run([sys.executable, str(script or ROOT / 'dbeaver_adapter.py'), str(path)],
+        result = subprocess.run(adapter_command(script or ROOT / 'dbeaver_adapter.py', path),
                                 cwd=self.base, env=self.env, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT if merge else subprocess.PIPE, timeout=30)
         self.assertEqual(path.read_bytes(), raw)
@@ -106,7 +107,7 @@ class B7AdapterTests(unittest.TestCase):
     def test_paths_foreign_configuration_and_import(self):
         project = self.base / 'проект с пробелами'
         project.mkdir()
-        for name in ('formatter.py', 'dbeaver_adapter.py', 'dbeaver_formatter.py', '.sqlfluff'):
+        for name in ('formatter.py', 'dbeaver_adapter.py', 'dbeaver_profile_selector.py', 'dbeaver_formatter.py', '.sqlfluff'):
             shutil.copy(ROOT / name, project / name)
         shutil.copytree(ROOT / 'formatter_modules', project / 'formatter_modules',
                         ignore=shutil.ignore_patterns('__pycache__'))
@@ -124,7 +125,7 @@ class B7AdapterTests(unittest.TestCase):
         raw = b'\xef\xbb\xbfSELECT a FROM t;\r'
         path = self.base / 'input.sql'
         path.write_bytes(raw)
-        result = subprocess.run([sys.executable, '-S', str(ROOT / 'dbeaver_adapter.py'), str(path)],
+        result = subprocess.run(adapter_command(ROOT / 'dbeaver_adapter.py', path, python_options=('-S',)),
                                 env=self.env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout, raw)
@@ -155,7 +156,9 @@ class B7AdapterTests(unittest.TestCase):
         path = self.base / 'input.sql'
         path.write_bytes(b'SELECT a FROM t;')
         for target in ('os.write', 'pathlib.Path.read_bytes'):
-            code = ('import runpy,sys; from unittest.mock import patch; '
+            code = ('import runpy,sys; from pathlib import Path; from unittest.mock import patch; '
+                    'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
+                    'import dbeaver_profile_selector as selector; selector.select_profile=lambda: "personal"; '
                     'sys.argv=[sys.argv[1],sys.argv[2]]; '
                     f'context=patch({target!r},side_effect=PermissionError("secret")); '
                     'context.start(); runpy.run_path(sys.argv[0],run_name="__main__")')
