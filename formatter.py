@@ -5,6 +5,7 @@ from pathlib import Path
 from dataclasses import replace
 
 from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines
+from formatter_modules.formatter_case import normalize_case
 
 from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits, Diagnostic, line_number
 from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans
@@ -849,7 +850,7 @@ def _validation_snapshot(source):
 
 
 def validate_sql_unchanged(original, formatted):
-    """Validate exact tokens, with two narrowly specified AST exceptions."""
+    """Validate exact tokens, scoped prefixes and CP01–CP05-proven case edits."""
     # Lexical spans represent complete protected units, even when SQLFluff
     # splits a block comment into comment/newline/comment AST segments.
     def protected_values(sql):
@@ -857,6 +858,7 @@ def validate_sql_unchanged(original, formatted):
     if protected_values(original) != protected_values(formatted):
         raise ValueError('Форматирование изменило защищённые участки SQL!')
     before, before_comments, original_predicates = _validation_snapshot(original)
+    case_before, _, _ = _validation_snapshot(normalize_case(original))
     after, after_comments, formatted_predicates = _validation_snapshot(formatted)
     prefix = [('numeric_literal', '1'), ('raw_comparison_operator', '='),
               ('numeric_literal', '1'), ('binary_operator', 'AND')]
@@ -880,14 +882,9 @@ def validate_sql_unchanged(original, formatted):
             removed.update(range(after_offset, after_offset + 4))
     after = [t for i, t in enumerate(after) if i not in removed]
 
-    def same(left, right):
-        if left == right:
-            return True
-        kind, raw, context, header = left
-        return (header and right[3] and kind == right[0] == 'keyword'
-                and context == right[2] and raw.upper() == right[1])
-
-    if len(before) != len(after) or any(not same(a, b) for a, b in zip(before, after)):
+    if len(before) != len(after) or len(case_before) != len(before) or any(
+            a != b and b != permitted
+            for a, b, permitted in zip(before, after, case_before)):
         import difflib
         diff = ''.join(difflib.unified_diff(
             [f'{t[0]}: {t[1]!r} ({t[2]})\n' for t in before],
@@ -1262,7 +1259,9 @@ def format_sql(source, diagnostics=None):
 
     validate_sql_unchanged(original_source, result)
 
-    return result.rstrip("\n") + "\n"
+    result = normalize_case(result.rstrip("\n") + "\n")
+    validate_sql_unchanged(original_source, result)
+    return result
 
 
 def main():

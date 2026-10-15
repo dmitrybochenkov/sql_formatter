@@ -539,9 +539,9 @@ class B33BasicClauseTests(unittest.TestCase):
         ('select id from users where active = 1;',
          'SELECT\n    id\nFROM users\n\nWHERE active = 1\n;\n'),
         ('SeLeCt Id from Users WhErE active=1;',
-         'SELECT\n    Id\nFROM Users\n\nWHERE active = 1\n;\n'),
+         'SELECT\n    id\nFROM users\n\nWHERE active = 1\n;\n'),
         ("select 'select FROM where' AS \"where\",MixedName from MixedTable where MixedName='WHERE';",
-         "SELECT\n    'select FROM where' AS \"where\"\n    , MixedName\nFROM MixedTable\n\nWHERE MixedName = 'WHERE'\n;\n"),
+         'SELECT\n    \'select FROM where\' AS "where"\n    , mixedname\nFROM mixedtable\n\nWHERE mixedname = \'WHERE\'\n;\n'),
         ('SELECT a.id,b.name FROM a,b;',
          'SELECT\n    a.id\n    , b.name\nFROM a\n    , b\n;\n'),
         ('SELECT id,\n-- first\n-- second\nname FROM users;',
@@ -551,7 +551,7 @@ class B33BasicClauseTests(unittest.TestCase):
         ('SELECT x+y AS total,-x AS neg,COUNT(*) AS n FROM t;',
          'SELECT\n    x + y AS total\n    , -x AS neg\n    , COUNT(*) AS n\nFROM t\n;\n'),
         ('select distinct Id from Users where a=1 and b=2;',
-         'SELECT distinct\n    Id\nFROM Users\n\nWHERE 1=1\n    AND a = 1\n    and b = 2\n;\n'),
+         'SELECT DISTINCT\n    id\nFROM users\n\nWHERE 1=1\n    AND a = 1\n    AND b = 2\n;\n'),
     ]
 
     def test_exact_basic_outputs(self):
@@ -658,8 +658,10 @@ class B33StrictValidatorTests(unittest.TestCase):
         self.assertAccepted(source, source)
         self.assertAccepted(source, source.replace('select distinct', 'SELECT distinct')
                             .replace('from MixedTable', 'FROM MixedTable').replace('where Id', 'WHERE Id'))
-        for old, new in (('distinct', 'DISTINCT'), (' as ', ' AS '), (' in ', ' IN '),
-                         ('Id', 'ID'), ('Alias', 'ALIAS'), ('MixedTable', 'MIXEDTABLE'),
+        for old, new in (('distinct', 'DISTINCT'), (' as ', ' AS '), (' in ', ' IN ')):
+            with self.subTest(old=old):
+                self.assertAccepted(source, source.replace(old, new))
+        for old, new in (('Id', 'ID'), ('Alias', 'ALIAS'), ('MixedTable', 'MIXEDTABLE'),
                          ("'select FROM WHERE'", "'SELECT FROM WHERE'")):
             with self.subTest(old=old):
                 self.assertRejected(source, source.replace(old, new))
@@ -734,7 +736,7 @@ class B41ClauseContextTests(unittest.TestCase):
         ('SELECT a FROM t HAVING a>1 AND a<3 ORDER BY a;',
          'SELECT\n    a\nFROM t\n\nHAVING 1=1\n    AND a > 1\n    AND a < 3\n\nORDER BY a\n;\n'),
         ('select a from t group by a,b order by a desc,b;',
-         'SELECT\n    a\nFROM t\n\ngroup by\n    a\n    , b\n\norder by\n    a desc\n    , b\n;\n'),
+         'SELECT\n    a\nFROM t\n\nGROUP BY\n    a\n    , b\n\nORDER BY\n    a DESC\n    , b\n;\n'),
         ("SELECT COALESCE(a,b) AS x FROM t GROUP BY COALESCE(a,b),'a,b' ORDER BY x DESC NULLS LAST,a;",
          "SELECT\n    COALESCE(a,b) AS x\nFROM t\n\nGROUP BY\n    COALESCE(a,b)\n    , 'a,b'\n\nORDER BY\n    x DESC NULLS LAST\n    , a\n;\n"),
     ]
@@ -855,7 +857,8 @@ class B42JoinTests(unittest.TestCase):
         second_diagnostics = []
         self.assertEqual(format_sql(actual, diagnostics=second_diagnostics), actual)
         self.assertFalse(any(d.code in ('SQLFMT-E001', 'SQLFMT-E002') for d in second_diagnostics))
-        self.assertEqual(sql_tokens(source), sql_tokens(actual))
+        from formatter_modules.formatter_case import normalize_case
+        self.assertEqual(sql_tokens(normalize_case(source)), sql_tokens(actual))
         return actual
 
     def test_literal_multiple_conditions_whitespace_variants(self):
@@ -893,7 +896,7 @@ class B42JoinTests(unittest.TestCase):
 
     def test_literals_and_existing_keyword_case_preserved(self):
         self.check_join("SELECT t.a FROM t left join u on t.a=u.a and u.b='SELECT FROM WHERE JOIN AND';",
-                        "SELECT\n    t.a\nFROM t\n\nleft join u\non t.a = u.a\n    and u.b = 'SELECT FROM WHERE JOIN AND'\n;\n")
+                        "SELECT\n    t.a\nFROM t\n\nLEFT JOIN u\nON t.a = u.a\n    AND u.b = 'SELECT FROM WHERE JOIN AND'\n;\n")
 
     def test_between_and_parenthesized_or(self):
         self.check_join('SELECT t.a FROM t JOIN u ON t.a=u.a AND u.b BETWEEN 1 AND 2 AND (u.c=3 OR u.c=4);',
@@ -1074,7 +1077,7 @@ class B44HavingTests(unittest.TestCase):
         from formatter import validate_sql_unchanged
         from formatter_modules.formatter_protection import protected_spans
         source = 'SELECT a FROM t GROUP BY a ' + header + ' ' + predicate + ';'
-        expected = self.PREFIX + header + ' ' + expected_predicate + '\n;\n'
+        expected = self.PREFIX + header.upper() + ' ' + expected_predicate + '\n;\n'
         diagnostics = []
         actual = format_sql(source, diagnostics=diagnostics)
         self.assertEqual(actual, expected)
@@ -1104,9 +1107,9 @@ class B44HavingTests(unittest.TestCase):
 
     def test_case_literals_and_existing_prefix(self):
         self.check_having("MAX(b)='HAVING AND 1=1' and SUM(a+1)>2",
-                          "1=1\n    AND MAX(b) = 'HAVING AND 1=1'\n    and SUM(a+1) > 2", header='having')
+                          "1=1\n    AND MAX(b) = 'HAVING AND 1=1'\n    AND SUM(a+1) > 2", header='having')
         self.check_having('1=1 and COUNT(*)>1 AND SUM(a)>2',
-                          '1=1\n    and COUNT(*) > 1\n    AND SUM(a) > 2', header='HaViNg')
+                          '1=1\n    AND COUNT(*) > 1\n    AND SUM(a) > 2', header='HaViNg')
 
     def test_comments_and_header_comments(self):
         self.check_having("MAX(b)='OK' AND SUM(a)>1 -- left\nAND MIN(c)<9",
@@ -1199,12 +1202,13 @@ class B44HavingValidatorTests(unittest.TestCase):
         self.assert_valid(source, valid)
         for candidate in (valid.replace('1=1 AND ', '1=1 AND 1=1 AND '),
                           valid.replace("'OK'", "'ok'"), valid.replace('SUM(a)>2', 'SUM(a)>3'),
-                          valid.replace(' and SUM(a)>2', ''), valid.replace('having', 'HAVING'),
-                          valid.replace(' and ', ' AND '), valid.replace('MAX(b)', 'MAX(a)'),
+                          valid.replace(' and SUM(a)>2', ''), valid.replace('MAX(b)', 'MAX(a)'),
                           valid.replace('1=1', '2=2')):
             with self.subTest(candidate=candidate):
                 self.assert_invalid(source, candidate)
         self.assert_invalid(valid, source)
+        self.assert_valid(source, valid.replace('having', 'HAVING'))
+        self.assert_valid(source, valid.replace(' and ', ' AND '))
         self.assert_invalid(valid, valid.replace('1=1 AND ', '1=1 AND 1=1 AND '))
         commented = source.replace(' and ', ' /* exact */ and ')
         self.assert_invalid(commented, commented.replace('having ', 'having 1=1 AND ').replace('/* exact */', '/* changed */'))
@@ -1368,7 +1372,7 @@ class B51CTETests(unittest.TestCase):
 
     def test_keyword_case_columns_and_literals(self):
         self.check_cte("with c(a,b) as(select x,'WITH, SELECT WHERE AND' from t) select a from c;",
-            "with c(a,b) as (\n    SELECT\n        x\n        , 'WITH, SELECT WHERE AND'\n    FROM t\n)\n\nSELECT\n    a\nFROM c\n;\n")
+            "WITH c(a,b) AS (\n    SELECT\n        x\n        , 'WITH, SELECT WHERE AND'\n    FROM t\n)\n\nSELECT\n    a\nFROM c\n;\n")
 
     def test_scalar_select_and_multiline_inputs(self):
         expected = 'WITH c AS (\n    SELECT\n        1 AS a\n)\n\nSELECT\n    a\nFROM c\n;\n'
@@ -1452,7 +1456,7 @@ class B52SetOperationTests(unittest.TestCase):
 
     def test_operators_preserve_case_and_multiline_input(self):
         for operator in ('UNION', 'union all', 'union DISTINCT', 'Intersect', 'INTERSECT ALL', 'except', 'except all'):
-            expected = 'SELECT\n    a\nFROM t\n\n' + operator + '\n\nSELECT\n    b\nFROM u\n;\n'
+            expected = 'SELECT\n    a\nFROM t\n\n' + operator.upper() + '\n\nSELECT\n    b\nFROM u\n;\n'
             for source in (f'SELECT a FROM t {operator} SELECT b FROM u;',
                            f'   SELECT a\n FROM t\n {operator}\n  SELECT b\nFROM u;'):
                 with self.subTest(source=source):
@@ -1605,11 +1609,11 @@ class B53WindowTests(unittest.TestCase):
                       'rows  3 preceding', 'RANGE CURRENT ROW'):
             with self.subTest(frame=frame):
                 self.check_window(f'SELECT SUM(a) OVER (ORDER BY b {frame}) AS n FROM t;',
-                    f'SELECT\n    SUM(a) OVER (\n        ORDER BY b\n        {frame}\n    ) AS n\nFROM t\n;\n')
+                    f'SELECT\n    SUM(a) OVER (\n        ORDER BY b\n        {frame.upper()}\n    ) AS n\nFROM t\n;\n')
 
     def test_arguments_literals_and_case_are_opaque(self):
         self.check_window("SELECT SUM(CASE WHEN s='ORDER BY, OVER' THEN 1 ELSE 0 END) over (partition by COALESCE(a+b,'x,y'),s order by c range between unbounded preceding and current row) AS n FROM t;",
-            "SELECT\n    SUM(CASE WHEN s='ORDER BY, OVER' THEN 1 ELSE 0 END) over (\n        partition by\n            COALESCE(a+b,'x,y')\n            , s\n        order by c\n        range between unbounded preceding and current row\n    ) AS n\nFROM t\n;\n")
+            "SELECT\n    SUM(CASE WHEN s='ORDER BY, OVER' THEN 1 ELSE 0 END) OVER (\n        PARTITION BY\n            COALESCE(a+b,'x,y')\n            , s\n        ORDER BY c\n        RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n    ) AS n\nFROM t\n;\n")
         self.check_window('SELECT SUM(a /* arg */ +  b) OVER (PARTITION BY a) AS n FROM t;',
             'SELECT\n    SUM(a /* arg */ +  b) OVER (\n        PARTITION BY a\n    ) AS n\nFROM t\n;\n')
 
@@ -1644,7 +1648,7 @@ class B53WindowTests(unittest.TestCase):
             'SELECT\n    SUM(a) OVER (\n        ORDER BY a\n    ) AS n\nFROM t\n\nUNION ALL\n\nSELECT\n    SUM(b) OVER (\n        PARTITION BY c\n    ) AS n\nFROM u\n\nORDER BY n\n;\n')
 
     def test_multiline_and_compact_inputs(self):
-        expected = 'SELECT\n    ROW_NUMBER() over (\n        partition by a\n        order by b\n    ) AS n\nFROM t\n;\n'
+        expected = 'SELECT\n    ROW_NUMBER() OVER (\n        PARTITION BY a\n        ORDER BY b\n    ) AS n\nFROM t\n;\n'
         for source in ('select ROW_NUMBER() over(partition by a order by b) AS n from t;',
                        '   select\n  ROW_NUMBER() over (\n partition by a\n     order by b\n     ) AS n\n  from t;'):
             self.check_window(source, expected)
@@ -1708,7 +1712,8 @@ class B53WindowTests(unittest.TestCase):
         from formatter import validate_sql_unchanged
         source = 'SELECT SUM(a) over (partition by b order by c DESC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS n FROM t;'
         valid = format_sql(source)
-        for invalid in (valid.replace('over', 'OVER'),valid.replace('partition', 'PARTITION'),
+        validate_sql_unchanged(source, valid)
+        for invalid in (valid.replace('OVER', 'OvEr'),valid.replace('PARTITION', 'Partition'),
                         valid.replace('DESC', 'ASC'), valid.replace('2 PRECEDING', '3 PRECEDING'),
                         valid.replace('ROWS', 'RANGE'), valid.replace('SUM(a)', 'SUM(b)'),
                         valid.replace('AND CURRENT ROW', 'AND 1=1 AND CURRENT ROW')):
@@ -1758,7 +1763,8 @@ class B54QualifyTests(unittest.TestCase):
                     for q in tree.recursive_crawl('qualify_clause')]
         # Stronger than searching for the text '1=1': literals may contain it,
         # and existing tautologies must remain while no synthetic token is added.
-        self.assertEqual(qualify_tokens(source), qualify_tokens(first))
+        from formatter_modules.formatter_case import normalize_case
+        self.assertEqual(qualify_tokens(normalize_case(source)), qualify_tokens(first))
 
     def test_three_old_goldens(self):
         from tests.contract.test_contract_golden import GOLDEN
@@ -1771,7 +1777,7 @@ class B54QualifyTests(unittest.TestCase):
         self.check_qualify('SELECT a FROM t QUALIFY a=1;',
             'SELECT\n    a\nFROM t\n\nQUALIFY a = 1\n;\n')
         self.check_qualify('SELECT a FROM t qualify a=1 and b>2 and c<3;',
-            'SELECT\n    a\nFROM t\n\nqualify a = 1\n    and b > 2\n    and c < 3\n;\n')
+            'SELECT\n    a\nFROM t\n\nQUALIFY a = 1\n    AND b > 2\n    AND c < 3\n;\n')
 
     def test_or_and_mixed_boolean_expressions(self):
         self.check_qualify('SELECT a FROM t QUALIFY a=1 OR b=2;',
@@ -1828,7 +1834,7 @@ class B54QualifyTests(unittest.TestCase):
 
     def test_literals_function_arguments_and_keyword_case(self):
         self.check_qualify("SELECT a FROM t qualify SUM(CASE WHEN s='QUALIFY AND 1=1' THEN 1 ELSE 0 END) over (partition by a order by b)>0;",
-            "SELECT\n    a\nFROM t\n\nqualify SUM(CASE WHEN s='QUALIFY AND 1=1' THEN 1 ELSE 0 END) over (\n    partition by a\n    order by b\n) > 0\n;\n")
+            "SELECT\n    a\nFROM t\n\nQUALIFY SUM(CASE WHEN s='QUALIFY AND 1=1' THEN 1 ELSE 0 END) OVER (\n    PARTITION BY a\n    ORDER BY b\n) > 0\n;\n")
 
     def test_multiline_inputs(self):
         expected = 'SELECT\n    a\nFROM t\n\nQUALIFY RANK() OVER (\n    ORDER BY a\n) = 1\n    AND b > 0\n;\n'
@@ -1879,7 +1885,8 @@ class B54QualifyTests(unittest.TestCase):
         from formatter import validate_sql_unchanged
         source='SELECT a FROM t qualify a>1 AND b<2;'
         valid=format_sql(source)
-        for invalid in (valid.replace('qualify','QUALIFY'),valid.replace('qualify','qualify 1=1 AND'),
+        validate_sql_unchanged(source,valid)
+        for invalid in (valid.replace('QUALIFY','Qualify'),valid.replace('QUALIFY','QUALIFY 1=1 AND'),
                         valid.replace('AND','OR'),valid.replace('a > 1','a > 2'),valid.replace('b < 2','b < 3')):
             with self.subTest(invalid=invalid),self.assertRaises(ValueError):
                 validate_sql_unchanged(source,invalid)
