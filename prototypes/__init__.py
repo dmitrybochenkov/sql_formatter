@@ -1,1 +1,1 @@
-"""Opt-in experiments; never imported by production entry points."""
+"""Grammar experiments; modules have no formatter or CLI import side effects."""

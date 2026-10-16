@@ -12,7 +12,8 @@ def main():
     path = Path(sys.argv[1])
 
     try:
-        source = path.read_bytes().decode("utf-8-sig")
+        from formatter_modules.formatter_dialect import decode_sql_bytes
+        source = decode_sql_bytes(path.read_bytes())
 
         # # Сохраняем входной SQL для диагностики.
         # debug_path = Path(__file__).resolve().parent / "dbeaver_debug.sql"

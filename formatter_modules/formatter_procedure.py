@@ -41,7 +41,7 @@ def indented_fragment(text, level):
     return text
 
 
-def format_procedure(source, format_dml, validate, diagnostics):
+def format_procedure(source, format_dml, validate, diagnostics, *, _checking=False):
     """Transaction boundary: never expose a partial procedure or exception text."""
     original = source
     bom = '\ufeff' if source.startswith('\ufeff') else ''
@@ -52,6 +52,10 @@ def format_procedure(source, format_dml, validate, diagnostics):
         if (parsed.tree is None or parsed.violations or
                 any(s.is_type('unparsable') for s in walk(parsed.tree))):
             raise ProcedureRefusal()
+        from formatter_modules.formatter_clause_gaps import window_specification_parts
+        if any(n.is_type('over_clause') and window_specification_parts(n) is None
+               for n in walk(parsed.tree)):
+            raise ProcedureRefusal('SQLFMT-E004')
         if ambiguous_comment_spans(source):
             raise ProcedureRefusal('SQLFMT-C001')
         definitions = [s for s in parsed.tree.segments if s.is_type('procedure_definition')]
@@ -103,9 +107,18 @@ def format_procedure(source, format_dml, validate, diagnostics):
                     boundary(stop(op), start(after), ' ')
 
         def items(bracket, level):
+            # Moving a trailing comma across an argument comment could change
+            # attachment. Until a proven list policy exists, refuse the procedure.
+            if any(start(bracket) < p.start < stop(bracket)
+                   and p.kind in ('line_comment', 'block_comment') for p in protected):
+                raise ProcedureRefusal('SQLFMT-C001')
             parts = code(bracket)
             opening, closing = parts[0], parts[-1]
             values = parts[1:-1]
+            for value in values:
+                if value.is_type('procedure_parameter'):
+                    for left, right in zip(code(value), code(value)[1:]):
+                        boundary(stop(left), start(right), ' ')
             if not values:
                 boundary(stop(opening), start(closing), '')
                 return
@@ -156,7 +169,7 @@ def format_procedure(source, format_dml, validate, diagnostics):
             parts = code(node)
             if node.is_type('procedure_definition'):
                 verb, keyword, name, params = parts[:4]
-                boundary(0, start(verb), '')
+                boundary(0, start(verb), '\n' if source[:start(verb)].strip() else '')
                 boundary(stop(verb), start(keyword), ' ')
                 boundary(stop(keyword), start(name), ' ')
                 boundary(stop(name), start(params), '')
@@ -217,7 +230,14 @@ def format_procedure(source, format_dml, validate, diagnostics):
         result = apply_edits(source, planned)
         result = normalize_case(result)
         validate(original[len(bom):], result)
-        return bom + result
+        candidate = bom + result
+        if not _checking:
+            repeat_diagnostics = []
+            repeated = format_procedure(candidate, format_dml, validate, repeat_diagnostics, _checking=True)
+            if repeated != candidate or repeat_diagnostics:
+                diagnostics.extend(repeat_diagnostics)
+                raise ProcedureRefusal()
+        return candidate
     except Exception as exc:
         code_value = exc.code if isinstance(exc, ProcedureRefusal) else 'SQLFMT-E003'
         diagnostics.append(Diagnostic(code_value, 1, 'Процедура сохранена целиком: безопасное форматирование не подтверждено'))

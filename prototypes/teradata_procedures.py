@@ -1,7 +1,8 @@
-"""B10.1: isolated, deliberately limited Teradata procedure parser.
+"""B10.1 grammar, reused by the explicit B10.2 runtime/case selector.
 
 No dialect registry mutation, installed-library patches, formatting or linting.
-Only parse_procedure() opts into the copied grammar. SQLFluff 4.4.0 only.
+parse_procedure() remains the isolated LF-only diagnostic entry point.
+SQLFluff 4.4.0 only.
 """
 from dataclasses import dataclass
 

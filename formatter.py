@@ -1288,7 +1288,8 @@ def main():
     # Настраиваем UTF-8 только для CLI, не меняя stdout при импорте.
     sys.stdout.reconfigure(encoding="utf-8", newline="")
     filename = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("input.sql")
-    source = filename.read_bytes().decode("utf-8-sig")
+    from formatter_modules.formatter_dialect import decode_sql_bytes
+    source = decode_sql_bytes(filename.read_bytes())
 
     diagnostics = []
     result = format_sql(source, diagnostics=diagnostics)

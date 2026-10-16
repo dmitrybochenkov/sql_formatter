@@ -20,3 +20,11 @@ def select_config(source, config):
         return config
     from prototypes.teradata_procedures import prototype_config
     return prototype_config(config)
+
+
+def decode_sql_bytes(data):
+    """Preserve a procedure BOM; retain the established ordinary-SQL transport."""
+    source = data.decode('utf-8-sig')
+    if data.startswith(b'\xef\xbb\xbf') and is_procedure(source):
+        return '\ufeff' + source
+    return source

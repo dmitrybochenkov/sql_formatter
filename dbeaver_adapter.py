@@ -34,7 +34,8 @@ def format_bytes(original):
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
             from formatter import format_sql, validate_sql_unchanged
-            source = original.decode('utf-8-sig')
+            from formatter_modules.formatter_dialect import decode_sql_bytes
+            source = decode_sql_bytes(original)
             diagnostics = []
             result = format_sql(source, diagnostics=diagnostics)
             codes = {d.code for d in diagnostics}

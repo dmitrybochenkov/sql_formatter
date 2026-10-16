@@ -68,6 +68,8 @@ class ProcedureLayoutTests(unittest.TestCase):
         result=self.check(sql)
         self.assertIn('SET a = 1; -- first\n    -- next call\n    CALL',result)
         self.assertIn("); /* trailing */\n    SET",result)
+        headed=self.check('-- procedure\n       '+SIMPLE_INPUT)
+        self.assertTrue(headed.startswith('-- procedure\nREPLACE PROCEDURE'))
 
     def test_multiline_protected_and_endings(self):
         sql=wrap('DECLARE "a\r\nb" VARCHAR(100); SET "a\r\nb"=\'x\ry\'; /* z\r\nq */\nCALL p(\'-- END;\');')
@@ -84,12 +86,19 @@ class ProcedureLayoutTests(unittest.TestCase):
         self.check(SIMPLE_EXPECTED, SIMPLE_EXPECTED)
         source=SIMPLE_EXPECTED.replace('\n','\n       ')
         self.check(source,SIMPLE_EXPECTED)
+        self.check(SIMPLE_INPUT.replace('in D date','in\n      D\n  date'),SIMPLE_EXPECTED)
 
     def test_ambiguous_comment_returns_entire_original(self):
         sql='\ufeff'+wrap('SET a=1;\r\n-- detached\r\n\r\nCALL p();')
         for _ in range(2):
             ds=[]
             self.assertEqual(format_sql(sql,diagnostics=ds),sql)
+            self.assertIn('SQLFMT-C001',[d.code for d in ds])
+
+        for call in ("CALL p(a, -- attached to a\nb);", "CALL p(a, /* attached */ b);"):
+            source=wrap(call)
+            ds=[]
+            self.assertEqual(format_sql(source,diagnostics=ds),source)
             self.assertIn('SQLFMT-C001',[d.code for d in ds])
 
     def test_invalid_or_unsupported_returns_entire_original(self):
@@ -125,4 +134,4 @@ class ProcedureLayoutTests(unittest.TestCase):
         ds=[]
         def failure(*a,**k): raise ValueError('private SQL must not leak')
         self.assertEqual(format_procedure(sql,failure,validate_sql_unchanged,ds),sql)
-        self.assertNotIn('private',[d.message for d in ds])
+        self.assertTrue(all('private' not in d.message for d in ds))
