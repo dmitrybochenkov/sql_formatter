@@ -1,0 +1,480 @@
+[L:  1, P:  1]      |file:
+[L:  1, P:  1]      |    procedure_definition:
+[L:  1, P:  1]      |        keyword:                                              'REPLACE'
+[L:  1, P:  8]      |        whitespace:                                           ' '
+[L:  1, P:  9]      |        keyword:                                              'PROCEDURE'
+[L:  1, P: 18]      |        whitespace:                                           ' '
+[L:  1, P: 19]      |        object_reference:
+[L:  1, P: 19]      |            naked_identifier:                                 'example_proc'
+[L:  1, P: 31]      |        bracketed:
+[L:  1, P: 31]      |            start_bracket:                                    '('
+[L:  1, P: 32]      |            [META] indent:
+[L:  1, P: 32]      |            procedure_parameter:
+[L:  1, P: 32]      |                keyword:                                      'IN'
+[L:  1, P: 34]      |                whitespace:                                   ' '
+[L:  1, P: 35]      |                naked_identifier:                             'p_start_date'
+[L:  1, P: 47]      |                whitespace:                                   ' '
+[L:  1, P: 48]      |                data_type:
+[L:  1, P: 48]      |                    data_type_identifier:                     'DATE'
+[L:  1, P: 52]      |            comma:                                            ','
+[L:  1, P: 53]      |            whitespace:                                       ' '
+[L:  1, P: 54]      |            procedure_parameter:
+[L:  1, P: 54]      |                keyword:                                      'OUT'
+[L:  1, P: 57]      |                whitespace:                                   ' '
+[L:  1, P: 58]      |                naked_identifier:                             'p_count'
+[L:  1, P: 65]      |                whitespace:                                   ' '
+[L:  1, P: 66]      |                data_type:
+[L:  1, P: 66]      |                    data_type_identifier:                     'INTEGER'
+[L:  1, P: 73]      |            [META] dedent:
+[L:  1, P: 73]      |            end_bracket:                                      ')'
+[L:  1, P: 74]      |        newline:                                              '\n'
+[L:  2, P:  1]      |        procedure_security:
+[L:  2, P:  1]      |            keyword:                                          'SQL'
+[L:  2, P:  4]      |            whitespace:                                       ' '
+[L:  2, P:  5]      |            keyword:                                          'SECURITY'
+[L:  2, P: 13]      |            whitespace:                                       ' '
+[L:  2, P: 14]      |            keyword:                                          'INVOKER'
+[L:  2, P: 21]      |        newline:                                              '\n'
+[L:  3, P:  1]      |        procedure_block:
+[L:  3, P:  1]      |            keyword:                                          'BEGIN'
+[L:  3, P:  6]      |            newline:                                          '\n'
+[L:  4, P:  1]      |            whitespace:                                       '    '
+[L:  4, P:  5]      |            procedure_declaration:
+[L:  4, P:  5]      |                keyword:                                      'DECLARE'
+[L:  4, P: 12]      |                whitespace:                                   ' '
+[L:  4, P: 13]      |                naked_identifier:                             'v_cur_date'
+[L:  4, P: 23]      |                whitespace:                                   ' '
+[L:  4, P: 24]      |                data_type:
+[L:  4, P: 24]      |                    data_type_identifier:                     'DATE'
+[L:  4, P: 28]      |            statement_terminator:                             ';'
+[L:  4, P: 29]      |            newline:                                          '\n'
+[L:  5, P:  1]      |            whitespace:                                       '    '
+[L:  5, P:  5]      |            procedure_declaration:
+[L:  5, P:  5]      |                keyword:                                      'DECLARE'
+[L:  5, P: 12]      |                whitespace:                                   ' '
+[L:  5, P: 13]      |                naked_identifier:                             'v_end_date'
+[L:  5, P: 23]      |                whitespace:                                   ' '
+[L:  5, P: 24]      |                data_type:
+[L:  5, P: 24]      |                    data_type_identifier:                     'DATE'
+[L:  5, P: 28]      |            statement_terminator:                             ';'
+[L:  5, P: 29]      |            newline:                                          '\n'
+[L:  6, P:  1]      |            whitespace:                                       '    '
+[L:  6, P:  5]      |            procedure_declaration:
+[L:  6, P:  5]      |                keyword:                                      'DECLARE'
+[L:  6, P: 12]      |                whitespace:                                   ' '
+[L:  6, P: 13]      |                naked_identifier:                             'v_count'
+[L:  6, P: 20]      |                whitespace:                                   ' '
+[L:  6, P: 21]      |                data_type:
+[L:  6, P: 21]      |                    data_type_identifier:                     'INTEGER'
+[L:  6, P: 28]      |                whitespace:                                   ' '
+[L:  6, P: 29]      |                keyword:                                      'DEFAULT'
+[L:  6, P: 36]      |                whitespace:                                   ' '
+[L:  6, P: 37]      |                numeric_literal:                              '0'
+[L:  6, P: 38]      |            statement_terminator:                             ';'
+[L:  6, P: 39]      |            newline:                                          '\n'
+[L:  7, P:  1]      |            whitespace:                                       '    '
+[L:  7, P:  5]      |            procedure_executable:
+[L:  7, P:  5]      |                procedure_assignment:
+[L:  7, P:  5]      |                    keyword:                                  'SET'
+[L:  7, P:  8]      |                    whitespace:                               ' '
+[L:  7, P:  9]      |                    naked_identifier:                         'v_cur_date'
+[L:  7, P: 19]      |                    whitespace:                               ' '
+[L:  7, P: 20]      |                    comparison_operator:
+[L:  7, P: 20]      |                        raw_comparison_operator:              '='
+[L:  7, P: 21]      |                    whitespace:                               ' '
+[L:  7, P: 22]      |                    expression:
+[L:  7, P: 22]      |                        column_reference:
+[L:  7, P: 22]      |                            naked_identifier:                 'p_start_date'
+[L:  7, P: 34]      |                statement_terminator:                         ';'
+[L:  7, P: 35]      |            newline:                                          '\n'
+[L:  8, P:  1]      |            whitespace:                                       '    '
+[L:  8, P:  5]      |            procedure_executable:
+[L:  8, P:  5]      |                procedure_assignment:
+[L:  8, P:  5]      |                    keyword:                                  'SET'
+[L:  8, P:  8]      |                    whitespace:                               ' '
+[L:  8, P:  9]      |                    naked_identifier:                         'v_end_date'
+[L:  8, P: 19]      |                    whitespace:                               ' '
+[L:  8, P: 20]      |                    comparison_operator:
+[L:  8, P: 20]      |                        raw_comparison_operator:              '='
+[L:  8, P: 21]      |                    whitespace:                               ' '
+[L:  8, P: 22]      |                    expression:
+[L:  8, P: 22]      |                        column_reference:
+[L:  8, P: 22]      |                            naked_identifier:                 'p_start_date'
+[L:  8, P: 34]      |                        whitespace:                           ' '
+[L:  8, P: 35]      |                        binary_operator:                      '+'
+[L:  8, P: 36]      |                        whitespace:                           ' '
+[L:  8, P: 37]      |                        numeric_literal:                      '2'
+[L:  8, P: 38]      |                statement_terminator:                         ';'
+[L:  8, P: 39]      |            newline:                                          '\n'
+[L:  9, P:  1]      |            whitespace:                                       '    '
+[L:  9, P:  5]      |            procedure_executable:
+[L:  9, P:  5]      |                procedure_while:
+[L:  9, P:  5]      |                    keyword:                                  'WHILE'
+[L:  9, P: 10]      |                    whitespace:                               ' '
+[L:  9, P: 11]      |                    expression:
+[L:  9, P: 11]      |                        column_reference:
+[L:  9, P: 11]      |                            naked_identifier:                 'v_cur_date'
+[L:  9, P: 21]      |                        whitespace:                           ' '
+[L:  9, P: 22]      |                        comparison_operator:
+[L:  9, P: 22]      |                            raw_comparison_operator:          '<'
+[L:  9, P: 23]      |                            raw_comparison_operator:          '='
+[L:  9, P: 24]      |                        whitespace:                           ' '
+[L:  9, P: 25]      |                        column_reference:
+[L:  9, P: 25]      |                            naked_identifier:                 'v_end_date'
+[L:  9, P: 35]      |                    whitespace:                               ' '
+[L:  9, P: 36]      |                    keyword:                                  'DO'
+[L:  9, P: 38]      |                    newline:                                  '\n'
+[L: 10, P:  1]      |                    whitespace:                               '        '
+[L: 10, P:  9]      |                    procedure_executable:
+[L: 10, P:  9]      |                        procedure_call:
+[L: 10, P:  9]      |                            keyword:                          'CALL'
+[L: 10, P: 13]      |                            whitespace:                       ' '
+[L: 10, P: 14]      |                            object_reference:
+[L: 10, P: 14]      |                                naked_identifier:             'example_log'
+[L: 10, P: 25]      |                            bracketed:
+[L: 10, P: 25]      |                                start_bracket:                '('
+[L: 10, P: 26]      |                                [META] indent:
+[L: 10, P: 26]      |                                expression:
+[L: 10, P: 26]      |                                    quoted_literal:           "'Processing; -- DO END'"
+[L: 10, P: 49]      |                                comma:                        ','
+[L: 10, P: 50]      |                                whitespace:                   ' '
+[L: 10, P: 51]      |                                expression:
+[L: 10, P: 51]      |                                    column_reference:
+[L: 10, P: 51]      |                                        naked_identifier:     'v_cur_date'
+[L: 10, P: 61]      |                                [META] dedent:
+[L: 10, P: 61]      |                                end_bracket:                  ')'
+[L: 10, P: 62]      |                        statement_terminator:                 ';'
+[L: 10, P: 63]      |                    newline:                                  '\n'
+[L: 11, P:  1]      |                    whitespace:                               '        '
+[L: 11, P:  9]      |                    inline_comment:                           '-- Remove previous data'
+[L: 11, P: 32]      |                    newline:                                  '\n'
+[L: 12, P:  1]      |                    whitespace:                               '        '
+[L: 12, P:  9]      |                    procedure_executable:
+[L: 12, P:  9]      |                        delete_statement:
+[L: 12, P:  9]      |                            keyword:                          'DELETE'
+[L: 12, P: 15]      |                            whitespace:                       ' '
+[L: 12, P: 16]      |                            from_clause:
+[L: 12, P: 16]      |                                keyword:                      'FROM'
+[L: 12, P: 20]      |                                whitespace:                   ' '
+[L: 12, P: 21]      |                                from_expression:
+[L: 12, P: 21]      |                                    [META] (implicit) indent:
+[L: 12, P: 21]      |                                    from_expression_element:
+[L: 12, P: 21]      |                                        table_expression:
+[L: 12, P: 21]      |                                            table_reference:
+[L: 12, P: 21]      |                                                naked_identifier:  'example_target'
+[L: 12, P: 35]      |                                    [META] dedent:
+[L: 12, P: 35]      |                            whitespace:                       ' '
+[L: 12, P: 36]      |                            where_clause:
+[L: 12, P: 36]      |                                keyword:                      'WHERE'
+[L: 12, P: 41]      |                                [META] (implicit) indent:
+[L: 12, P: 41]      |                                whitespace:                   ' '
+[L: 12, P: 42]      |                                expression:
+[L: 12, P: 42]      |                                    column_reference:
+[L: 12, P: 42]      |                                        naked_identifier:     'event_date'
+[L: 12, P: 52]      |                                    whitespace:               ' '
+[L: 12, P: 53]      |                                    comparison_operator:
+[L: 12, P: 53]      |                                        raw_comparison_operator:  '='
+[L: 12, P: 54]      |                                    whitespace:               ' '
+[L: 12, P: 55]      |                                    column_reference:
+[L: 12, P: 55]      |                                        naked_identifier:     'v_cur_date'
+[L: 12, P: 65]      |                                [META] dedent:
+[L: 12, P: 65]      |                        statement_terminator:                 ';'
+[L: 12, P: 66]      |                    newline:                                  '\n'
+[L: 13, P:  1]      |                    whitespace:                               '        '
+[L: 13, P:  9]      |                    block_comment:                            '/* Load current day; END WHILE */'
+[L: 13, P: 42]      |                    newline:                                  '\n'
+[L: 14, P:  1]      |                    whitespace:                               '        '
+[L: 14, P:  9]      |                    procedure_executable:
+[L: 14, P:  9]      |                        insert_statement:
+[L: 14, P:  9]      |                            keyword:                          'INSERT'
+[L: 14, P: 15]      |                            whitespace:                       ' '
+[L: 14, P: 16]      |                            keyword:                          'INTO'
+[L: 14, P: 20]      |                            whitespace:                       ' '
+[L: 14, P: 21]      |                            table_reference:
+[L: 14, P: 21]      |                                naked_identifier:             'example_target'
+[L: 14, P: 35]      |                            newline:                          '\n'
+[L: 15, P:  1]      |                            whitespace:                       '        '
+[L: 15, P:  9]      |                            select_statement:
+[L: 15, P:  9]      |                                select_clause:
+[L: 15, P:  9]      |                                    keyword:                  'SELECT'
+[L: 15, P: 15]      |                                    [META] indent:
+[L: 15, P: 15]      |                                    whitespace:               ' '
+[L: 15, P: 16]      |                                    select_clause_element:
+[L: 15, P: 16]      |                                        column_reference:
+[L: 15, P: 16]      |                                            naked_identifier:  'a'
+[L: 15, P: 17]      |                                            dot:              '.'
+[L: 15, P: 18]      |                                            naked_identifier:  'id'
+[L: 15, P: 20]      |                                    comma:                    ','
+[L: 15, P: 21]      |                                    whitespace:               ' '
+[L: 15, P: 22]      |                                    select_clause_element:
+[L: 15, P: 22]      |                                        column_reference:
+[L: 15, P: 22]      |                                            naked_identifier:  'b'
+[L: 15, P: 23]      |                                            dot:              '.'
+[L: 15, P: 24]      |                                            naked_identifier:  'name'
+[L: 15, P: 28]      |                                    comma:                    ','
+[L: 15, P: 29]      |                                    whitespace:               ' '
+[L: 15, P: 30]      |                                    select_clause_element:
+[L: 15, P: 30]      |                                        expression:
+[L: 15, P: 30]      |                                            case_expression:
+[L: 15, P: 30]      |                                                keyword:      'CASE'
+[L: 15, P: 34]      |                                                [META] (implicit) indent:
+[L: 15, P: 34]      |                                                whitespace:   ' '
+[L: 15, P: 35]      |                                                when_clause:
+[L: 15, P: 35]      |                                                    keyword:  'WHEN'
+[L: 15, P: 39]      |                                                    whitespace:  ' '
+[L: 15, P: 40]      |                                                    [META] (implicit) indent:
+[L: 15, P: 40]      |                                                    expression:
+[L: 15, P: 40]      |                                                        column_reference:
+[L: 15, P: 40]      |                                                            naked_identifier:  'c'
+[L: 15, P: 41]      |                                                            dot:  '.'
+[L: 15, P: 42]      |                                                            naked_identifier:  'id'
+[L: 15, P: 44]      |                                                        whitespace:  ' '
+[L: 15, P: 45]      |                                                        keyword:  'IS'
+[L: 15, P: 47]      |                                                        whitespace:  ' '
+[L: 15, P: 48]      |                                                        null_literal:  'NULL'
+[L: 15, P: 52]      |                                                    [META] dedent:
+[L: 15, P: 52]      |                                                    [META] indent:
+[L: 15, P: 52]      |                                                    whitespace:  ' '
+[L: 15, P: 53]      |                                                    keyword:  'THEN'
+[L: 15, P: 57]      |                                                    [META] (implicit) indent:
+[L: 15, P: 57]      |                                                    whitespace:  ' '
+[L: 15, P: 58]      |                                                    expression:
+[L: 15, P: 58]      |                                                        quoted_literal:  "'END'"
+[L: 15, P: 63]      |                                                    [META] dedent:
+[L: 15, P: 63]      |                                                    [META] dedent:
+[L: 15, P: 63]      |                                                whitespace:   ' '
+[L: 15, P: 64]      |                                                else_clause:
+[L: 15, P: 64]      |                                                    keyword:  'ELSE'
+[L: 15, P: 68]      |                                                    [META] (implicit) indent:
+[L: 15, P: 68]      |                                                    whitespace:  ' '
+[L: 15, P: 69]      |                                                    expression:
+[L: 15, P: 69]      |                                                        quoted_literal:  "'DO'"
+[L: 15, P: 73]      |                                                    [META] dedent:
+[L: 15, P: 73]      |                                                whitespace:   ' '
+[L: 15, P: 74]      |                                                [META] dedent:
+[L: 15, P: 74]      |                                                keyword:      'END'
+[L: 15, P: 77]      |                                    [META] dedent:
+[L: 15, P: 77]      |                                newline:                      '\n'
+[L: 16, P:  1]      |                                whitespace:                   '        '
+[L: 16, P:  9]      |                                from_clause:
+[L: 16, P:  9]      |                                    keyword:                  'FROM'
+[L: 16, P: 13]      |                                    whitespace:               ' '
+[L: 16, P: 14]      |                                    from_expression:
+[L: 16, P: 14]      |                                        [META] (implicit) indent:
+[L: 16, P: 14]      |                                        from_expression_element:
+[L: 16, P: 14]      |                                            table_expression:
+[L: 16, P: 14]      |                                                table_reference:
+[L: 16, P: 14]      |                                                    naked_identifier:  'example_source'
+[L: 16, P: 28]      |                                            whitespace:       ' '
+[L: 16, P: 29]      |                                            alias_expression:
+[L: 16, P: 29]      |                                                [META] indent:
+[L: 16, P: 29]      |                                                naked_identifier:  'a'
+[L: 16, P: 30]      |                                                [META] dedent:
+[L: 16, P: 30]      |                                        newline:              '\n'
+[L: 17, P:  1]      |                                        whitespace:           '        '
+[L: 17, P:  9]      |                                        [META] dedent:
+[L: 17, P:  9]      |                                        join_clause:
+[L: 17, P:  9]      |                                            keyword:          'INNER'
+[L: 17, P: 14]      |                                            whitespace:       ' '
+[L: 17, P: 15]      |                                            keyword:          'JOIN'
+[L: 17, P: 19]      |                                            [META] indent:
+[L: 17, P: 19]      |                                            whitespace:       ' '
+[L: 17, P: 20]      |                                            from_expression_element:
+[L: 17, P: 20]      |                                                table_expression:
+[L: 17, P: 20]      |                                                    table_reference:
+[L: 17, P: 20]      |                                                        naked_identifier:  'example_other'
+[L: 17, P: 33]      |                                                whitespace:   ' '
+[L: 17, P: 34]      |                                                alias_expression:
+[L: 17, P: 34]      |                                                    [META] indent:
+[L: 17, P: 34]      |                                                    naked_identifier:  'b'
+[L: 17, P: 35]      |                                                    [META] dedent:
+[L: 17, P: 35]      |                                            whitespace:       ' '
+[L: 17, P: 36]      |                                            [META] dedent:
+[L: 17, P: 36]      |                                            [META] indent:
+[L: 17, P: 36]      |                                            join_on_condition:
+[L: 17, P: 36]      |                                                keyword:      'ON'
+[L: 17, P: 38]      |                                                [META] (implicit) indent:
+[L: 17, P: 38]      |                                                whitespace:   ' '
+[L: 17, P: 39]      |                                                expression:
+[L: 17, P: 39]      |                                                    column_reference:
+[L: 17, P: 39]      |                                                        naked_identifier:  'a'
+[L: 17, P: 40]      |                                                        dot:  '.'
+[L: 17, P: 41]      |                                                        naked_identifier:  'id'
+[L: 17, P: 43]      |                                                    whitespace:  ' '
+[L: 17, P: 44]      |                                                    comparison_operator:
+[L: 17, P: 44]      |                                                        raw_comparison_operator:  '='
+[L: 17, P: 45]      |                                                    whitespace:  ' '
+[L: 17, P: 46]      |                                                    column_reference:
+[L: 17, P: 46]      |                                                        naked_identifier:  'b'
+[L: 17, P: 47]      |                                                        dot:  '.'
+[L: 17, P: 48]      |                                                        naked_identifier:  'id'
+[L: 17, P: 50]      |                                                [META] dedent:
+[L: 17, P: 50]      |                                            [META] dedent:
+[L: 17, P: 50]      |                                        newline:              '\n'
+[L: 18, P:  1]      |                                        whitespace:           '        '
+[L: 18, P:  9]      |                                        join_clause:
+[L: 18, P:  9]      |                                            keyword:          'LEFT'
+[L: 18, P: 13]      |                                            whitespace:       ' '
+[L: 18, P: 14]      |                                            keyword:          'JOIN'
+[L: 18, P: 18]      |                                            [META] indent:
+[L: 18, P: 18]      |                                            whitespace:       ' '
+[L: 18, P: 19]      |                                            from_expression_element:
+[L: 18, P: 19]      |                                                table_expression:
+[L: 18, P: 19]      |                                                    table_reference:
+[L: 18, P: 19]      |                                                        naked_identifier:  'example_extra'
+[L: 18, P: 32]      |                                                whitespace:   ' '
+[L: 18, P: 33]      |                                                alias_expression:
+[L: 18, P: 33]      |                                                    [META] indent:
+[L: 18, P: 33]      |                                                    naked_identifier:  'c'
+[L: 18, P: 34]      |                                                    [META] dedent:
+[L: 18, P: 34]      |                                            whitespace:       ' '
+[L: 18, P: 35]      |                                            [META] dedent:
+[L: 18, P: 35]      |                                            [META] indent:
+[L: 18, P: 35]      |                                            join_on_condition:
+[L: 18, P: 35]      |                                                keyword:      'ON'
+[L: 18, P: 37]      |                                                [META] (implicit) indent:
+[L: 18, P: 37]      |                                                whitespace:   ' '
+[L: 18, P: 38]      |                                                expression:
+[L: 18, P: 38]      |                                                    column_reference:
+[L: 18, P: 38]      |                                                        naked_identifier:  'a'
+[L: 18, P: 39]      |                                                        dot:  '.'
+[L: 18, P: 40]      |                                                        naked_identifier:  'id'
+[L: 18, P: 42]      |                                                    whitespace:  ' '
+[L: 18, P: 43]      |                                                    comparison_operator:
+[L: 18, P: 43]      |                                                        raw_comparison_operator:  '='
+[L: 18, P: 44]      |                                                    whitespace:  ' '
+[L: 18, P: 45]      |                                                    column_reference:
+[L: 18, P: 45]      |                                                        naked_identifier:  'c'
+[L: 18, P: 46]      |                                                        dot:  '.'
+[L: 18, P: 47]      |                                                        naked_identifier:  'id'
+[L: 18, P: 49]      |                                                [META] dedent:
+[L: 18, P: 49]      |                                            [META] dedent:
+[L: 18, P: 49]      |                                newline:                      '\n'
+[L: 19, P:  1]      |                                whitespace:                   '        '
+[L: 19, P:  9]      |                                where_clause:
+[L: 19, P:  9]      |                                    keyword:                  'WHERE'
+[L: 19, P: 14]      |                                    [META] (implicit) indent:
+[L: 19, P: 14]      |                                    whitespace:               ' '
+[L: 19, P: 15]      |                                    expression:
+[L: 19, P: 15]      |                                        column_reference:
+[L: 19, P: 15]      |                                            naked_identifier:  'a'
+[L: 19, P: 16]      |                                            dot:              '.'
+[L: 19, P: 17]      |                                            naked_identifier:  'event_date'
+[L: 19, P: 27]      |                                        whitespace:           ' '
+[L: 19, P: 28]      |                                        comparison_operator:
+[L: 19, P: 28]      |                                            raw_comparison_operator:  '='
+[L: 19, P: 29]      |                                        whitespace:           ' '
+[L: 19, P: 30]      |                                        column_reference:
+[L: 19, P: 30]      |                                            naked_identifier:  'v_cur_date'
+[L: 19, P: 40]      |                                        whitespace:           ' '
+[L: 19, P: 41]      |                                        binary_operator:      'AND'
+[L: 19, P: 44]      |                                        whitespace:           ' '
+[L: 19, P: 45]      |                                        column_reference:
+[L: 19, P: 45]      |                                            naked_identifier:  'a'
+[L: 19, P: 46]      |                                            dot:              '.'
+[L: 19, P: 47]      |                                            naked_identifier:  'status'
+[L: 19, P: 53]      |                                        whitespace:           ' '
+[L: 19, P: 54]      |                                        keyword:              'IN'
+[L: 19, P: 56]      |                                        whitespace:           ' '
+[L: 19, P: 57]      |                                        bracketed:
+[L: 19, P: 57]      |                                            start_bracket:    '('
+[L: 19, P: 58]      |                                            [META] indent:
+[L: 19, P: 58]      |                                            numeric_literal:  '1'
+[L: 19, P: 59]      |                                            comma:            ','
+[L: 19, P: 60]      |                                            whitespace:       ' '
+[L: 19, P: 61]      |                                            numeric_literal:  '2'
+[L: 19, P: 62]      |                                            comma:            ','
+[L: 19, P: 63]      |                                            whitespace:       ' '
+[L: 19, P: 64]      |                                            numeric_literal:  '3'
+[L: 19, P: 65]      |                                            comma:            ','
+[L: 19, P: 66]      |                                            whitespace:       ' '
+[L: 19, P: 67]      |                                            numeric_literal:  '4'
+[L: 19, P: 68]      |                                            comma:            ','
+[L: 19, P: 69]      |                                            whitespace:       ' '
+[L: 19, P: 70]      |                                            numeric_literal:  '5'
+[L: 19, P: 71]      |                                            [META] dedent:
+[L: 19, P: 71]      |                                            end_bracket:      ')'
+[L: 19, P: 72]      |                                        newline:              '\n'
+[L: 20, P:  1]      |                                        whitespace:           '          '
+[L: 20, P: 11]      |                                        binary_operator:      'AND'
+[L: 20, P: 14]      |                                        whitespace:           ' '
+[L: 20, P: 15]      |                                        column_reference:
+[L: 20, P: 15]      |                                            naked_identifier:  'a'
+[L: 20, P: 16]      |                                            dot:              '.'
+[L: 20, P: 17]      |                                            naked_identifier:  'id'
+[L: 20, P: 19]      |                                        whitespace:           ' '
+[L: 20, P: 20]      |                                        keyword:              'NOT'
+[L: 20, P: 23]      |                                        whitespace:           ' '
+[L: 20, P: 24]      |                                        keyword:              'IN'
+[L: 20, P: 26]      |                                        whitespace:           ' '
+[L: 20, P: 27]      |                                        bracketed:
+[L: 20, P: 27]      |                                            start_bracket:    '('
+[L: 20, P: 28]      |                                            [META] indent:
+[L: 20, P: 28]      |                                            select_statement:
+[L: 20, P: 28]      |                                                select_clause:
+[L: 20, P: 28]      |                                                    keyword:  'SELECT'
+[L: 20, P: 34]      |                                                    [META] indent:
+[L: 20, P: 34]      |                                                    whitespace:  ' '
+[L: 20, P: 35]      |                                                    select_clause_element:
+[L: 20, P: 35]      |                                                        column_reference:
+[L: 20, P: 35]      |                                                            naked_identifier:  'id'
+[L: 20, P: 37]      |                                                    [META] dedent:
+[L: 20, P: 37]      |                                                whitespace:   ' '
+[L: 20, P: 38]      |                                                from_clause:
+[L: 20, P: 38]      |                                                    keyword:  'FROM'
+[L: 20, P: 42]      |                                                    whitespace:  ' '
+[L: 20, P: 43]      |                                                    from_expression:
+[L: 20, P: 43]      |                                                        [META] (implicit) indent:
+[L: 20, P: 43]      |                                                        from_expression_element:
+[L: 20, P: 43]      |                                                            table_expression:
+[L: 20, P: 43]      |                                                                table_reference:
+[L: 20, P: 43]      |                                                                    naked_identifier:  'example_excluded'
+[L: 20, P: 59]      |                                                        [META] dedent:
+[L: 20, P: 59]      |                                            [META] dedent:
+[L: 20, P: 59]      |                                            end_bracket:      ')'
+[L: 20, P: 60]      |                                    [META] dedent:
+[L: 20, P: 60]      |                        statement_terminator:                 ';'
+[L: 20, P: 61]      |                    newline:                                  '\n'
+[L: 21, P:  1]      |                    whitespace:                               '        '
+[L: 21, P:  9]      |                    procedure_executable:
+[L: 21, P:  9]      |                        procedure_assignment:
+[L: 21, P:  9]      |                            keyword:                          'SET'
+[L: 21, P: 12]      |                            whitespace:                       ' '
+[L: 21, P: 13]      |                            naked_identifier:                 'v_cur_date'
+[L: 21, P: 23]      |                            whitespace:                       ' '
+[L: 21, P: 24]      |                            comparison_operator:
+[L: 21, P: 24]      |                                raw_comparison_operator:      '='
+[L: 21, P: 25]      |                            whitespace:                       ' '
+[L: 21, P: 26]      |                            expression:
+[L: 21, P: 26]      |                                column_reference:
+[L: 21, P: 26]      |                                    naked_identifier:         'v_cur_date'
+[L: 21, P: 36]      |                                whitespace:                   ' '
+[L: 21, P: 37]      |                                binary_operator:              '+'
+[L: 21, P: 38]      |                                whitespace:                   ' '
+[L: 21, P: 39]      |                                numeric_literal:              '1'
+[L: 21, P: 40]      |                        statement_terminator:                 ';'
+[L: 21, P: 41]      |                    newline:                                  '\n'
+[L: 22, P:  1]      |                    whitespace:                               '    '
+[L: 22, P:  5]      |                    keyword:                                  'END'
+[L: 22, P:  8]      |                    whitespace:                               ' '
+[L: 22, P:  9]      |                    keyword:                                  'WHILE'
+[L: 22, P: 14]      |                statement_terminator:                         ';'
+[L: 22, P: 15]      |            newline:                                          '\n'
+[L: 23, P:  1]      |            whitespace:                                       '    '
+[L: 23, P:  5]      |            procedure_executable:
+[L: 23, P:  5]      |                procedure_assignment:
+[L: 23, P:  5]      |                    keyword:                                  'SET'
+[L: 23, P:  8]      |                    whitespace:                               ' '
+[L: 23, P:  9]      |                    naked_identifier:                         'p_count'
+[L: 23, P: 16]      |                    whitespace:                               ' '
+[L: 23, P: 17]      |                    comparison_operator:
+[L: 23, P: 17]      |                        raw_comparison_operator:              '='
+[L: 23, P: 18]      |                    whitespace:                               ' '
+[L: 23, P: 19]      |                    expression:
+[L: 23, P: 19]      |                        column_reference:
+[L: 23, P: 19]      |                            naked_identifier:                 'v_count'
+[L: 23, P: 26]      |                statement_terminator:                         ';'
+[L: 23, P: 27]      |            newline:                                          '\n'
+[L: 24, P:  1]      |            keyword:                                          'END'
+[L: 24, P:  4]      |    statement_terminator:                                     ';'
+[L: 24, P:  5]      |    [META] end_of_file:
