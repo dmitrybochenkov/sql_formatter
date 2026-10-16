@@ -170,17 +170,18 @@ DO; */ CALL "журнал"("имя");"""
             with self.assertRaises(RuntimeError):
                 prototype_config()
 
-    def test_runtime_grammar_enabled_profiles_still_fail_closed(self):
+    def test_runtime_grammar_case_and_profiles_integrated(self):
         self.accepted(SYNTHETIC)
         baseline = source_linter().parse_string(SYNTHETIC)
         self.assertFalse(list(baseline.tree.recursive_crawl('unparsable')))
         self.assertTrue(parse_procedure(normalize_case(SYNTHETIC)).complete)
-        with self.assertRaises(ValueError):
-            format_sql(SYNTHETIC)
+        result = format_sql(SYNTHETIC, diagnostics=[])
+        self.assertNotEqual(result, SYNTHETIC)
+        self.assertEqual(format_sql(result, diagnostics=[]), result)
         original = b'\xef\xbb\xbf' + SYNTHETIC.replace('\n','\r\n').encode()
         with patch('dbeaver_adapter.log_event'):
             for formatter in PROFILE_FORMATTERS.values():
-                self.assertEqual(formatter(original), original)
+                self.assertEqual(formatter(original).decode('utf-8-sig'), result)
 
 
 class ExistingDMLReproductionTests(unittest.TestCase):

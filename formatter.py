@@ -817,7 +817,11 @@ def _validation_snapshot(source):
         raise ValueError('Не удалось разобрать SQL для проверки сохранности')
     tokens, comments, predicates, counts = [], [], {}, {}
     clause_headers = {'select_clause': 'SELECT', 'from_clause': 'FROM', 'where_clause': 'WHERE'}
-    scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause', 'having_clause'}
+    scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause', 'having_clause',
+              'procedure_definition', 'procedure_parameter', 'procedure_security',
+              'procedure_block', 'procedure_declaration', 'procedure_assignment',
+              'procedure_while', 'procedure_call', 'procedure_executable',
+              'insert_statement', 'delete_statement'}
 
     def collect(node, context=(), parent=None):
         kind = node.get_type()
@@ -851,6 +855,12 @@ def _validation_snapshot(source):
 
 def validate_sql_unchanged(original, formatted):
     """Validate exact tokens, scoped prefixes and CP01–CP05-proven case edits."""
+    if original.startswith('\ufeff') or formatted.startswith('\ufeff'):
+        from formatter_modules.formatter_dialect import is_procedure
+        if not (original.startswith('\ufeff') and formatted.startswith('\ufeff')
+                and is_procedure(original) and is_procedure(formatted)):
+            raise ValueError('Formatting changed BOM or its SQL context')
+        original, formatted = original[1:], formatted[1:]
     # Lexical spans represent complete protected units, even when SQLFluff
     # splits a block comment into comment/newline/comment AST segments.
     def protected_values(sql):
@@ -1017,7 +1027,14 @@ def remove_select_blank_lines(source):
 def format_sql(source, diagnostics=None):
     from formatter_modules.formatter_dialect import is_procedure
     if is_procedure(source):
-        raise ValueError('Procedure layout is not enabled yet')  # B10.2a fail-closed.
+        from formatter_modules.formatter_procedure import format_procedure
+        procedure_diagnostics = []
+        result = format_procedure(source, format_sql, validate_sql_unchanged, procedure_diagnostics)
+        if diagnostics is not None:
+            diagnostics.extend(procedure_diagnostics)
+        else:
+            emit_diagnostics(procedure_diagnostics)
+        return result
     original_source = source
     source = normalize_external_newlines(source)
     source = normalize_groupby_header_comments(source)
