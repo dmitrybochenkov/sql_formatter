@@ -91,7 +91,8 @@ def simple_query_gap_edits(source, tree):
         if (sum(s.is_type('select_statement') for s in nodes) != 1
                 or any(s.is_type('join_clause', 'over_clause', 'window_specification') for s in nodes)):
             continue
-        clauses = [s for s in query.segments if s.is_code and not s.is_meta]
+        clauses = [s for s in query.segments if s.is_code and not s.is_meta
+                       and not (query.is_type('delete_statement') and s.is_type('keyword'))]
         if ([s.get_type() for s in clauses] not in (
                 ['select_clause', 'from_clause'],
                 ['select_clause', 'from_clause', 'where_clause'])):
@@ -264,6 +265,11 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             root = next((s for s in statement.segments if s.is_type('set_expression')), None)
         if root is None and include_cte:
             root = next((s for s in statement.segments if s.is_type('with_compound_statement')), None)
+        insert = next((s for s in statement.segments if s.is_type('insert_statement')), None)
+        if root is None and include_simple and insert is not None:
+            root = next((s for s in insert.segments if s.is_type('select_statement')), None)
+        if root is None and include_simple:
+            root = next((s for s in statement.segments if s.is_type('delete_statement')), None)
         if root is None:
             continue
         cte_mode = root.is_type('with_compound_statement')
@@ -285,7 +291,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 continue
             main_query = mains[0]
         nodes = list(_walk(root))
-        queries = [s for s in nodes if s.is_type('select_statement')]
+        queries = [s for s in nodes if s.is_type('select_statement', 'delete_statement')]
         joins = [s for s in nodes if s.is_type('join_clause')]
         if joins and (not include_joins or not include_simple):
             continue
@@ -300,7 +306,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             continue
         clauses_by_id = {}
         for query in queries:
-            clauses = [s for s in query.segments if s.is_code and not s.is_meta]
+            clauses = [s for s in query.segments if s.is_code and not s.is_meta
+                       and not (query.is_type('delete_statement') and s.is_type('keyword'))]
             by_type = {s.get_type(): s for s in clauses}
             allowed = {'select_clause', 'from_clause', 'where_clause'}
             if include_qualify:
@@ -308,7 +315,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             if include_simple and (cte_mode or set_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
-                    or 'select_clause' not in by_type
+                    or ('select_clause' not in by_type and not query.is_type('delete_statement'))
                     or (not (cte_mode or set_mode) and 'from_clause' not in by_type)):
                 break
             # Preserve the helper's previous scope unless explicitly enabled.
@@ -807,7 +814,17 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                     boundary(stop(child), start(closing), '\n' + ' ' * container_level)
                     render(child, container_level + 4)
 
-        gap(source.rfind('\n', 0, start(root)) + 1, start(root), '')
+        if insert is not None:
+            previous = next((s for s in reversed(insert.segments) if s.is_code
+                             and not s.is_meta and stop(s) <= start(root)), None)
+            if previous is not None:
+                boundary(stop(previous), start(root), '\n')
+        if root.is_type('delete_statement'):
+            keyword = next(s for s in root.segments if s.is_type('keyword'))
+            first = clauses_by_id[id(root)][0]
+            gap(stop(keyword), start(first), ' ')
+        if insert is None:
+            gap(source.rfind('\n', 0, start(root)) + 1, start(root), '')
         if cte_mode:
             keyword = next(s for s in root.segments if s.is_type('keyword'))
             gap(stop(keyword), start(ctes[0]), ' ')

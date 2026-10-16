@@ -170,12 +170,11 @@ DO; */ CALL "журнал"("имя");"""
             with self.assertRaises(RuntimeError):
                 prototype_config()
 
-    def test_production_dialect_case_and_profiles_remain_isolated(self):
+    def test_runtime_grammar_enabled_profiles_still_fail_closed(self):
         self.accepted(SYNTHETIC)
         baseline = source_linter().parse_string(SYNTHETIC)
-        self.assertTrue(list(baseline.tree.recursive_crawl('unparsable')))
-        with self.assertRaises(ValueError):
-            normalize_case(SYNTHETIC)
+        self.assertFalse(list(baseline.tree.recursive_crawl('unparsable')))
+        self.assertTrue(parse_procedure(normalize_case(SYNTHETIC)).complete)
         with self.assertRaises(ValueError):
             format_sql(SYNTHETIC)
         original = b'\xef\xbb\xbf' + SYNTHETIC.replace('\n','\r\n').encode()
@@ -185,14 +184,15 @@ DO; */ CALL "журнал"("имя");"""
 
 
 class ExistingDMLReproductionTests(unittest.TestCase):
-    """Known limitations: assert the observed defect, not a new format contract."""
+    """B10.1 defect specimens, upgraded to B10.2a regression assertions."""
     def test_existing_insert_select_non_idempotence(self):
         sql = 'INSERT INTO example_target SELECT a.id, b.name FROM example_source a INNER JOIN example_other b ON a.id = b.id WHERE a.id IN (1, 2);'
         ds1, ds2 = [], []
         first = format_sql(sql, diagnostics=ds1)
         second = format_sql(first, diagnostics=ds2)
-        self.assertNotEqual(first, second)
-        self.assertEqual(second, first.replace('\nINNER JOIN', '\n\nINNER JOIN'))
+        self.assertEqual(first, second)
+        self.assertIn('\nSELECT\n    a.id\n    , b.name\nFROM', first)
+        self.assertIn('\n\nINNER JOIN', first)
         self.assertEqual(ds1, [])
         self.assertEqual(ds2, [])
 
@@ -200,6 +200,6 @@ class ExistingDMLReproductionTests(unittest.TestCase):
         sql = "DELETE FROM example_target WHERE id IN (1, 2) AND status = 'OK';"
         ds = []
         actual = format_sql(sql, diagnostics=ds)
-        self.assertEqual(actual, sql[:-1]+'\n;\n')
-        self.assertEqual([d.code for d in ds], ['SQLFMT-E002'])
+        self.assertEqual(actual, "DELETE FROM example_target\n\nWHERE 1=1\n    AND id IN (1, 2)\n    AND status = 'OK'\n;\n")
+        self.assertEqual(ds, [])
         self.assertEqual(format_sql(actual, diagnostics=[]), actual)

@@ -6,6 +6,7 @@ from sqlfluff.core import FluffConfig, Linter
 
 from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans
+from formatter_modules.formatter_dialect import select_config
 
 CONFIG_PATH = Path(__file__).resolve().parent.parent / '.sqlfluff'
 
@@ -126,8 +127,10 @@ class SourceLinter:
         mapping = SourceMap.build(source)
         # SQL comments are data, not a second configuration source. Use the
         # public render/parse stages without parse_string's inline directives.
-        rendered = self._linter.render_string(mapping.normalized, '<string>', self.config.copy(), 'utf-8')
-        parsed = self._linter.parse_rendered(rendered)
+        config = select_config(mapping.normalized, self.config.copy())
+        linter = Linter(config=config)
+        rendered = linter.render_string(mapping.normalized, '<string>', config, 'utf-8')
+        parsed = linter.parse_rendered(rendered)
         tree = parsed.tree
         if tree is not None and tree.raw != mapping.normalized:
             raise ValueError('SQLFluff changed the parser-view source')

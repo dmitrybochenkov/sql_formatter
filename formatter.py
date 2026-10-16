@@ -1015,6 +1015,9 @@ def remove_select_blank_lines(source):
 
 
 def format_sql(source, diagnostics=None):
+    from formatter_modules.formatter_dialect import is_procedure
+    if is_procedure(source):
+        raise ValueError('Procedure layout is not enabled yet')  # B10.2a fail-closed.
     original_source = source
     source = normalize_external_newlines(source)
     source = normalize_groupby_header_comments(source)

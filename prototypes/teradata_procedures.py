@@ -113,7 +113,7 @@ class ProcedureParse:
         return not self.violations and not any(self.tree.recursive_crawl('unparsable'))
 
 
-def prototype_config():
+def prototype_config(base_config=None):
     """Create a private expanded dialect; never register it globally."""
     if sqlfluff.__version__ != '4.4.0':
         raise RuntimeError('Procedure prototype requires SQLFluff 4.4.0')
@@ -128,7 +128,8 @@ def prototype_config():
         ProcedureDefinitionSegment,
     )})
     dialect.replace(FileSegment=ProcedureFileSegment)
-    config = FluffConfig(overrides={'dialect': 'teradata', 'templater': 'raw'})
+    config = base_config.copy() if base_config is not None else FluffConfig(
+        overrides={'dialect': 'teradata', 'templater': 'raw'})
     # 4.4.0 has no public injection API for a project-local Dialect object.
     # Keep this version-pinned private hook confined to this prototype config.
     config._configs['core']['dialect_obj'] = dialect.expand()

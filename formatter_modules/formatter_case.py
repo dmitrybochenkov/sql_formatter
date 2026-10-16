@@ -4,6 +4,7 @@ from sqlfluff.core import FluffConfig, Linter
 from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans
 from formatter_modules.formatter_runtime import CONFIG_PATH, SourceMap
+from formatter_modules.formatter_dialect import select_config
 
 RULES = ('CP01', 'CP02', 'CP03', 'CP04', 'CP05')
 
@@ -34,6 +35,7 @@ def normalize_case(source):
         ignore_local_config=True, overrides={
             'dialect': 'teradata', 'templater': 'raw', 'rules': ','.join(RULES),
             'exclude_rules': '', 'disable_noqa': True})
+    config = select_config(source, config)
     linter = Linter(config=config)
     pack = linter.get_rulepack()
     if {r.code for r in pack.rules} != set(RULES):
