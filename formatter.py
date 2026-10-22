@@ -809,18 +809,22 @@ def remove_formatter_where_prefix(tokens):
     return result
 
 
-def _validation_snapshot(source):
+def _validation_snapshot(source, alias_permissions=None):
     """Keep clause ownership alongside exact tokens; never casefold SQL text."""
     tree = source_linter().parse_string(source).tree
     if tree is None or any(s.is_type('unparsable') for s in walk(tree)):
         raise ValueError('Не удалось разобрать SQL для проверки сохранности')
     tokens, comments, predicates, counts = [], [], {}, {}
+    from formatter_modules.formatter_clause_gaps import table_alias_parts
+    optional_as = ({keyword.pos_marker.source_slice.start
+                    for _, _, keyword, _ in table_alias_parts(source, tree) if keyword is not None}
+                   if alias_permissions is not None else set())
     clause_headers = {'select_clause': 'SELECT', 'from_clause': 'FROM', 'where_clause': 'WHERE'}
     scoped = {'statement', 'select_statement', 'select_clause', 'from_clause', 'where_clause', 'having_clause',
               'procedure_definition', 'procedure_parameter', 'procedure_security',
               'procedure_block', 'procedure_declaration', 'procedure_assignment',
               'procedure_while', 'procedure_call', 'procedure_executable',
-              'insert_statement', 'delete_statement'}
+              'insert_statement', 'delete_statement', 'from_expression_element', 'alias_expression'}
 
     def collect(node, context=(), parent=None):
         kind = node.get_type()
@@ -846,6 +850,9 @@ def _validation_snapshot(source):
             header = (parent is not None and parent.get_type() in clause_headers
                       and node.is_type('keyword')
                       and node.raw_upper == clause_headers[parent.get_type()])
+            if (alias_permissions is not None and node.pos_marker is not None
+                    and node.pos_marker.source_slice.start in optional_as):
+                alias_permissions.add(len(tokens))
             tokens.append((kind, node.raw, context, header))
 
     collect(tree)
@@ -866,7 +873,8 @@ def validate_sql_unchanged(original, formatted):
         return [(span.kind, sql[span.start:span.end]) for span in protected_spans(sql)]
     if protected_values(original) != protected_values(formatted):
         raise ValueError('Форматирование изменило защищённые участки SQL!')
-    before, before_comments, original_predicates = _validation_snapshot(original)
+    alias_permissions = set()
+    before, before_comments, original_predicates = _validation_snapshot(original, alias_permissions)
     case_before, _, _ = _validation_snapshot(normalize_case(original))
     after, after_comments, formatted_predicates = _validation_snapshot(formatted)
     prefix = [('numeric_literal', '1'), ('raw_comparison_operator', '='),
@@ -891,9 +899,19 @@ def validate_sql_unchanged(original, formatted):
             removed.update(range(after_offset, after_offset + 4))
     after = [t for i, t in enumerate(after) if i not in removed]
 
-    if len(before) != len(after) or len(case_before) != len(before) or any(
-            a != b and b != permitted
-            for a, b, permitted in zip(before, after, case_before)):
+    # Only the original AST's proven optional table-AS token may disappear.
+    # Alias scopes remain in every token signature; insertion, column-AS,
+    # CAST-AS, changing the alias or moving tokens between tables still fail.
+    matched = len(case_before) == len(before)
+    cursor = 0
+    if matched:
+        for index, (token, permitted) in enumerate(zip(before, case_before)):
+            if cursor < len(after) and after[cursor] in (token, permitted):
+                cursor += 1
+            elif index not in alias_permissions:
+                matched = False
+                break
+    if not matched or cursor != len(after):
         import difflib
         diff = ''.join(difflib.unified_diff(
             [f'{t[0]}: {t[1]!r} ({t[2]})\n' for t in before],
@@ -1062,6 +1080,18 @@ def format_sql(source, diagnostics=None):
             emit_diagnostics([warning])
         return original_source
 
+    # B10.4: AST-proven root margins and table aliases, on original coordinates.
+    from formatter_modules.formatter_clause_gaps import statement_margin_edits, table_alias_gap_edits
+    preparation = statement_margin_edits(source, parsed.tree) + table_alias_gap_edits(source, parsed.tree)
+    prepared, preparation_warnings = (plan_edits(
+        source, preparation, protected=[(p.start, p.end) for p in protected_spans(source)])
+        if preparation else ([], []))
+    if prepared:
+        source = apply_edits(source, prepared)
+        parsed = linter.parse_string(source)
+        if parsed.tree is None or any(s.is_type('unparsable') for s in walk(parsed.tree)):
+            raise ValueError('AST preparation produced unsupported SQL')
+
     # Prepare supported query boundaries. Reparse after changing whitespace so
     # all existing renderers and B2 checks use offsets from the same snapshot.
     nested_edits, nested_statements = nested_query_gap_edits(
@@ -1094,7 +1124,7 @@ def format_sql(source, diagnostics=None):
                    if i in nested_statements for s in walk(statement)
                    if s.is_type('join_clause')}
     edits = []
-    structural_warnings = list(boundary_warnings)
+    structural_warnings = list(preparation_warnings) + list(boundary_warnings)
     for statement in statements:
         for clause in walk(statement):
             if id(clause) in basic_lists and commented_clause_gap_edits(source, clause) is None:

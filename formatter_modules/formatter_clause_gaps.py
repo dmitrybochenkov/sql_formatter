@@ -293,16 +293,20 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         nodes = list(_walk(root))
         queries = [s for s in nodes if s.is_type('select_statement', 'delete_statement')]
         joins = [s for s in nodes if s.is_type('join_clause')]
+        derived_mode = any(s.is_type('table_expression') and any(
+            child.is_type('bracketed') and any(q.is_type('select_statement', 'set_expression')
+                                              for q in child.segments)
+            for child in s.segments) for s in nodes)
         if joins and (not include_joins or not include_simple):
             continue
         if (len(queries) < 2 and not include_simple) or any((s.is_type(
                 'over_clause', 'window_specification') and not include_windows) or (s.is_type('set_expression') and not include_sets) or (s is not root and s.is_type('with_compound_statement')) for s in nodes):
             continue
-        # Only ordinary JOIN ... ON is owned here; USING and other forms
-        # retain their existing fallback. Never claim a JOIN with a subquery.
-        if any(any(s.is_type('select_statement') for s in _walk(join))
-               or not any(s.is_type('join_on_condition') for s in join.segments)
-               for join in joins):
+        # Direct JOIN targets can contain derived queries. USING and unknown
+        # forms still fall back; CROSS JOIN legitimately has no ON.
+        if any(not any(s.is_type('join_on_condition') for s in join.segments)
+               and not (derived_mode and any(s.is_type('keyword') and s.raw_upper == 'CROSS'
+                                            for s in join.segments)) for join in joins):
             continue
         clauses_by_id = {}
         for query in queries:
@@ -312,7 +316,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             allowed = {'select_clause', 'from_clause', 'where_clause'}
             if include_qualify:
                 allowed.add('qualify_clause')
-            if include_simple and (cte_mode or set_mode or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
+            if include_simple and (cte_mode or set_mode or (joins and derived_mode) or len(queries) == 1 or (include_having and 'having_clause' in by_type)):
                 allowed |= {'groupby_clause', 'orderby_clause', 'having_clause'}
             if (len(by_type) != len(clauses) or not set(by_type) <= allowed
                     or ('select_clause' not in by_type and not query.is_type('delete_statement'))
@@ -324,7 +328,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                 break
             if ('from_clause' in by_type and sum(s.is_type('from_expression_element')
                     for s in _owned_walk(by_type['from_clause'])) != 1
-                    and not (include_simple and (cte_mode or set_mode or len(queries) == 1 or (joins and query is root)))):
+                    and not (include_simple and (cte_mode or set_mode or len(queries) == 1
+                                                or (joins and (query is root or derived_mode))))):
                 break
             clauses_by_id[id(query)] = clauses
         if len(clauses_by_id) != len(queries):
@@ -346,14 +351,15 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             continue
         if joins:
             direct_joins = []
-            for query in (queries if cte_mode or set_mode else [root]):
+            for query in (queries if cte_mode or set_mode or derived_mode else [root]):
                 from_clause = next((s for s in clauses_by_id[id(query)] if s.is_type('from_clause')), None)
                 if from_clause is None:
                     continue
                 local_joins = [s for expr in from_clause.segments if expr.is_type('from_expression')
                                for s in expr.segments if s.is_type('join_clause')]
-                if local_joins and any(s.is_type('select_statement') for s in _walk(from_clause)):
-                    break  # Derived targets remain outside ordinary JOIN support.
+                if local_joins and not derived_mode and any(
+                        s.is_type('select_statement') for s in _walk(from_clause)):
+                    break
                 direct_joins.extend(local_joins)
             if {id(s) for s in joins} != {id(s) for s in direct_joins}:
                 continue  # Parenthesized JOIN trees are outside this pass.
@@ -480,7 +486,10 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                         for left, right in zip(code, code[1:]):
                             join_boundary(stop(left), start(right),
                                           '\n' + base if right.is_type('join_on_condition') else ' ')
-                        on = next(s for s in code if s.is_type('join_on_condition'))
+                        previous = node
+                        on = next((s for s in code if s.is_type('join_on_condition')), None)
+                        if on is None:
+                            continue  # CROSS JOIN has no predicate.
                         keyword = next(s for s in on.segments if s.is_type('keyword'))
                         expression = next(s for s in on.segments if s.is_type('expression'))
                         gap(stop(keyword), start(expression), ' ')
@@ -871,3 +880,82 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
         else:
             render(root, 0)
     return edits, handled
+
+
+def table_alias_parts(source, tree):
+    """Prove ordinary/derived table aliases; never infer AS from text alone.
+
+    Comments in the target/alias gap and alias column lists are deliberately
+    left opaque. The returned AS keyword is the validator's deletion witness.
+    """
+    from_elements = {id(s) for clause in _walk(tree) if clause.is_type('from_clause')
+                     for s in _walk(clause) if s.is_type('from_expression_element')}
+    for element in _walk(tree):
+        if id(element) not in from_elements:
+            continue
+        code = [s for s in element.segments if s.is_code and not s.is_meta]
+        if len(code) != 2 or not code[0].is_type('table_expression') or not code[1].is_type('alias_expression'):
+            continue
+        target, alias = code
+        target_code = [s for s in target.segments if s.is_code and not s.is_meta]
+        if len(target_code) != 1:
+            continue
+        body = target_code[0]
+        derived = body.is_type('bracketed') and any(
+            s.is_type('select_statement', 'set_expression', 'with_compound_statement')
+            for s in body.segments)
+        if not body.is_type('table_reference') and not derived:
+            continue
+        parts = [s for s in alias.segments if s.is_code and not s.is_meta]
+        keyword = None
+        if len(parts) == 2 and parts[0].is_type('alias_operator'):
+            leaves = [s for s in _walk(parts[0]) if not s.segments and s.is_code]
+            if len(leaves) != 1 or not leaves[0].is_type('keyword') or leaves[0].raw_upper != 'AS':
+                continue
+            keyword = leaves[0]
+            parts = parts[1:]
+        if len(parts) != 1 or not parts[0].is_type('naked_identifier', 'quoted_identifier'):
+            continue
+        identifier = parts[0]
+        a, b = target.pos_marker.source_slice.stop, identifier.pos_marker.source_slice.start
+        if keyword is None:
+            if source[a:b].strip():
+                continue
+        else:
+            span = keyword.pos_marker.source_slice
+            if source[a:span.start].strip() or source[span.stop:b].strip():
+                continue
+        yield target, identifier, keyword, derived
+
+
+def statement_margin_edits(source, tree):
+    """Remove only a root statement's whitespace prefix on its physical line."""
+    edits = []
+    for index, statement in enumerate(tree.segments):
+        if not statement.is_type('statement') or statement.pos_marker is None:
+            continue
+        a = statement.pos_marker.source_slice.start
+        line = source.rfind('\n', 0, a) + 1
+        prefix = source[line:a]
+        previous = next((s for s in reversed(tree.segments[:index])
+                         if not s.is_meta and not s.is_type('whitespace', 'newline')), None)
+        if previous is not None and previous.is_type('statement_terminator', 'comment'):
+            end = previous.pos_marker.source_slice.stop
+            if not source[end:a].strip() and '\n' not in source[end:a]:
+                edits.append(Edit(end, a, '\n', 'ROOT-MARGIN', 'statement', f'root-margin:{a}'))
+                continue
+        if prefix and all(c in ' \t' for c in prefix):
+            edits.append(Edit(line, a, '', 'ROOT-MARGIN', 'statement', f'root-margin:{a}'))
+    return edits
+
+
+def table_alias_gap_edits(source, tree):
+    """An optional table AS and its separating whitespace form one atomic edit."""
+    edits = []
+    for target, identifier, keyword, derived in table_alias_parts(source, tree):
+        if keyword is None and not derived:
+            continue
+        a, b = target.pos_marker.source_slice.stop, identifier.pos_marker.source_slice.start
+        if source[a:b] != ' ':
+            edits.append(Edit(a, b, ' ', 'TABLE-ALIAS', 'table-alias', f'table-alias:{a}'))
+    return edits

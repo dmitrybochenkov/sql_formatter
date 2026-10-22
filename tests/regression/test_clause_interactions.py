@@ -49,15 +49,18 @@ class B45IntegrationTests(unittest.TestCase):
             BASE + 'WHERE a = 1\n-- detached\n\nAND b = 2\n;\n'),
     }
 
-    def test_join_subqueries_remain_out_of_scope(self):
+    def test_derived_join_boundaries_are_owned_atomically(self):
         from sqlfluff.core import Linter
         from formatter_modules.formatter_clause_gaps import nested_query_gap_edits
         for source in ('SELECT t.a FROM t JOIN (SELECT a FROM u) s ON t.a=s.a;',
                        'SELECT t.a FROM (SELECT a FROM t) t JOIN u ON t.a=u.a;'):
             with self.subTest(source=source):
                 tree = Linter(dialect='teradata').parse_string(source).tree
-                self.assertEqual(nested_query_gap_edits(source, tree, include_simple=True,
-                    include_joins=True, include_comment_lists=True, include_having=True), ([], set()))
+                edits, owners = nested_query_gap_edits(source, tree, include_simple=True,
+                    include_joins=True, include_comment_lists=True, include_having=True)
+                self.assertEqual(owners, {0})
+                self.assertTrue(edits)
+                self.assertEqual(len({e.group_id for e in edits}), 1)
 
     def test_exact_matrix(self):
         for name, (source, expected) in self.CASES.items():

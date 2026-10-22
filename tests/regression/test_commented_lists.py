@@ -112,8 +112,13 @@ class B43CommentedClauseTests(unittest.TestCase):
                        'SELECT a FROM t JOIN (SELECT a FROM u) s ON t.a=s.a ORDER BY a,\n-- next\nb;',
                        'WITH q AS (SELECT a FROM t) SELECT a FROM q ORDER BY a,\n-- next\nb;'):
             tree = Linter(dialect='teradata').parse_string(source).tree
-            self.assertEqual(nested_query_gap_edits(source, tree, include_simple=True,
-                             include_joins=True, include_comment_lists=True), ([], set()))
+            result = nested_query_gap_edits(source, tree, include_simple=True,
+                             include_joins=True, include_comment_lists=True)
+            if 'JOIN (' in source:
+                self.assertEqual(result[1], {0})
+                self.assertTrue(result[0])
+            else:
+                self.assertEqual(result, ([], set()))
 
     def test_join_where_and_both_lists(self):
         from formatter import validate_sql_unchanged

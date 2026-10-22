@@ -128,7 +128,7 @@ class FormatterTests(unittest.TestCase):
                   ") sub ON t.user_id = sub.user_id;")
         formatted = format_sql(source)
         self.assertIn("-- group fields", formatted)
-        self.assertIn("GROUP BY\n    1\n    , 2", formatted)
+        self.assertIn("GROUP BY\n        1\n        , 2", formatted)
         self.assertEqual(formatted, format_sql(formatted))
 
     def test_rejects_changed_sql(self):

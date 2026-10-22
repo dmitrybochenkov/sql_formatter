@@ -127,15 +127,20 @@ class B52SetOperationTests(unittest.TestCase):
         self.check_set('SELECT t.a FROM t JOIN v ON t.a=v.a WHERE p=1 AND q=2 UNION SELECT a FROM u WHERE r=3 AND s=4;',
             'SELECT\n    t.a\nFROM t\n\nJOIN v\nON t.a = v.a\n\nWHERE 1=1\n    AND p = 1\n    AND q = 2\n\nUNION\n\nSELECT\n    a\nFROM u\n\nWHERE 1=1\n    AND r = 3\n    AND s = 4\n;\n')
 
-    def test_future_constructs_not_claimed(self):
+    def test_derived_join_supported_other_feature_gates_preserved(self):
         from sqlfluff.core import Linter
         from formatter_modules.formatter_clause_gaps import nested_query_gap_edits
         for source in ('SELECT ROW_NUMBER() OVER (ORDER BY a) FROM t UNION SELECT b FROM u;',
                        'SELECT a FROM t QUALIFY a=1 UNION SELECT b FROM u;',
                        'SELECT a FROM t UNION SELECT a FROM u JOIN (SELECT a FROM v) s ON u.a=s.a;'):
             tree = Linter(dialect='teradata').parse_string(source).tree
-            self.assertEqual(nested_query_gap_edits(source, tree, include_simple=True,
-                include_joins=True, include_cte=True, include_sets=True), ([], set()))
+            result = nested_query_gap_edits(source, tree, include_simple=True,
+                include_joins=True, include_cte=True, include_sets=True)
+            if 'JOIN (' in source:
+                self.assertEqual(result[1], {0})
+                self.assertTrue(result[0])
+            else:
+                self.assertEqual(result, ([], set()))
 
 if __name__ == "__main__":
     unittest.main()

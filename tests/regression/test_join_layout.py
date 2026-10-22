@@ -68,7 +68,7 @@ class B42JoinTests(unittest.TestCase):
         self.assertEqual(format_sql(actual, diagnostics=[]), actual)
         self.assertNotIn('ON 1=1', actual)
 
-    def test_join_subqueries_and_window_queries_not_claimed(self):
+    def test_derived_join_supported_windows_and_using_not_claimed(self):
         from sqlfluff.core import Linter
         from formatter_modules.formatter_clause_gaps import nested_query_gap_edits
         for source in ('SELECT a FROM t JOIN (SELECT a FROM u) s ON t.a=s.a;',
@@ -76,8 +76,13 @@ class B42JoinTests(unittest.TestCase):
                        'SELECT a FROM t JOIN u USING (a);'):
             with self.subTest(source=source):
                 tree = Linter(dialect='teradata').parse_string(source).tree
-                self.assertEqual(nested_query_gap_edits(source, tree, include_simple=True,
-                                                       include_joins=True), ([], set()))
+                result = nested_query_gap_edits(source, tree, include_simple=True,
+                                                       include_joins=True)
+                if 'JOIN (' in source:
+                    self.assertEqual(result[1], {0})
+                    self.assertTrue(result[0])
+                else:
+                    self.assertEqual(result, ([], set()))
 
     def test_narrow_edits_atomic_and_order_independent(self):
         from sqlfluff.core import Linter

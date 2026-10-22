@@ -97,7 +97,7 @@ class B51CTETests(unittest.TestCase):
         self.assertFalse(group_edits and any(e.rule_id == 'TEST' for e in accepted))
         self.assertTrue(any(d.code == 'SQLFMT-E001' for d in warnings))
 
-    def test_future_constructs_and_join_subqueries_not_claimed(self):
+    def test_cte_derived_join_supported_other_feature_gates_preserved(self):
         from sqlfluff.core import Linter
         from formatter_modules.formatter_clause_gaps import nested_query_gap_edits
         for source in ('WITH c AS (SELECT a FROM t UNION ALL SELECT a FROM u) SELECT a FROM c;',
@@ -106,8 +106,13 @@ class B51CTETests(unittest.TestCase):
                        'WITH c AS (SELECT t.a FROM t JOIN (SELECT a FROM u) s ON t.a=s.a) SELECT a FROM c;'):
             with self.subTest(source=source):
                 tree = Linter(dialect='teradata').parse_string(source).tree
-                self.assertEqual(nested_query_gap_edits(source, tree, include_simple=True,
-                    include_joins=True, include_comment_lists=True, include_having=True, include_cte=True), ([], set()))
+                result = nested_query_gap_edits(source, tree, include_simple=True,
+                    include_joins=True, include_comment_lists=True, include_having=True, include_cte=True)
+                if 'JOIN (' in source:
+                    self.assertEqual(result[1], {0})
+                    self.assertTrue(result[0])
+                else:
+                    self.assertEqual(result, ([], set()))
 
 if __name__ == "__main__":
     unittest.main()
