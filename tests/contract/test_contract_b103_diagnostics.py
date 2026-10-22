@@ -11,7 +11,6 @@ import unittest
 from unittest.mock import patch
 
 from formatter import format_sql, validate_sql_unchanged
-from formatter_modules.formatter_procedure import format_procedure
 from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_trace import event
 from tests.unit.test_procedure_prototype import wrap, walk
@@ -34,28 +33,24 @@ class B103DiagnosisTests(unittest.TestCase):
     def records(self):
         return [json.loads(s) for s in (self.base/'logs/diagnostic.jsonl').read_text().splitlines()]
 
-    def test_known_multiline_in_reproduces_atomic_rollback(self):
+    def test_multiline_in_is_formatted_without_atomic_rollback(self):
         ds=[]
-        self.assertEqual(format_sql(REPRO,diagnostics=ds),REPRO)
-        self.assertEqual([d.code for d in ds],['SQLFMT-E003'])
+        first=format_sql(REPRO,diagnostics=ds)
+        self.assertNotEqual(first,REPRO)
+        self.assertEqual(ds,[])
         records=self.records()
-        mismatch=next(r for r in records if r['code']=='NON_IDEMPOTENT')
-        self.assertEqual(mismatch['stage'],'repeat')
-        self.assertEqual(mismatch['view'],'candidate')
-        self.assertEqual(mismatch['segment'],'procedure_definition')
+        self.assertFalse(any(r['code']=='NON_IDEMPOTENT' for r in records))
         self.assertTrue(any(r['stage']=='validate' and r['code']=='END' for r in records))
-        self.assertEqual(records[-1]['stage'],'rollback')
+        self.assertFalse(any(r['stage']=='rollback' for r in records))
+        self.assertIn('\n    2)',first)
+        validate_sql_unchanged(REPRO,first)
+        self.assertEqual(format_sql(first,diagnostics=[]),first)
         for ending in ('\r', '\r\n', '\r\n\n\r'):
             variant='\ufeff'+REPRO.replace('\n',ending)
-            self.assertEqual(format_sql(variant,diagnostics=[]),variant)
-        # Internal one-pass probe only: public fail-safe is never bypassed.
-        first=format_procedure(REPRO,format_sql,validate_sql_unchanged,[],_checking=True)
-        second=format_procedure(first,format_sql,validate_sql_unchanged,[],_checking=True)
-        self.assertIn('\n    2)',first)
-        self.assertIn('\n        2)',second)
-        self.assertEqual(second,first.replace('\n    2)','\n        2)'))
-        validate_sql_unchanged(REPRO,first)
-        validate_sql_unchanged(REPRO,second)
+            result=format_sql(variant,diagnostics=[])
+            self.assertNotEqual(result,variant)
+            validate_sql_unchanged(variant,result)
+            self.assertEqual(format_sql(result,diagnostics=[]),result)
 
     def test_synthetic_construct_matrix(self):
         stable=[
@@ -68,22 +63,18 @@ class B103DiagnosisTests(unittest.TestCase):
             wrap('INSERT INTO t SELECT a FROM u WHERE a NOT IN ('+','.join(map(str,range(50)))+');'),
             wrap('INSERT INTO t SELECT a FROM u WHERE a IN ('+','.join(map(str,range(50)))+');'),
         ]
-        unstable=[wrap('INSERT INTO t SELECT a FROM u WHERE a '+op+' (1,\n2,\n3);')
+        multiline=[wrap('INSERT INTO t SELECT a FROM u WHERE a '+op+' (1,\n2,\n3);')
                   for op in ('IN','NOT IN')]
-        for sql in stable+unstable:
+        for sql in stable+multiline:
             with self.subTest(sql=sql):
                 parsed=source_linter().parse_string(sql)
                 self.assertEqual(parsed.violations,[])
                 self.assertFalse(any(n.is_type('unparsable') for n in walk(parsed.tree)))
                 ds=[];result=format_sql(sql,diagnostics=ds)
-                if sql in unstable:
-                    self.assertEqual(result,sql)
-                    self.assertEqual([d.code for d in ds],['SQLFMT-E003'])
-                else:
-                    self.assertEqual(ds,[])
-                    self.assertNotEqual(result,sql)
-                    validate_sql_unchanged(sql,result)
-                    self.assertEqual(format_sql(result,diagnostics=[]),result)
+                self.assertEqual(ds,[])
+                self.assertNotEqual(result,sql)
+                validate_sql_unchanged(sql,result)
+                self.assertEqual(format_sql(result,diagnostics=[]),result)
 
     def test_tracing_is_opt_in_and_does_not_change_result(self):
         path=self.base/'logs/diagnostic.jsonl'
@@ -91,7 +82,7 @@ class B103DiagnosisTests(unittest.TestCase):
             first=format_sql(REPRO,diagnostics=[])
         self.assertFalse(path.exists())
         self.assertEqual(format_sql(REPRO,diagnostics=[]),first)
-        # An unwritable log destination must not interfere with rollback.
+        # An unwritable log destination must not interfere with formatting.
         bad=self.base/'file';bad.write_text('x')
         with patch.dict(os.environ,SQL_FORMATTER_LOG_DIR=str(bad)):
             self.assertEqual(format_sql(REPRO,diagnostics=[]),first)
@@ -111,6 +102,7 @@ class B103DiagnosisTests(unittest.TestCase):
 
     def test_headless_diagnostic_and_merged_adapter(self):
         path=self.base/'sample.sql';raw=b'\xef\xbb\xbf'+REPRO.replace('\n','\r\n').encode()
+        expected=format_sql(raw.decode('utf-8'),diagnostics=[]).encode('utf-8')
         path.write_bytes(raw)
         for profile in ('personal','corporate'):
             env=dict(os.environ)
@@ -121,7 +113,7 @@ class B103DiagnosisTests(unittest.TestCase):
             run=subprocess.run(adapter_command(ROOT/'dbeaver_adapter.py',path,profile),
                 cwd=self.base,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=60)
             self.assertEqual(run.returncode,0)
-            self.assertEqual(run.stdout,raw)
+            self.assertEqual(run.stdout,expected)
             self.assertEqual(path.read_bytes(),raw)
 
     def test_stage_of_grammar_failure_is_distinct(self):

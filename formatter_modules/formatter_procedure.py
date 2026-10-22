@@ -42,6 +42,38 @@ def indented_fragment(text, level):
     return text
 
 
+def local_dml_fragment(source, node):
+    """Remove a standalone statement's outer margin, preserving relative gaps.
+
+    Interior lines of protected units are opaque. An insufficient continuation
+    margin is ambiguous, so the entire procedure must be refused.
+    """
+    offset = start(node)
+    prefix = source[source.rfind('\n', 0, offset) + 1:offset]
+    if not prefix or any(ch != ' ' for ch in prefix):
+        return node.raw
+    margin = len(prefix)
+    text = node.raw
+    spans = protected_spans(text)
+    removals = []
+    for i, ch in enumerate(text):
+        if ch != '\n' or i + 1 == len(text):
+            continue
+        pos = i + 1
+        if any(p.start <= i < p.end for p in spans):
+            continue
+        end = text.find('\n', pos)
+        line = text[pos:end if end >= 0 else len(text)]
+        if not line.startswith(' ' * margin):
+            if not line.strip():
+                continue  # Blank lines may have no outer margin yet.
+            raise ProcedureRefusal()
+        removals.append(pos)
+    for pos in reversed(removals):
+        text = text[:pos] + text[pos + margin:]
+    return text
+
+
 def format_procedure(source, format_dml, validate, diagnostics, *, _checking=False):
     """Transaction boundary: never expose a partial procedure or exception text."""
     original = source
@@ -158,7 +190,7 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
         def dml(node, level):
             ds = []
             with stage('dml', node=node):
-                candidate = format_dml(node.raw + ';', diagnostics=ds)
+                candidate = format_dml(local_dml_fragment(source, node) + ';', diagnostics=ds)
             for diagnostic in ds:
                 event('dml', diagnostic.code, node=node)
             if ds:
