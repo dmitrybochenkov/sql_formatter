@@ -33,7 +33,7 @@ class ProcedureTransportTests(unittest.TestCase):
                 with self.subTest(ending=repr(ending),profile=profile):
                     raw=b'\xef\xbb\xbf'+SIMPLE_INPUT.replace(' begin ',ending+'begin'+ending).encode()
                     expected=b'\xef\xbb\xbf'+SIMPLE_EXPECTED.encode()
-                    with patch('dbeaver_profile_selector.select_profile',return_value=profile):
+                    with patch('formatter_modules.profile_selector.select_profile',return_value=profile):
                         result=adapter.select_and_format_bytes(raw)
                         self.assertEqual(result,expected)
                         self.assertEqual(adapter.select_and_format_bytes(result),result)
@@ -54,7 +54,7 @@ class ProcedureTransportTests(unittest.TestCase):
     def test_cli_no_gui_success_and_failure_bytes(self):
         path=self.base/'SQL.sql'
         invalid=wrap('IF a=1 THEN SET a=2; END IF;')+'\r\n'
-        for script in ('formatter.py','dbeaver_formatter.py'):
+        for script in ('formatter.py',):
             for source, expected in ((SIMPLE_INPUT,SIMPLE_EXPECTED),(invalid,invalid)):
                 path.write_bytes(b'\xef\xbb\xbf'+source.encode())
                 # Importing tkinter fails deliberately: both CLIs must be headless.

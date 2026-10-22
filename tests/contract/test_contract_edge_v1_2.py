@@ -185,7 +185,7 @@ class ContractEdgeGoldenTests(unittest.TestCase):
                     "sys.stdout = stream\n"
                     "encoding = stream.encoding\n"
                     "import formatter\n"
-                    "import dbeaver_formatter\n"
+                    "import dbeaver_adapter\n"
                     "assert sys.stdout is stream\n"
                     "assert stream.encoding == encoding\n"
                     "assert stream.tell() == 0\n"

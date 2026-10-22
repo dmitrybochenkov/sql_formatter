@@ -7,7 +7,7 @@ def adapter_command(script, path, profile='personal', python_options=()):
         'import sys,runpy; from pathlib import Path; '
         'script,path,profile=sys.argv[1:]; '
         'sys.path.insert(0,str(Path(script).parent)); '
-        'import dbeaver_profile_selector as selector; '
+        'import formatter_modules.profile_selector as selector; '
         'selector.select_profile=lambda: None if profile=="cancel" else profile; '
         'sys.argv=[script,path]; runpy.run_path(script,run_name="__main__")'
     )

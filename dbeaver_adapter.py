@@ -77,7 +77,7 @@ def select_and_format_bytes(original):
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
             from formatter_modules.formatter_trace import stage
-            from dbeaver_profile_selector import select_profile
+            from formatter_modules.profile_selector import select_profile
             with stage('profile'):
                 profile = select_profile()
             output.flush()

@@ -107,7 +107,7 @@ class B7AdapterTests(unittest.TestCase):
     def test_paths_foreign_configuration_and_import(self):
         project = self.base / 'проект с пробелами'
         project.mkdir()
-        for name in ('formatter.py', 'dbeaver_adapter.py', 'dbeaver_profile_selector.py', 'dbeaver_formatter.py', '.sqlfluff'):
+        for name in ('formatter.py', 'dbeaver_adapter.py', '.sqlfluff'):
             shutil.copy(ROOT / name, project / name)
         shutil.copytree(ROOT / 'formatter_modules', project / 'formatter_modules',
                         ignore=shutil.ignore_patterns('__pycache__'))
@@ -116,7 +116,7 @@ class B7AdapterTests(unittest.TestCase):
         self.assertEqual(self.run_adapter(raw, project / 'dbeaver_adapter.py'),
                          b'SELECT\n    a\nFROM t\n;\n')
         code = ('import sys; before=(sys.stdout,sys.stderr,sys.stdout.encoding,sys.stderr.encoding); '
-                'import dbeaver_adapter,dbeaver_formatter,formatter; '
+                'import dbeaver_adapter,formatter; '
                 'assert before==(sys.stdout,sys.stderr,sys.stdout.encoding,sys.stderr.encoding)')
         result = subprocess.run([sys.executable, '-c', code], cwd=project, env=self.env, capture_output=True)
         self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b'', b''))
@@ -130,16 +130,16 @@ class B7AdapterTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout, raw)
 
-    def test_legacy_cli_interface_unchanged(self):
+    def test_supported_cli_interface(self):
         path = self.base / 'input.sql'
         for raw, code in ((b'SELECT a FROM t;', 0), (b'SELECT FROM;', 1)):
             path.write_bytes(raw)
-            result = subprocess.run([sys.executable, str(ROOT / 'dbeaver_formatter.py'), str(path)],
+            result = subprocess.run([sys.executable, str(ROOT / 'formatter.py'), str(path)],
                                     env=self.env, capture_output=True)
             self.assertEqual(result.returncode, code)
             if code:
                 self.assertEqual(result.stdout, b'')
-                self.assertIn(b'Formatting failed', result.stderr)
+                self.assertIn(b'ValueError', result.stderr)
             else:
                 self.assertEqual(result.stderr, b'')
 
@@ -158,7 +158,7 @@ class B7AdapterTests(unittest.TestCase):
         for target in ('os.write', 'pathlib.Path.read_bytes'):
             code = ('import runpy,sys; from pathlib import Path; from unittest.mock import patch; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
-                    'import dbeaver_profile_selector as selector; selector.select_profile=lambda: "personal"; '
+                    'import formatter_modules.profile_selector as selector; selector.select_profile=lambda: "personal"; '
                     'sys.argv=[sys.argv[1],sys.argv[2]]; '
                     f'context=patch({target!r},side_effect=PermissionError("secret")); '
                     'context.start(); runpy.run_path(sys.argv[0],run_name="__main__")')

@@ -1,7 +1,7 @@
-"""AST-positioned, conservative SELECT list formatting with standalone comments.
+"""Compatibility helper preserving standalone comment indentation.
 
-Only whitespace and delimiter gaps are edited; comments and expressions are
-never rewritten. Unsupported layouts return None for the legacy fallback.
+Not used by the engine. Retained for the distinct historical helper contract
+and its tests until B10.3d; runtime uses formatter_comment_lists instead.
 """
 import re
 from formatter_modules.formatter_edits import Edit
@@ -55,21 +55,18 @@ def commented_select_edits(source, clause):
             if source[left:right] != '\n' + indent + ', ':
                 edits.append(Edit(left, right, '\n' + indent + ', ', 'COMMENT-LIST', 'select-gap'))
             continue
-        # Supported inline comment: `a, -- note\n b` -> `a -- note\n , b`.
-        # Move only the delimiter, never the comment or expression bytes.
-        if len(gap_comments) == 1 and gap_comments[0].kind == 'line_comment':
-            comment = gap_comments[0]
-            if (cs < comment.start < comment.end < right
-                    and re.fullmatch(r'\s*', before)
-                    and re.fullmatch(r'[ \t]*', source[ce:comment.start])
-                    and source[comment.start:comment.end].startswith('--')
-                    and re.fullmatch(r'\n[ \t]*', source[comment.end:right])):
-                # No newline before the comment: it belongs to the left field.
-                if '\n' not in source[ce:comment.start] and '\n' not in before:
-                    edits.append(Edit(cs, ce, '', 'COMMENT-LIST', 'remove-trailing-comma'))
-                    edits.append(Edit(comment.end, right, '\n' + indent + ', ',
-                                      'COMMENT-LIST', 'leading-comma-after-comment'))
-                    continue
-        # Other comment layouts remain unsupported, rather than guessed.
-        return None
+        # The comma must already follow all standalone comments; moving it
+        # across comments would require semantic ownership inference.
+        if any(p.end > cs for p in gap_comments):
+            return None
+        if any(source[source.rfind('\n', 0, p.start)+1:p.start].strip() for p in gap_comments):
+            return None  # trailing inline comment, requires a separate algorithm
+        # Keep comment bytes and placement unchanged. Normalize only whitespace
+        # after comma, and never remove blank lines across comments.
+        if not before.strip().startswith('--') and not before.strip().startswith('/*'):
+            return None
+        if not re.fullmatch(r'\s*', after):
+            return None
+        if after != ' ':
+            edits.append(Edit(ce, right, ' ', 'COMMENT-LIST', 'after-comma'))
     return edits

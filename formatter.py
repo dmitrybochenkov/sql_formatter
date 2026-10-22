@@ -13,9 +13,8 @@ from formatter_modules.formatter_guarded_pass import guarded_pass
 from formatter_modules.formatter_lists import normalize_simple_list
 from formatter_modules.formatter_list_gaps import select_gap_edits
 from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits, window_specification_parts
-from formatter_modules.formatter_comment_lists_v3 import commented_select_edits
+from formatter_modules.formatter_comment_lists import commented_select_edits
 
-DIALECT = "teradata"
 INDENT = " " * 4
 
 

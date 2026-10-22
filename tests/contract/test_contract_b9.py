@@ -33,7 +33,7 @@ class B9AdapterTests(unittest.TestCase):
             other = Mock(side_effect=AssertionError('wrong route'))
             routes = dict.fromkeys(('personal','corporate'), other)
             routes[profile] = selected
-            with patch('dbeaver_profile_selector.select_profile', return_value=profile), \
+            with patch('formatter_modules.profile_selector.select_profile', return_value=profile), \
                  patch.dict(adapter.PROFILE_FORMATTERS, routes):
                 self.assertEqual(adapter.select_and_format_bytes(self.RAW), self.EXPECTED)
                 selected.assert_called_once_with(self.RAW)
@@ -42,7 +42,7 @@ class B9AdapterTests(unittest.TestCase):
     def test_profiles_match_b8_and_are_idempotent(self):
         self.assertIs(adapter.PROFILE_FORMATTERS['personal'], adapter.PROFILE_FORMATTERS['corporate'])
         for profile in adapter.PROFILE_FORMATTERS:
-            with patch('dbeaver_profile_selector.select_profile', return_value=profile):
+            with patch('formatter_modules.profile_selector.select_profile', return_value=profile):
                 first = adapter.select_and_format_bytes(self.RAW)
                 self.assertEqual(first, self.EXPECTED)
                 self.assertEqual(first, adapter.format_bytes(self.RAW))
@@ -51,7 +51,7 @@ class B9AdapterTests(unittest.TestCase):
     def test_cancel_and_unknown_profile_never_format(self):
         for choice in (None, 'unknown'):
             formatter = Mock(side_effect=AssertionError('must not format'))
-            with patch('dbeaver_profile_selector.select_profile', return_value=choice), \
+            with patch('formatter_modules.profile_selector.select_profile', return_value=choice), \
                  patch.dict(adapter.PROFILE_FORMATTERS, personal=formatter, corporate=formatter):
                 self.assertEqual(adapter.select_and_format_bytes(self.RAW), self.RAW)
                 formatter.assert_not_called()
@@ -63,14 +63,14 @@ class B9AdapterTests(unittest.TestCase):
             return 'personal'
         for action in (RuntimeError('secret'), ImportError('secret'), KeyboardInterrupt(), noisy):
             out, err = io.StringIO(), io.StringIO()
-            with patch('dbeaver_profile_selector.select_profile', side_effect=action), \
+            with patch('formatter_modules.profile_selector.select_profile', side_effect=action), \
                  contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
                 self.assertEqual(adapter.select_and_format_bytes(self.RAW), self.RAW)
             self.assertEqual(out.getvalue()+err.getvalue(), '')
         self.assertNotIn('secret', (self.base/'logs/adapter.jsonl').read_text())
 
     def test_format_failure_and_e004_preserve_bytes(self):
-        with patch('dbeaver_profile_selector.select_profile', return_value='corporate'):
+        with patch('formatter_modules.profile_selector.select_profile', return_value='corporate'):
             with patch('formatter.format_sql', side_effect=RuntimeError('secret')):
                 self.assertEqual(adapter.select_and_format_bytes(self.RAW), self.RAW)
             for raw in (b'\xef\xbb\xbfSELECT FROM;\r', b'\xef\xbb\xbfselect SUM(A) over W from T;\r\n'):
@@ -94,14 +94,14 @@ class B9AdapterTests(unittest.TestCase):
 
     def test_cli_and_imports_do_not_load_tk(self):
         path = self.base/'input.sql'; path.write_bytes(self.RAW)
-        for script in ('formatter.py','dbeaver_formatter.py'):
+        for script in ('formatter.py',):
             code = ('import sys,runpy; from pathlib import Path; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
-                    'sys.modules["tkinter"]=None; sys.modules["dbeaver_profile_selector"]=None; '
+                    'sys.modules["tkinter"]=None; sys.modules["formatter_modules.profile_selector"]=None; '
                     'sys.argv=sys.argv[1:]; runpy.run_path(sys.argv[0],run_name="__main__")')
             result = subprocess.run([sys.executable,'-c',code,str(ROOT/script),str(path)],env=self.env,capture_output=True)
             self.assertEqual((result.returncode,result.stdout,result.stderr),(0,self.EXPECTED,b''))
-        code = 'import sys; import dbeaver_adapter,dbeaver_profile_selector; assert "tkinter" not in sys.modules'
+        code = 'import sys; import dbeaver_adapter,formatter_modules.profile_selector; assert "tkinter" not in sys.modules'
         result = subprocess.run([sys.executable,'-c',code],cwd=ROOT,env=self.env,capture_output=True)
         self.assertEqual((result.returncode,result.stdout,result.stderr),(0,b'',b''))
 
@@ -112,13 +112,13 @@ class B9AdapterTests(unittest.TestCase):
                        'selector.select_profile=lambda: print("secret") or "personal"'):
             code = ('import sys,runpy; from pathlib import Path; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
-                    'import dbeaver_profile_selector as selector; ' + action + '; '
+                    'import formatter_modules.profile_selector as selector; ' + action + '; '
                     'sys.argv=sys.argv[1:]; runpy.run_path(sys.argv[0],run_name="__main__")')
             result = subprocess.run([sys.executable,'-c',code,str(ROOT/'dbeaver_adapter.py'),str(path)],
                                     env=self.env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
             self.assertEqual((result.returncode,result.stdout),(0,self.RAW))
 
     def test_cancel_with_unwritable_log(self):
-        with patch('dbeaver_profile_selector.select_profile', return_value=None), \
+        with patch('formatter_modules.profile_selector.select_profile', return_value=None), \
              patch.object(Path,'mkdir',side_effect=PermissionError()):
             self.assertEqual(adapter.select_and_format_bytes(self.RAW),self.RAW)

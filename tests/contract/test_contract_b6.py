@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_runtime import CONFIG_PATH
+from tests.adapter_runner import adapter_command
 
 
 class B6ContractTests(unittest.TestCase):
@@ -34,17 +35,18 @@ class B6ContractTests(unittest.TestCase):
                         validate_sql_unchanged(variant,first)
                         self.assertEqual(d1+d2,[])
 
-    def test_dbeaver_reads_exact_bytes_before_formatter(self):
-        import dbeaver_formatter
+    def test_cli_reads_exact_bytes_before_formatter(self):
+        import formatter as cli
         source="SELECT 'x\r\ny' /* c\rd */\r\nFROM t;\r"
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'input.sql';path.write_bytes(source.encode())
             import io
             output=io.TextIOWrapper(io.BytesIO(),encoding='utf-8')
-            with patch.object(sys,'argv',['dbeaver_formatter.py',str(path)]),patch.object(sys,'stdout',output), \
-                 patch.object(dbeaver_formatter,'format_sql',return_value=source) as formatter:
-                self.assertEqual(dbeaver_formatter.main(),0)
-                formatter.assert_called_once_with(source)
+            with patch.object(sys,'argv',['formatter.py',str(path)]),patch.object(sys,'stdout',output), \
+                 patch.object(cli,'format_sql',return_value=source) as engine:
+                self.assertIsNone(cli.main())
+                engine.assert_called_once_with(source, diagnostics=[])
+                output.flush()
                 self.assertEqual(output.buffer.getvalue(),source.encode())
 
     def test_cwd_foreign_configuration_and_cli(self):
@@ -58,8 +60,9 @@ class B6ContractTests(unittest.TestCase):
             path=base/'input.sql';path.write_bytes(source.encode())
             env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
             for directory in (root,cwd):
-                for script in ('dbeaver_formatter.py','formatter.py'):
-                    result=subprocess.run([sys.executable,str(root/script),str(path)],cwd=directory,env=env,capture_output=True)
+                for script in ('dbeaver_adapter.py','formatter.py'):
+                    command = adapter_command(root/script,path) if script=='dbeaver_adapter.py' else [sys.executable,str(root/script),str(path)]
+                    result=subprocess.run(command,cwd=directory,env=env,capture_output=True)
                     self.assertEqual(result.returncode,0,result.stderr)
                     self.assertEqual(result.stdout,expected)
                     self.assertEqual(result.stderr,b'')

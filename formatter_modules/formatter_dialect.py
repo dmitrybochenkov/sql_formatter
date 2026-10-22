@@ -18,8 +18,8 @@ def is_procedure(source):
 def select_config(source, config):
     if not is_procedure(source):
         return config
-    from prototypes.teradata_procedures import prototype_config
-    return prototype_config(config)
+    from formatter_modules.teradata_procedure_grammar import procedure_config
+    return procedure_config(config)
 
 
 def decode_sql_bytes(data):

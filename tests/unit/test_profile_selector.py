@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from dbeaver_profile_selector import select_profile
+from formatter_modules.profile_selector import select_profile
 
 
 class FakeTk:

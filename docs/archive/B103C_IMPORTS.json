@@ -1,0 +1,287 @@
+{
+  "baseline": "9659234",
+  "before": {
+    "dbeaver_adapter.py": [
+      "import contextlib",
+      "from datetime import datetime, timezone",
+      "import io",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import sys",
+      "import tempfile",
+      "from formatter_modules.formatter_trace import stage",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_dialect import decode_sql_bytes",
+      "from formatter_modules.formatter_trace import stage",
+      "from dbeaver_profile_selector import select_profile",
+      "import msvcrt",
+      "from formatter_modules.formatter_trace import stage"
+    ],
+    "dbeaver_formatter.py": [
+      "import sys",
+      "from pathlib import Path",
+      "from formatter import format_sql",
+      "from formatter_modules.formatter_dialect import decode_sql_bytes"
+    ],
+    "dbeaver_profile_selector.py": [
+      "import tkinter as tk",
+      "from tkinter import ttk"
+    ],
+    "diagnose_formatter.py": [
+      "import os",
+      "import sys",
+      "from pathlib import Path",
+      "from formatter_modules.formatter_trace import event, stage",
+      "from dbeaver_adapter import PROFILE_FORMATTERS"
+    ],
+    "formatter.py": [
+      "import re",
+      "import sys",
+      "from pathlib import Path",
+      "from dataclasses import replace",
+      "from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits, Diagnostic, line_number",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans",
+      "from formatter_modules.formatter_guarded_pass import guarded_pass",
+      "from formatter_modules.formatter_lists import normalize_simple_list",
+      "from formatter_modules.formatter_list_gaps import select_gap_edits",
+      "from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits, window_specification_parts",
+      "from formatter_modules.formatter_comment_lists_v3 import commented_select_edits",
+      "import unicodedata",
+      "from formatter_modules.formatter_dialect import is_procedure",
+      "from formatter_modules.formatter_dialect import decode_sql_bytes",
+      "from formatter_modules.formatter_dialect import is_procedure",
+      "import difflib",
+      "from formatter_modules.formatter_procedure import format_procedure"
+    ],
+    "formatter_modules/__init__.py": [],
+    "formatter_modules/formatter_case.py": [
+      "from sqlfluff.core import FluffConfig, Linter",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_runtime import CONFIG_PATH, SourceMap",
+      "from formatter_modules.formatter_dialect import select_config"
+    ],
+    "formatter_modules/formatter_clause_gaps.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans"
+    ],
+    "formatter_modules/formatter_comment_lists.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_comment_lists_v2.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_comment_lists_v3.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_dialect.py": [
+      "from sqlfluff.core import FluffConfig",
+      "from sqlfluff.core.parser import Lexer",
+      "from prototypes.teradata_procedures import prototype_config"
+    ],
+    "formatter_modules/formatter_edits.py": [
+      "from dataclasses import dataclass",
+      "import sys"
+    ],
+    "formatter_modules/formatter_guarded_pass.py": [
+      "from difflib import SequenceMatcher",
+      "from formatter_modules.formatter_edits import Edit, Diagnostic, apply_edits, line_number, plan_edits",
+      "from formatter_modules.formatter_protection import ambiguous_comment_spans, protected_spans"
+    ],
+    "formatter_modules/formatter_list_gaps.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_lists.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit"
+    ],
+    "formatter_modules/formatter_procedure.py": [
+      "from difflib import SequenceMatcher",
+      "from formatter_modules.formatter_trace import event, stage",
+      "from formatter_modules.formatter_edits import Edit, Diagnostic, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans",
+      "from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_clause_gaps import window_specification_parts"
+    ],
+    "formatter_modules/formatter_protection.py": [
+      "from dataclasses import dataclass"
+    ],
+    "formatter_modules/formatter_runtime.py": [
+      "from dataclasses import dataclass",
+      "from pathlib import Path",
+      "from sqlfluff.core import FluffConfig, Linter",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_dialect import select_config",
+      "from bisect import bisect_left",
+      "from dataclasses import replace"
+    ],
+    "formatter_modules/formatter_trace.py": [
+      "from contextlib import contextmanager",
+      "from datetime import datetime, timezone",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import tempfile",
+      "from time import perf_counter"
+    ],
+    "prototypes/__init__.py": [],
+    "prototypes/teradata_procedures.py": [
+      "from dataclasses import dataclass",
+      "import sqlfluff",
+      "from sqlfluff.core import FluffConfig",
+      "from sqlfluff.core.dialects import load_raw_dialect",
+      "from sqlfluff.core.parser import AnyNumberOf, BaseSegment, Bracketed, Delimited, Lexer, OneOf, Parser, Ref, Sequence",
+      "from sqlfluff.core.parser.segments import BaseFileSegment"
+    ]
+  },
+  "after": {
+    "dbeaver_adapter.py": [
+      "import contextlib",
+      "from datetime import datetime, timezone",
+      "import io",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import sys",
+      "import tempfile",
+      "from formatter_modules.formatter_trace import stage",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_dialect import decode_sql_bytes",
+      "from formatter_modules.formatter_trace import stage",
+      "from formatter_modules.profile_selector import select_profile",
+      "import msvcrt",
+      "from formatter_modules.formatter_trace import stage"
+    ],
+    "diagnose_formatter.py": [
+      "import os",
+      "import sys",
+      "from pathlib import Path",
+      "from formatter_modules.formatter_trace import event, stage",
+      "from dbeaver_adapter import PROFILE_FORMATTERS"
+    ],
+    "formatter.py": [
+      "import re",
+      "import sys",
+      "from pathlib import Path",
+      "from dataclasses import replace",
+      "from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits, Diagnostic, line_number",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans",
+      "from formatter_modules.formatter_guarded_pass import guarded_pass",
+      "from formatter_modules.formatter_lists import normalize_simple_list",
+      "from formatter_modules.formatter_list_gaps import select_gap_edits",
+      "from formatter_modules.formatter_clause_gaps import clause_gap_edits, nested_query_gap_edits, commented_clause_gap_edits, window_specification_parts",
+      "from formatter_modules.formatter_comment_lists import commented_select_edits",
+      "import unicodedata",
+      "from formatter_modules.formatter_dialect import is_procedure",
+      "from formatter_modules.formatter_dialect import decode_sql_bytes",
+      "from formatter_modules.formatter_dialect import is_procedure",
+      "import difflib",
+      "from formatter_modules.formatter_procedure import format_procedure"
+    ],
+    "formatter_modules/__init__.py": [],
+    "formatter_modules/formatter_case.py": [
+      "from sqlfluff.core import FluffConfig, Linter",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_runtime import CONFIG_PATH, SourceMap",
+      "from formatter_modules.formatter_dialect import select_config"
+    ],
+    "formatter_modules/formatter_clause_gaps.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans"
+    ],
+    "formatter_modules/formatter_comment_lists.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_comment_lists_preserve_layout.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_dialect.py": [
+      "from sqlfluff.core import FluffConfig",
+      "from sqlfluff.core.parser import Lexer",
+      "from formatter_modules.teradata_procedure_grammar import procedure_config"
+    ],
+    "formatter_modules/formatter_edits.py": [
+      "from dataclasses import dataclass",
+      "import sys"
+    ],
+    "formatter_modules/formatter_guarded_pass.py": [
+      "from difflib import SequenceMatcher",
+      "from formatter_modules.formatter_edits import Edit, Diagnostic, apply_edits, line_number, plan_edits",
+      "from formatter_modules.formatter_protection import ambiguous_comment_spans, protected_spans"
+    ],
+    "formatter_modules/formatter_list_gaps.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "formatter_modules/formatter_lists.py": [
+      "import re",
+      "from formatter_modules.formatter_edits import Edit"
+    ],
+    "formatter_modules/formatter_procedure.py": [
+      "from difflib import SequenceMatcher",
+      "from formatter_modules.formatter_trace import event, stage",
+      "from formatter_modules.formatter_edits import Edit, Diagnostic, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans",
+      "from formatter_modules.formatter_runtime import source_linter, normalize_external_newlines",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_clause_gaps import window_specification_parts"
+    ],
+    "formatter_modules/formatter_protection.py": [
+      "from dataclasses import dataclass"
+    ],
+    "formatter_modules/formatter_runtime.py": [
+      "from dataclasses import dataclass",
+      "from pathlib import Path",
+      "from sqlfluff.core import FluffConfig, Linter",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_dialect import select_config",
+      "from bisect import bisect_left",
+      "from dataclasses import replace"
+    ],
+    "formatter_modules/formatter_trace.py": [
+      "from contextlib import contextmanager",
+      "from datetime import datetime, timezone",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import tempfile",
+      "from time import perf_counter"
+    ],
+    "formatter_modules/profile_selector.py": [
+      "import tkinter as tk",
+      "from tkinter import ttk"
+    ],
+    "formatter_modules/teradata_procedure_grammar.py": [
+      "from dataclasses import dataclass",
+      "import sqlfluff",
+      "from sqlfluff.core import FluffConfig",
+      "from sqlfluff.core.dialects import load_raw_dialect",
+      "from sqlfluff.core.parser import AnyNumberOf, BaseSegment, Bracketed, Delimited, Lexer, OneOf, Parser, Ref, Sequence",
+      "from sqlfluff.core.parser.segments import BaseFileSegment"
+    ]
+  }
+}

@@ -121,7 +121,6 @@ class ParsedSource:
 class SourceLinter:
     def __init__(self):
         self.config = project_config()
-        self._linter = Linter(config=self.config)
 
     def parse_string(self, source):
         mapping = SourceMap.build(source)

@@ -1,6 +1,6 @@
 import unittest
 from dataclasses import dataclass
-from formatter_modules.formatter_comment_lists import commented_select_edits
+from formatter_modules.formatter_comment_lists_preserve_layout import commented_select_edits
 from formatter_modules.formatter_edits import apply_edits
 
 @dataclass

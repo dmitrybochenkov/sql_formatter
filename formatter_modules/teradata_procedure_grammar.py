@@ -114,11 +114,11 @@ class ProcedureParse:
         return not self.violations and not any(self.tree.recursive_crawl('unparsable'))
 
 
-def prototype_config(base_config=None):
+def procedure_config(base_config=None):
     """Create a private expanded dialect; never register it globally."""
     if sqlfluff.__version__ != '4.4.0':
-        raise RuntimeError('Procedure prototype requires SQLFluff 4.4.0')
-    dialect = load_raw_dialect('teradata').copy_as('teradata_procedure_prototype')
+        raise RuntimeError('Procedure grammar requires SQLFluff 4.4.0')
+    dialect = load_raw_dialect('teradata').copy_as('teradata_procedure')
     dialect.sets('unreserved_keywords').update(
         {'PROCEDURE', 'INOUT', 'SECURITY', 'INVOKER', 'DECLARE', 'WHILE', 'DO', 'CALL'}
     )
@@ -132,7 +132,7 @@ def prototype_config(base_config=None):
     config = base_config.copy() if base_config is not None else FluffConfig(
         overrides={'dialect': 'teradata', 'templater': 'raw'})
     # 4.4.0 has no public injection API for a project-local Dialect object.
-    # Keep this version-pinned private hook confined to this prototype config.
+    # Keep this version-pinned private hook confined to this procedure config.
     config._configs['core']['dialect_obj'] = dialect.expand()
     return config
 
@@ -140,12 +140,12 @@ def prototype_config(base_config=None):
 def parse_procedure(source):
     """Parse exact LF source, returning explicit failures, never formatting SQL.
 
-    Prototype does not use SourceMap: CR inputs are rejected until integration.
+    This parser-only helper does not use SourceMap and requires LF input.
     A file is exactly one procedure with a final semicolon, not a SQL script.
     """
     if '\r' in source:
-        raise ValueError('Prototype accepts LF input only')
-    config = prototype_config()
+        raise ValueError('Parser-only helper accepts LF input only')
+    config = procedure_config()
     segments, violations = Lexer(config=config).lex(source)
     tree = Parser(config=config).parse(segments)
     if tree is None or tree.raw != source:

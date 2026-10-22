@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import patch
 
-from prototypes.teradata_procedures import parse_procedure, prototype_config
+from formatter_modules.teradata_procedure_grammar import parse_procedure, procedure_config
 from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_case import normalize_case
 from formatter import format_sql
@@ -166,9 +166,9 @@ DO; */ CALL "журнал"("имя");"""
     def test_prototype_scope_and_version(self):
         with self.assertRaises(ValueError):
             parse_procedure(wrap('SET a=1;')+'\r\n')
-        with patch('prototypes.teradata_procedures.sqlfluff.__version__', '0.0'):
+        with patch('formatter_modules.teradata_procedure_grammar.sqlfluff.__version__', '0.0'):
             with self.assertRaises(RuntimeError):
-                prototype_config()
+                procedure_config()
 
     def test_runtime_grammar_case_and_profiles_integrated(self):
         self.accepted(SYNTHETIC)
