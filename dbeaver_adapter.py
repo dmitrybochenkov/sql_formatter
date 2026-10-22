@@ -33,11 +33,14 @@ def format_bytes(original):
     errors = io.TextIOWrapper(io.BytesIO(), encoding='utf-8')
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            from formatter_modules.formatter_trace import stage
             from formatter import format_sql, validate_sql_unchanged
             from formatter_modules.formatter_dialect import decode_sql_bytes
-            source = decode_sql_bytes(original)
+            with stage('decode'):
+                source = decode_sql_bytes(original)
             diagnostics = []
-            result = format_sql(source, diagnostics=diagnostics)
+            with stage('adapter_format'):
+                result = format_sql(source, diagnostics=diagnostics)
             codes = {d.code for d in diagnostics}
             known = {'SQLFMT-C001', 'SQLFMT-E001', 'SQLFMT-E002', 'SQLFMT-E003', 'SQLFMT-E004'}
             for code in sorted(codes & known):
@@ -45,7 +48,8 @@ def format_bytes(original):
             if codes - known or codes & {'SQLFMT-E003', 'SQLFMT-E004'}:
                 log_event('ADAPTER-REFUSAL', 'ConservativeRefusal')
                 return original
-            validate_sql_unchanged(source, result)
+            with stage('adapter_validate'):
+                validate_sql_unchanged(source, result)
             encoded = result.encode('utf-8')
             output.flush()
             errors.flush()
@@ -72,8 +76,10 @@ def select_and_format_bytes(original):
     errors = io.TextIOWrapper(io.BytesIO(), encoding='utf-8')
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            from formatter_modules.formatter_trace import stage
             from dbeaver_profile_selector import select_profile
-            profile = select_profile()
+            with stage('profile'):
+                profile = select_profile()
             output.flush()
             errors.flush()
             if output.buffer.getvalue() or errors.buffer.getvalue():
@@ -119,7 +125,9 @@ def main():
             log_event('ADAPTER-ARGS', 'ArgumentError')
             return 2
         try:
-            original = Path(sys.argv[1]).read_bytes()
+            from formatter_modules.formatter_trace import stage
+            with stage('read'):
+                original = Path(sys.argv[1]).read_bytes()
         except Exception:
             log_event('ADAPTER-READ', 'ReadError')
             return 1

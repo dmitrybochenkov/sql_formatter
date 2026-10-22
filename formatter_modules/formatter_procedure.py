@@ -1,5 +1,6 @@
 """Atomic procedure layout using the shared grammar and existing DML formatter."""
 from difflib import SequenceMatcher
+from formatter_modules.formatter_trace import event, stage
 
 from formatter_modules.formatter_edits import Edit, Diagnostic, apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans
@@ -47,10 +48,14 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
     bom = '\ufeff' if source.startswith('\ufeff') else ''
     source = source[len(bom):]
     try:
-        source = normalize_external_newlines(source)
-        parsed = source_linter().parse_string(source)
+        with stage('normalize'):
+            source = normalize_external_newlines(source)
+        with stage('parse'):
+            parsed = source_linter().parse_string(source)
         if (parsed.tree is None or parsed.violations or
                 any(s.is_type('unparsable') for s in walk(parsed.tree))):
+            bad = next((n for n in walk(parsed.tree) if n.is_type('unparsable')), None) if parsed.tree else None
+            event('parse', 'UNPARSABLE' if bad is not None else 'LEXICAL_ERROR', node=bad)
             raise ProcedureRefusal()
         from formatter_modules.formatter_clause_gaps import window_specification_parts
         if any(n.is_type('over_clause') and window_specification_parts(n) is None
@@ -70,6 +75,7 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
 
         def gap(a, b, text):
             if source[a:b].strip():
+                event('layout_gap', 'NON_WHITESPACE', position=a)
                 raise ProcedureRefusal('SQLFMT-C001')
             edit(a, b, text)
 
@@ -88,6 +94,7 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
             for i, (x, y) in enumerate(points):
                 raw = source[x:y]
                 if raw.strip() or (i > 0 and raw.count('\n') > 1):
+                    event('layout_boundary', 'COMMENT_ATTACHMENT', position=x)
                     raise ProcedureRefusal('SQLFMT-C001')
                 if i == 0 and '\n' not in raw:
                     continue  # Keep a trailing comment attached to its predecessor.
@@ -111,6 +118,7 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
             # attachment. Until a proven list policy exists, refuse the procedure.
             if any(start(bracket) < p.start < stop(bracket)
                    and p.kind in ('line_comment', 'block_comment') for p in protected):
+                event('layout_list', 'COMMENT_ATTACHMENT', node=bracket)
                 raise ProcedureRefusal('SQLFMT-C001')
             parts = code(bracket)
             opening, closing = parts[0], parts[-1]
@@ -149,7 +157,10 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
 
         def dml(node, level):
             ds = []
-            candidate = format_dml(node.raw + ';', diagnostics=ds)
+            with stage('dml', node=node):
+                candidate = format_dml(node.raw + ';', diagnostics=ds)
+            for diagnostic in ds:
+                event('dml', diagnostic.code, node=node)
             if ds:
                 diagnostics.extend(ds)
                 raise ProcedureRefusal('SQLFMT-E004' if any(d.code == 'SQLFMT-E004' for d in ds) else 'SQLFMT-E003')
@@ -214,7 +225,8 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
                 raise ProcedureRefusal()
 
         definition = definitions[0]
-        render(definition, 0)
+        with stage('layout', node=definition):
+            render(definition, 0)
         end = next(s for s in parsed.tree.segments if s.is_type('statement_terminator'))
         boundary(stop(definition), start(end), '')
         # Preserve a final comment; ensure a terminating LF only outside it.
@@ -223,22 +235,34 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
                 edit(len(source), len(source), '\n')
         else:
             gap(stop(end), len(source), '\n')
-        planned, warnings = plan_edits(source, edits, protected=[(p.start, p.end) for p in protected])
+        with stage('planner'):
+            planned, warnings = plan_edits(source, edits, protected=[(p.start, p.end) for p in protected])
+        for warning in warnings:
+            event('planner', warning.code)
         if warnings or len(planned) != len(edits):
             diagnostics.extend(warnings)
             raise ProcedureRefusal()
         result = apply_edits(source, planned)
-        result = normalize_case(result)
-        validate(original[len(bom):], result)
+        with stage('case'):
+            result = normalize_case(result)
+        with stage('validate'):
+            validate(original[len(bom):], result)
         candidate = bom + result
         if not _checking:
             repeat_diagnostics = []
-            repeated = format_procedure(candidate, format_dml, validate, repeat_diagnostics, _checking=True)
+            with stage('repeat'):
+                repeated = format_procedure(candidate, format_dml, validate, repeat_diagnostics, _checking=True)
             if repeated != candidate or repeat_diagnostics:
+                if repeated != candidate:
+                    first_difference = next((i for i, (a, b) in enumerate(zip(candidate, repeated)) if a != b), min(len(candidate), len(repeated)))
+                    event('repeat', 'NON_IDEMPOTENT', node=definition, position=first_difference, view='candidate')
+                if repeat_diagnostics:
+                    event('repeat', 'REPEAT_DIAGNOSTIC')
                 diagnostics.extend(repeat_diagnostics)
                 raise ProcedureRefusal()
         return candidate
     except Exception as exc:
         code_value = exc.code if isinstance(exc, ProcedureRefusal) else 'SQLFMT-E003'
+        event('rollback', code_value)
         diagnostics.append(Diagnostic(code_value, 1, 'Процедура сохранена целиком: безопасное форматирование не подтверждено'))
         return original
