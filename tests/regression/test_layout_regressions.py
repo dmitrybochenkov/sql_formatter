@@ -1,5 +1,5 @@
+"""Regression coverage: layout regressions. Historical class IDs retain provenance."""
 import unittest
-
 from formatter import format_sql
 
 CASES = {
@@ -61,7 +61,6 @@ ORDER BY t.region_id;
 """,
 }
 
-
 class FormatterTests(unittest.TestCase):
     def test_cases(self):
         for name, source in CASES.items():
@@ -120,6 +119,18 @@ class FormatterTests(unittest.TestCase):
         formatted = format_sql(source)
         validate_sql_unchanged(source, formatted)
 
+    def test_groupby_header_comment_nested(self):
+        source = ("SELECT t.user_id FROM users t INNER JOIN (\n"
+                  "SELECT s.user_id, SUM(s.amount) AS total FROM sales s\n"
+                  "GROUP BY -- group fields\n"
+                  "    1,\n"
+                  "    2\n"
+                  ") sub ON t.user_id = sub.user_id;")
+        formatted = format_sql(source)
+        self.assertIn("-- group fields", formatted)
+        self.assertIn("GROUP BY\n    1\n    , 2", formatted)
+        self.assertEqual(formatted, format_sql(formatted))
+
     def test_rejects_changed_sql(self):
         from formatter import validate_sql_unchanged
 
@@ -129,6 +140,25 @@ class FormatterTests(unittest.TestCase):
                 "SELECT 2",
             )
 
+
+    def test_spacing_before_sections_and_join(self):
+        source = ("SELECT a FROM t\n\n\n\n"
+                  "-- group comment\n\nGROUP BY a, b\n\n\n"
+                  "LEFT JOIN x ON t.id=x.id\n\n\nWHERE a=1;")
+        # Проверяем непосредственно правило пробелов отдельно от остальных
+        # трансформаций JOIN/WHERE.
+        from formatter import format_clause_spacing
+        result = format_clause_spacing(source)
+        self.assertIn("\n\n-- group comment", result)
+        self.assertIn("-- group comment\n\nGROUP BY", result)
+        self.assertNotIn("\n\n\n", result)
+        self.assertEqual(result, format_clause_spacing(result))
+
+    def test_spacing_invisible_blank_lines(self):
+        from formatter import format_clause_spacing
+        source = "SELECT a FROM t\n\u00a0\n\t\nGROUP BY a, b"
+        result = format_clause_spacing(source)
+        self.assertEqual(result, "SELECT a FROM t\n\nGROUP BY a, b")
 
 if __name__ == "__main__":
     unittest.main()

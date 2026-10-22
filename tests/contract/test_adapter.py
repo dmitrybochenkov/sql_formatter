@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 import dbeaver_adapter as adapter
 from formatter import format_sql, validate_sql_unchanged
-from tests.adapter_runner import adapter_command
+from tests.helpers.runners import adapter_command
 
 ROOT = Path(__file__).resolve().parents[2]
 

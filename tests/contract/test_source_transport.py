@@ -9,13 +9,13 @@ from unittest.mock import patch
 
 from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_runtime import CONFIG_PATH
-from tests.adapter_runner import adapter_command
+from tests.helpers.runners import adapter_command
 
 
 class B6ContractTests(unittest.TestCase):
     def test_all_supported_constructs_share_canonical_lf(self):
-        from tests.contract.test_contract_golden import GOLDEN
-        from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE
+        from tests.fixtures.golden import GOLDEN
+        from tests.fixtures.edge_cases import GOLDEN as EDGE
         cases=[GOLDEN[k] for k in ('ctes_separated','union_all','window_multiple_keys','qualify')]
         cases += [EDGE['nested_cte_select_from_no_blank']]
         cases += [('SELECT a FROM t WHERE a IN (SELECT b FROM u);',

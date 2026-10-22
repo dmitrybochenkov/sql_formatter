@@ -13,8 +13,8 @@ from unittest.mock import patch
 from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_trace import event
-from tests.unit.test_procedure_prototype import wrap, walk
-from tests.adapter_runner import adapter_command
+from tests.helpers.fixtures import wrap, walk
+from tests.helpers.runners import adapter_command
 
 ROOT=Path(__file__).resolve().parents[2]
 REPRO=wrap('INSERT INTO t SELECT a FROM u WHERE a IN (1,\n2);')

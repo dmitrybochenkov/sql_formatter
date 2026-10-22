@@ -10,9 +10,9 @@ import dbeaver_adapter as adapter
 from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_edits import Edit
 from formatter_modules.formatter_protection import protected_spans
-from tests.adapter_runner import adapter_command
-from tests.contract.test_contract_b102 import SIMPLE_INPUT, SIMPLE_EXPECTED
-from tests.unit.test_procedure_prototype import wrap
+from tests.helpers.runners import adapter_command
+from tests.helpers.fixtures import SIMPLE_INPUT, SIMPLE_EXPECTED
+from tests.helpers.fixtures import wrap
 
 ROOT=Path(__file__).resolve().parents[2]
 

@@ -3,7 +3,7 @@ from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_case import normalize_case
 from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_dialect import is_procedure
-from tests.unit.test_procedure_prototype import walk
+from tests.helpers.fixtures import walk
 
 
 class GrammarIntegrationTests(unittest.TestCase):

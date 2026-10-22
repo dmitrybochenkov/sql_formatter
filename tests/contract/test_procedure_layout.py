@@ -1,33 +1,12 @@
 """New procedure goldens; old SQL goldens remain untouched."""
+from tests.helpers.assertions import assert_protected_spans_preserved
 import unittest
 from unittest.mock import patch
 
 from formatter import format_sql, validate_sql_unchanged
 from formatter_modules.formatter_edits import Diagnostic
 from formatter_modules.formatter_protection import protected_spans
-from tests.unit.test_procedure_prototype import SYNTHETIC, wrap
-
-
-SIMPLE_INPUT = "replace procedure P(in D date) sql security invoker begin declare V date; set V=D; while V<D+2 do call LOG_P('DO; END --',V); set V=V+1; end while; end;"
-SIMPLE_EXPECTED = """REPLACE PROCEDURE p(
-    IN d DATE
-)
-SQL SECURITY INVOKER
-BEGIN
-    DECLARE v DATE;
-
-    SET v = d;
-
-    WHILE v < d + 2 DO
-        CALL log_p(
-            'DO; END --'
-            , v
-        );
-
-        SET v = v + 1;
-    END WHILE;
-END;
-"""
+from tests.helpers.fixtures import SYNTHETIC, wrap, SIMPLE_INPUT, SIMPLE_EXPECTED
 
 
 class ProcedureLayoutTests(unittest.TestCase):
@@ -41,8 +20,7 @@ class ProcedureLayoutTests(unittest.TestCase):
         second_ds=[]
         self.assertEqual(format_sql(result,diagnostics=second_ds),result)
         self.assertEqual(second_ds,[])
-        self.assertEqual([(p.kind,sql[p.start:p.end]) for p in protected_spans(sql)],
-                         [(p.kind,result[p.start:p.end]) for p in protected_spans(result)])
+        assert_protected_spans_preserved(self, sql, result)
         return result
 
     def test_simple_golden(self):

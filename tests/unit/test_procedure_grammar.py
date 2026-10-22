@@ -1,4 +1,5 @@
-"""Parser-only B10.1 tests; no opt-in from any production entry point."""
+"""Procedural AST grammar, rejection paths, and runtime integration (B10.1)."""
+from tests.helpers.fixtures import SYNTHETIC, wrap, walk
 import unittest
 from unittest.mock import patch
 
@@ -7,42 +8,6 @@ from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_case import normalize_case
 from formatter import format_sql
 from dbeaver_adapter import PROFILE_FORMATTERS
-
-
-SYNTHETIC = """REPLACE PROCEDURE example_proc(IN p_start_date DATE, OUT p_count INTEGER)
-SQL SECURITY INVOKER
-BEGIN
-    DECLARE v_cur_date DATE;
-    DECLARE v_end_date DATE;
-    DECLARE v_count INTEGER DEFAULT 0;
-    SET v_cur_date = p_start_date;
-    SET v_end_date = p_start_date + 2;
-    WHILE v_cur_date <= v_end_date DO
-        CALL example_log('Processing; -- DO END', v_cur_date);
-        -- Remove previous data
-        DELETE FROM example_target WHERE event_date = v_cur_date;
-        /* Load current day; END WHILE */
-        INSERT INTO example_target
-        SELECT a.id, b.name, CASE WHEN c.id IS NULL THEN 'END' ELSE 'DO' END
-        FROM example_source a
-        INNER JOIN example_other b ON a.id = b.id
-        LEFT JOIN example_extra c ON a.id = c.id
-        WHERE a.event_date = v_cur_date AND a.status IN (1, 2, 3, 4, 5)
-          AND a.id NOT IN (SELECT id FROM example_excluded);
-        SET v_cur_date = v_cur_date + 1;
-    END WHILE;
-    SET p_count = v_count;
-END;"""
-
-
-def wrap(body):
-    return 'CREATE PROCEDURE p() BEGIN ' + body + ' END;'
-
-
-def walk(node):
-    yield node
-    for child in node.segments:
-        yield from walk(child)
 
 
 class ProcedurePrototypeTests(unittest.TestCase):
@@ -184,23 +149,4 @@ DO; */ CALL "журнал"("имя");"""
                 self.assertEqual(formatter(original).decode('utf-8-sig'), result)
 
 
-class ExistingDMLReproductionTests(unittest.TestCase):
-    """B10.1 defect specimens, upgraded to B10.2a regression assertions."""
-    def test_existing_insert_select_non_idempotence(self):
-        sql = 'INSERT INTO example_target SELECT a.id, b.name FROM example_source a INNER JOIN example_other b ON a.id = b.id WHERE a.id IN (1, 2);'
-        ds1, ds2 = [], []
-        first = format_sql(sql, diagnostics=ds1)
-        second = format_sql(first, diagnostics=ds2)
-        self.assertEqual(first, second)
-        self.assertIn('\nSELECT\n    a.id\n    , b.name\nFROM', first)
-        self.assertIn('\n\nINNER JOIN', first)
-        self.assertEqual(ds1, [])
-        self.assertEqual(ds2, [])
 
-    def test_existing_delete_literal_protected_refusal(self):
-        sql = "DELETE FROM example_target WHERE id IN (1, 2) AND status = 'OK';"
-        ds = []
-        actual = format_sql(sql, diagnostics=ds)
-        self.assertEqual(actual, "DELETE FROM example_target\n\nWHERE 1=1\n    AND id IN (1, 2)\n    AND status = 'OK'\n;\n")
-        self.assertEqual(ds, [])
-        self.assertEqual(format_sql(actual, diagnostics=[]), actual)

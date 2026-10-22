@@ -1,0 +1,4559 @@
+[
+  {
+    "module": "tests/contract/test_contract_b102.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_simple_golden",
+        "line": 48,
+        "assertions": [],
+        "body_sha256": "1369a11a6cae2ed315ab19338879e272008a9e2a15c5250966081ba171b7f7cd"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_nested_blocks_and_consecutive_loops",
+        "line": 51,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "46ad16c6bd9570d8c5acff5463627b8f487d97db8498fc00e5b9091218b069d8"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_full_synthetic_and_dml_depth",
+        "line": 58,
+        "assertions": [
+          "self.assertIn"
+        ],
+        "body_sha256": "244fc304e65529b01847406da14c45841a0b121402fbf35740bfda6c9127e1a6"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_comments_remain_attached",
+        "line": 66,
+        "assertions": [
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "7bfc8c12a7139ebd07fa645aca2e08b994480e3c4cf356a7cab225801718d2be"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_multiline_protected_and_endings",
+        "line": 74,
+        "assertions": [
+          "self.assertTrue"
+        ],
+        "body_sha256": "e029cfa1145bb2fdef95a193d8b75da48079843c1ade840366a9d1ff4f5ad803"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_one_line_and_indented_inputs_equal",
+        "line": 85,
+        "assertions": [],
+        "body_sha256": "cbce374ce3d8ef8d48b05fbd91d72996e09b66bdb381536e3f07f2bf47e09f09"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_ambiguous_comment_returns_entire_original",
+        "line": 91,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "85c9dd2cfcd537e77f268da609e46816c5d184fc1d7a7facf86fc6fa273edfec"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_invalid_or_unsupported_returns_entire_original",
+        "line": 104,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "33c4d6e054b35780227c3f4a2bf5fa0e0bf5ea951cecb7aed9f878b763196236"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_no_partial_edits_on_planner_failure",
+        "line": 111,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "40bdaafc19a61d3a61299861973d4246671b942fcb8869674d1199ba4ccfe8ef"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_validator_rejects_structural_and_token_changes",
+        "line": 118,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "7a93c5c99d0b048b41eef0803cda902bd3093818e5f0aad5ba7e3daf1f7ddf5b"
+      },
+      {
+        "id": "tests.contract.test_contract_b102.ProcedureLayoutTests.test_failure_of_nested_formatter_rolls_back_whole_procedure",
+        "line": 128,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c85b6f71ff4fb7c7f2c7e0b71e3c4b4c8e971d012b551c124bf4b821918dd5bf"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_edits import Diagnostic",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.unit.test_procedure_prototype import SYNTHETIC, wrap",
+      "from formatter_modules.formatter_procedure import format_procedure"
+    ],
+    "fixtures": [
+      "SIMPLE_INPUT",
+      "SIMPLE_EXPECTED"
+    ],
+    "class_fixtures": {
+      "ProcedureLayoutTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "Diagnostic",
+      "SIMPLE_EXPECTED.replace",
+      "SIMPLE_INPUT.replace",
+      "ValueError",
+      "all",
+      "any",
+      "enumerate",
+      "format_procedure",
+      "format_sql",
+      "headed.startswith",
+      "patch",
+      "protected_spans",
+      "range",
+      "repr",
+      "result.count",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.check",
+      "self.subTest",
+      "source.replace",
+      "sql.replace",
+      "validate_sql_unchanged",
+      "wrap"
+    ],
+    "sha256": "05b494ca1932fca13f3790ba2d0954a98681ff20c0a9feca78359c44ced0550a",
+    "purpose": "Процедурный layout, вложенность, строгая валидация и полный откат",
+    "wall_seconds_approx": 16.260070624994114,
+    "new_modules": [
+      "tests.contract.test_procedure_layout"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b102_transport.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_profiles_endings_bom_and_idempotence",
+        "line": 30,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "16b6e9c50fcf3a7d3b27be61cdcfd706a087875c6d96136f22696ae77de014e4"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_merged_adapter_subprocess_and_arbitrary_cwd",
+        "line": 41,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "4b9f9f6788f96b6333c92cf550d5e98c516fc9660b9f9f8288dae54eaefb9c22"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_cli_no_gui_success_and_failure_bytes",
+        "line": 54,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "8d404852c4372f3e0c14b5f68b7b1228ab185c02135514292247ab48666db08d"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_invalid_ambiguous_and_e004_original_bytes",
+        "line": 72,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "137b561582859b2de4477f5e4abf490faade49178a005e2de65ac1d67074c71b"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_protected_multiline_bytes_and_validator_negative",
+        "line": 85,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotEqual",
+          "self.assertRaises",
+          "self.assertTrue"
+        ],
+        "body_sha256": "dcce2c3e3d491fb1834d20d38f891e0023f42fb3ba2d2203452333bbe518174f"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_actual_conflicts_and_protected_ranges_abort_transaction",
+        "line": 99,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "3da6a2a63fe7af86b265d13e1a11bcf402fe97f61b18f4949c07c1fb3e321c90"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_execution_scopes_and_prefixes_stay_separate",
+        "line": 118,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertRaises"
+        ],
+        "body_sha256": "7e58084500c3b0c2482d86d2994d86a77968d49e41fde49fc7c23727277b12d5"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_bom_cannot_be_removed_by_validator",
+        "line": 129,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "b1abd16dacb6aaabd2f1ede45e8921d9b00d184e9d050e6ff4e96f24321d4f98"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_unstable_nested_layout_refuses_whole_procedure",
+        "line": 135,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "5505be259101fce0160043c90a9f4b17a74857fca344f335d2aa8414af7bec6e"
+      },
+      {
+        "id": "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_dml_literals_comments_and_long_in_lists",
+        "line": 148,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotEqual"
+        ],
+        "body_sha256": "0816038beab10b33641126ca455b05204e5ef45a08c07ee5fdad1221aadbae88"
+      }
+    ],
+    "imports": [
+      "import os",
+      "from pathlib import Path",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import unittest",
+      "from unittest.mock import patch",
+      "import dbeaver_adapter as adapter",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_edits import Edit",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.adapter_runner import adapter_command",
+      "from tests.contract.test_contract_b102 import SIMPLE_INPUT, SIMPLE_EXPECTED",
+      "from tests.unit.test_procedure_prototype import wrap",
+      "from formatter_modules.formatter_edits import plan_edits as real_plan",
+      "from formatter_modules.formatter_procedure import format_procedure"
+    ],
+    "fixtures": [
+      "ROOT"
+    ],
+    "class_fixtures": {
+      "ProcedureTransportTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "(self.base / '.sqlfluff').write_text",
+      "Edit",
+      "Path",
+      "Path(__file__).resolve",
+      "SIMPLE_EXPECTED.encode",
+      "SIMPLE_INPUT.encode",
+      "SIMPLE_INPUT.replace",
+      "SIMPLE_INPUT.replace(' begin ', ending + 'begin' + ending).encode",
+      "adapter.format_bytes",
+      "adapter.select_and_format_bytes",
+      "adapter_command",
+      "all_edits.append",
+      "calls.append",
+      "decoded.replace",
+      "dict",
+      "expected.encode",
+      "format_procedure",
+      "format_sql",
+      "len",
+      "list",
+      "next",
+      "patch",
+      "patch.dict",
+      "path.read_bytes",
+      "path.write_bytes",
+      "protected_spans",
+      "real_plan",
+      "repr",
+      "result.count",
+      "result.decode",
+      "result.replace",
+      "result.startswith",
+      "self.addCleanup",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotEqual",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.patch.start",
+      "self.subTest",
+      "source.encode",
+      "sql.replace",
+      "sql.replace('\\n', '\\r\\n').encode",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory",
+      "validate_sql_unchanged",
+      "wrap"
+    ],
+    "sha256": "9e759d59603f7b37fb83125fd3581806e29ce51a8ca3e7ea194b05ce75829e3d",
+    "purpose": "Процедуры через CLI/adapter/profiles, BOM/CR, E001–E004, границы областей",
+    "wall_seconds_approx": 22.733646749984473,
+    "new_modules": [
+      "tests.contract.test_procedure_transport"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b103_diagnostics.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_multiline_in_is_formatted_without_atomic_rollback",
+        "line": 36,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertNotEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "2fbf211dc085153809e4da22a2f71a7b64abaa8e0fac59c6b07a348cfe4e3a8f"
+      },
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_synthetic_construct_matrix",
+        "line": 55,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertNotEqual"
+        ],
+        "body_sha256": "94f685ccff936cd7ed750dfa678f7bad8c211285c20ebf57a91c76d67825a3ef"
+      },
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_tracing_is_opt_in_and_does_not_change_result",
+        "line": 79,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "796585cc23ce5ffa6b494858caa80b18d83c5afd4cf4b33221d1d80e8fa5a627"
+      },
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_logs_and_streams_never_include_payload",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "2e187f7c04e9087cc7220441f7eb9743327b0e83c7bb5c133151928b58a68fb2"
+      },
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_headless_diagnostic_and_merged_adapter",
+        "line": 103,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "cd27dace6f8aeb40b2dd2b34f5f14a4a0422d62919dd504fe2c4e9f3ffdb0910"
+      },
+      {
+        "id": "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_stage_of_grammar_failure_is_distinct",
+        "line": 119,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c992febb0c9a87dbe44927228772ef27e28bd0de87df6c2a54f3d5efc789827d"
+      }
+    ],
+    "imports": [
+      "import contextlib",
+      "import io",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_runtime import source_linter",
+      "from formatter_modules.formatter_trace import event",
+      "from tests.unit.test_procedure_prototype import wrap, walk",
+      "from tests.adapter_runner import adapter_command"
+    ],
+    "fixtures": [
+      "ROOT",
+      "REPRO"
+    ],
+    "class_fixtures": {
+      "B103DiagnosisTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "','.join",
+      "(self.base / 'logs/diagnostic.jsonl').read_text",
+      "(self.base / 'logs/diagnostic.jsonl').read_text().splitlines",
+      "Path",
+      "Path(__file__).resolve",
+      "REPRO.replace",
+      "REPRO.replace('\\n', '\\r\\n').encode",
+      "adapter_command",
+      "all",
+      "any",
+      "bad.write_text",
+      "contextlib.redirect_stderr",
+      "contextlib.redirect_stdout",
+      "dict",
+      "err.getvalue",
+      "event",
+      "format_sql",
+      "format_sql(raw.decode('utf-8'), diagnostics=[]).encode",
+      "io.StringIO",
+      "json.loads",
+      "map",
+      "n.is_type",
+      "out.getvalue",
+      "patch.dict",
+      "path.exists",
+      "path.read_bytes",
+      "path.write_bytes",
+      "range",
+      "raw.decode",
+      "self.addCleanup",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertNotEqual",
+      "self.assertNotIn",
+      "self.assertTrue",
+      "self.patcher.start",
+      "self.records",
+      "self.subTest",
+      "set",
+      "source_linter",
+      "source_linter().parse_string",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory",
+      "validate_sql_unchanged",
+      "walk",
+      "wrap"
+    ],
+    "sha256": "1609e800727b1232add34c7629f026e670dab81eaf05371d91dd46f6aa0f0905",
+    "purpose": "Opt-in trace, приватность, no stdout, parser-матрица, успешный multiline IN",
+    "wall_seconds_approx": 34.17886520805769,
+    "new_modules": [
+      "tests.contract.test_diagnostics"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b103b_indentation.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_lists_keep_relative_continuation_columns",
+        "line": 27,
+        "assertions": [
+          "self.assertIn"
+        ],
+        "body_sha256": "c12869b0b02afb0edf440994f6c14c672bc580b79eaca4f238a927bb258ccc7e"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_sequential_inserts_and_nested_blocks_loops",
+        "line": 33,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "498427c1a9db88e36b095b6b948737a4fe86b1ad3733ff8fedd0027bea4617f8"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_expressions_nested_parentheses_functions_and_comments",
+        "line": 42,
+        "assertions": [
+          "self.assertIn"
+        ],
+        "body_sha256": "20d72ca2a47265559844f850308cf02b14488e7b437c00e5afa89c1d27906fbc"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_protected_multiline_values_and_mixed_endings",
+        "line": 48,
+        "assertions": [
+          "self.assertNotEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "5ca8303ac6c3c5a91408a67d894c922a28d7809db2123e991f8a16c33af10a96"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_both_profiles_have_identical_successful_results",
+        "line": 60,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotEqual"
+        ],
+        "body_sha256": "a7b14f985396f080cfd6312f3176a69eb705ca0614e166b711401ac1cbdb5ff7"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_outer_margin_inverse_preserves_opaque_and_blank_lines",
+        "line": 70,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "6985288d5b68156ff473d9671a3066cf3b37d2dceb7e6cd6546192bc079ee168"
+      },
+      {
+        "id": "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_ambiguous_insufficient_margin_keeps_atomic_refusal",
+        "line": 79,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertRaises"
+        ],
+        "body_sha256": "43e297b4a3635ec37221fb20bca211f32ad0bd61335367bfb2e25ea18a870a94"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from itertools import cycle",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_procedure import local_dml_fragment, indented_fragment, ProcedureRefusal",
+      "from formatter_modules.formatter_runtime import source_linter",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from dbeaver_adapter import PROFILE_FORMATTERS",
+      "from tests.unit.test_procedure_prototype import wrap, walk"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "ProceduralDmlIndentationTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "''.join",
+      "('\\ufeff' + wrap('INSERT INTO T SELECT A FROM U WHERE A NOT IN (1,\\r\\n  2);')).encode",
+      "PROFILE_FORMATTERS.values",
+      "any",
+      "cycle",
+      "enumerate",
+      "format_sql",
+      "indented_fragment",
+      "local_dml_fragment",
+      "n.is_type",
+      "next",
+      "protected_spans",
+      "range",
+      "result.count",
+      "result.startswith",
+      "results.append",
+      "route",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotEqual",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.check",
+      "source_linter",
+      "source_linter().parse_string",
+      "validate_sql_unchanged",
+      "walk",
+      "wrap"
+    ],
+    "sha256": "8ced3b70d9cd3b8f82187e2dd0b260342353abcba1bc117c86afbec2941e4c3d",
+    "purpose": "B10.3b: локальные отступы DML, несколько INSERT, IN/NOT IN, вложенные блоки",
+    "wall_seconds_approx": 36.128602124983445,
+    "new_modules": [
+      "tests.regression.test_procedure_dml_indentation"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b6.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b6.B6ContractTests.test_all_supported_constructs_share_canonical_lf",
+        "line": 16,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "41144130e201a5776b65badb0f047f7dcd8a5b1440ff8b4a029ac2189f70970a"
+      },
+      {
+        "id": "tests.contract.test_contract_b6.B6ContractTests.test_cli_reads_exact_bytes_before_formatter",
+        "line": 38,
+        "assertions": [
+          "engine.assert_called_once_with",
+          "self.assertEqual",
+          "self.assertIsNone"
+        ],
+        "body_sha256": "ee336e4e0639198726e86a5083f1d7a9f05be1009d486eb2c8c3391443b0c50c"
+      },
+      {
+        "id": "tests.contract.test_contract_b6.B6ContractTests.test_cwd_foreign_configuration_and_cli",
+        "line": 52,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "4ce7ba5f6c04e7c761f23d436d30be22bdc560292cd7275a55472dbcb20d986f"
+      }
+    ],
+    "imports": [
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_runtime import CONFIG_PATH",
+      "from tests.adapter_runner import adapter_command",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE",
+      "import formatter as cli",
+      "import io"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "B6ContractTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "''.join",
+      "(base / '.sqlfluff').write_text",
+      "(cwd / '.sqlfluff').write_text",
+      "Path",
+      "adapter_command",
+      "cli.main",
+      "cwd.mkdir",
+      "dict",
+      "engine.assert_called_once_with",
+      "enumerate",
+      "format_sql",
+      "format_sql(source, diagnostics=[]).encode",
+      "io.BytesIO",
+      "io.TextIOWrapper",
+      "json.loads",
+      "layout.split",
+      "len",
+      "output.buffer.getvalue",
+      "output.flush",
+      "patch.object",
+      "path.write_bytes",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "self.subTest",
+      "source.encode",
+      "source.replace",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "b05b51bd1a770cbea8ddcb93a05da6678a5e44255d453d841965b768e8c970d5",
+    "purpose": "Конфигурация вне cwd/home; transport без преждевременной нормализации байтов",
+    "wall_seconds_approx": 30.708189999917522,
+    "new_modules": [
+      "tests.contract.test_source_transport"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b7.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_success_exact_and_repeat",
+        "line": 43,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "3a6ce62f3c28e092b5682d3329ba0dd1511329282e067897b0338efa81b5b7f5"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_failures_return_original_with_bom_and_endings",
+        "line": 51,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "06b2d8244deb21b64915ba36d693b3679b5133335797011d49e9035cae81f1ac"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_unicode_protected_endings",
+        "line": 57,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "ac46ce3b56af52f2b39cd66dbb8206d75b2ad1e1e982bc8347580e720880401c"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_warning_result_is_validated_and_logged",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "e41f195c23195ff1f418ca325108eb036ba31c512858d46a2e12e657977b5baf"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_exception_and_unexpected_output_are_quiet",
+        "line": 77,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "325c08d0a35ab6e7a3989a7c2d57ec53fc563f09592927189d8896dcf1dbfd29"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_log_failure_does_not_change_output",
+        "line": 91,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "7a2888bb732b4eddf1cf0be5220cbc3d36afd368a1da73def0d59b58815e2d3b"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_read_and_argument_errors_never_emit_diagnostics",
+        "line": 100,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotEqual"
+        ],
+        "body_sha256": "1c161402557826d5e6d82445d708f2fbc39b4f8930a2e3ee2b0b2bc52a9f6532"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_paths_foreign_configuration_and_import",
+        "line": 107,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "7feb6d8839f0e549957517448a445a6085cc22ef8e959ac5d5a792ea3c0304b5"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_missing_dependency_is_safe",
+        "line": 124,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "43888c1593efd20732e9c4bda4aa33c30b50416cb053aad65677a64c08e4b819"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_supported_cli_interface",
+        "line": 133,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "0c843006a226c58a3a88c6b3ebd626f6441626cf7a929fce1f9c5b51dfddc1cb"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_log_rotation_and_safe_fields",
+        "line": 146,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "e93e72d5d0eff41b280cd1db222ebc87dc73a5142c9be1de2c654c95a6b5fe63"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_output_and_read_permission_failures_are_silent",
+        "line": 155,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "f569afc051e536760e810bd1fc910e9b30b2159355ea5f0797b1590ea0de2277"
+      },
+      {
+        "id": "tests.contract.test_contract_b7.B7AdapterTests.test_success_with_unexpected_print_returns_original",
+        "line": 171,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "48f85d6c393c2a2a89b9ad5f0f8d3ba4ebf1f6cb4c27a4df30f593d483259f77"
+      }
+    ],
+    "imports": [
+      "import contextlib",
+      "import io",
+      "import json",
+      "import os",
+      "from pathlib import Path",
+      "import shutil",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import unittest",
+      "from unittest.mock import patch",
+      "import dbeaver_adapter as adapter",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from tests.adapter_runner import adapter_command"
+    ],
+    "fixtures": [
+      "ROOT"
+    ],
+    "class_fixtures": {
+      "B7AdapterTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "(logs / 'adapter.jsonl').read_text",
+      "(logs / 'adapter.jsonl').write_bytes",
+      "(logs / 'adapter.previous.jsonl').exists",
+      "(self.base / '.sqlfluff').write_text",
+      "(self.base / 'logs/adapter.jsonl').read_text",
+      "Path",
+      "Path(__file__).resolve",
+      "PermissionError",
+      "RuntimeError",
+      "adapter.format_bytes",
+      "adapter.log_event",
+      "adapter_command",
+      "contextlib.redirect_stderr",
+      "contextlib.redirect_stdout",
+      "dict",
+      "err.getvalue",
+      "first.decode",
+      "format_sql",
+      "format_sql(source, diagnostics=[]).encode",
+      "io.StringIO",
+      "json.loads",
+      "logs.mkdir",
+      "out.getvalue",
+      "patch",
+      "patch.dict",
+      "patch.object",
+      "path.read_bytes",
+      "path.write_bytes",
+      "print",
+      "project.mkdir",
+      "self.addCleanup",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotEqual",
+      "self.assertNotIn",
+      "self.assertTrue",
+      "self.patch.start",
+      "self.run_adapter",
+      "set",
+      "shutil.copy",
+      "shutil.copytree",
+      "shutil.ignore_patterns",
+      "source.encode",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "1b75ddd0519f39df9404c86de7f60be3b05c7628d694e59e4dd0a9f34bc60188",
+    "purpose": "Fail-safe adapter: исключения, кодировки, logging, merged stdout/stderr",
+    "wall_seconds_approx": 22.703923958120868,
+    "new_modules": [
+      "tests.contract.test_adapter"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_b9.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_both_profile_routes_are_explicit",
+        "line": 30,
+        "assertions": [
+          "other.assert_not_called",
+          "selected.assert_called_once_with",
+          "self.assertEqual"
+        ],
+        "body_sha256": "79ccaab4c877b8a281dcc1a885e9dc7beda532789d86275309b7930b742062a1"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_profiles_match_b8_and_are_idempotent",
+        "line": 42,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIs"
+        ],
+        "body_sha256": "037b25b0eb9fa856e05ecc00745a8d781a1789be48ebe4dd43ff6ffaf88c2118"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_cancel_and_unknown_profile_never_format",
+        "line": 51,
+        "assertions": [
+          "formatter.assert_not_called",
+          "self.assertEqual"
+        ],
+        "body_sha256": "5f96bb3440a2a7f3a58871e71c12bee753f58095e9dfece540ae2dfa5a593a21"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_gui_errors_and_noisy_gui_return_original",
+        "line": 59,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "a18afd23ba50d4be5084a820ef782f3e964811e203a0f40a6d5ac9450ac1a75b"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_format_failure_and_e004_preserve_bytes",
+        "line": 72,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "f88b34f100930b9e7a22d542e2baf7772de9d81eff95b25e33c9fbd4a845b0da"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_merged_subprocess_transport_and_sequential_calls",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "45144eb2a35ff0260f85cd83f9635b6344b04f2ab02607f42bb14c3d87df04f4"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_cli_and_imports_do_not_load_tk",
+        "line": 95,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "21917cd81d07ad4be8712f4ab5f8de5fe1af35aed0a24462d61fcc6e9348a0cf"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_gui_failure_in_merged_subprocess",
+        "line": 108,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "94066f1adb0f79631a9f91d76ddbc98bbf48a42561d464d17da695a0d60c7750"
+      },
+      {
+        "id": "tests.contract.test_contract_b9.B9AdapterTests.test_cancel_with_unwritable_log",
+        "line": 121,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "256fa79afc8aeff0c405c48ab4c3e6d0019915af14d3e715a35804847e9e4b8a"
+      }
+    ],
+    "imports": [
+      "import contextlib",
+      "import io",
+      "import os",
+      "from pathlib import Path",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import unittest",
+      "from unittest.mock import Mock, patch",
+      "import dbeaver_adapter as adapter",
+      "from tests.adapter_runner import adapter_command"
+    ],
+    "fixtures": [
+      "ROOT"
+    ],
+    "class_fixtures": {
+      "B9AdapterTests": [
+        "RAW",
+        "EXPECTED"
+      ]
+    },
+    "local_helpers": [],
+    "calls": [
+      "(self.base / 'logs/adapter.jsonl').read_text",
+      "AssertionError",
+      "ImportError",
+      "KeyboardInterrupt",
+      "Mock",
+      "Path",
+      "Path(__file__).resolve",
+      "PermissionError",
+      "RuntimeError",
+      "adapter.format_bytes",
+      "adapter.select_and_format_bytes",
+      "adapter_command",
+      "contextlib.redirect_stderr",
+      "contextlib.redirect_stdout",
+      "dict",
+      "dict.fromkeys",
+      "err.getvalue",
+      "formatter.assert_not_called",
+      "io.StringIO",
+      "other.assert_not_called",
+      "out.getvalue",
+      "patch",
+      "patch.dict",
+      "patch.object",
+      "path.read_bytes",
+      "path.write_bytes",
+      "print",
+      "range",
+      "selected.assert_called_once_with",
+      "self.addCleanup",
+      "self.assertEqual",
+      "self.assertIs",
+      "self.assertNotIn",
+      "self.env_patch.start",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory"
+    ],
+    "sha256": "3a96862c6f141e6134cde42a7c99fbe7ed3901fbe8524f7307def2f551e58e49",
+    "purpose": "Оба профиля, GUI cancellation/errors, CLI без GUI",
+    "wall_seconds_approx": 8.119410374900326,
+    "new_modules": [
+      "tests.contract.test_adapter_profiles"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_edge_v1_2.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_exact_and_idempotent",
+        "line": 145,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "5f3b99dfb09ba6119fa80cbbcc8002307529710b05575a8d48cad6c1ab111ab8"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_same_query_different_whitespace_same_result",
+        "line": 152,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "c125c97ce7fb5d8d4f355f8a71f2b2967cacaed0272340cf030282e09e3bfa31"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_no_stdout_side_effect_from_format_sql",
+        "line": 168,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "5ae2ba5347fff9fd07cb6fcfa41f09328175c224b0e8cf13986fe917eba198dd"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_import_preserves_stdout",
+        "line": 175,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "8dd39f85c03daf93a5403ff6c2a90f1f470eae4f10df7ec0637507eb48e8bcda"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_ambiguous_comment_warns_and_keeps_text",
+        "line": 219,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "8a0b37c700f27286f4497d1e4fcf6df665fc8e8fb447fd5af047e8d495436c40"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_valid_comment_no_ambiguity_warning",
+        "line": 229,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "f1f0d6b46b73a09d2b9d133034a8c0b2dd59dbdb51e669250a2647c32b510155"
+      },
+      {
+        "id": "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_top_level_and_or_warns_without_inserting_true",
+        "line": 236,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "3af8eb5e5bf56bdc047e1ac7f24d654d603a2dc7a5a2df2fc139a2a0339dcb7e"
+      }
+    ],
+    "imports": [
+      "import contextlib",
+      "import io",
+      "import subprocess",
+      "import sys",
+      "import tempfile",
+      "import textwrap",
+      "import unittest",
+      "from pathlib import Path",
+      "from formatter import format_sql"
+    ],
+    "fixtures": [
+      "GOLDEN"
+    ],
+    "class_fixtures": {
+      "ContractEdgeGoldenTests": [],
+      "ContractWarningTests": []
+    },
+    "local_helpers": [
+      "sql"
+    ],
+    "calls": [
+      "GOLDEN.items",
+      "Path",
+      "Path(__file__).resolve",
+      "buffer.getvalue",
+      "completed.stderr.lower",
+      "completed.stderr.strip",
+      "contextlib.redirect_stdout",
+      "format_sql",
+      "formatter_script.is_file",
+      "io.StringIO",
+      "path.write_text",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotIn",
+      "self.assertTrue",
+      "self.run_cli",
+      "self.subTest",
+      "sql",
+      "str",
+      "subprocess.run",
+      "tempfile.TemporaryDirectory",
+      "textwrap.dedent",
+      "textwrap.dedent(source).strip",
+      "unittest.main"
+    ],
+    "sha256": "1fed20dcf4a8654d369b1ee80145f4c0c10b2a06a8c6d221cff6cb4e4e6b98c1",
+    "purpose": "Edge golden, import side effects, CLI/C001 и смешанные AND/OR",
+    "wall_seconds_approx": 15.544670749921352,
+    "new_modules": [
+      "tests.contract.test_edge_cases_and_cli"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_golden.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_golden.ContractGoldenTests.test_exact_output_and_idempotence",
+        "line": 224,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "3a41ed428d0637d6d76c9d9dde8e27e43724159d726bb182fd231654ff887cf5"
+      }
+    ],
+    "imports": [
+      "import textwrap",
+      "import unittest",
+      "from formatter import format_sql"
+    ],
+    "fixtures": [
+      "GOLDEN"
+    ],
+    "class_fixtures": {
+      "ContractGoldenTests": []
+    },
+    "local_helpers": [
+      "sql"
+    ],
+    "calls": [
+      "GOLDEN.items",
+      "format_sql",
+      "self.assertEqual",
+      "self.subTest",
+      "sql",
+      "textwrap.dedent",
+      "textwrap.dedent(s).strip",
+      "unittest.main"
+    ],
+    "sha256": "fbd9d53b00c4ed4d2a8b43fbc7459927ea7fe51c49382f13e95b92ead9f8e8a7",
+    "purpose": "Точный SQL-output и идемпотентность",
+    "wall_seconds_approx": 12.854307417059317,
+    "new_modules": [
+      "tests.contract.test_contract_golden"
+    ]
+  },
+  {
+    "module": "tests/contract/test_contract_golden_v1_2.py",
+    "methods": [
+      {
+        "id": "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_operator_spacing_and_final_newline",
+        "line": 224,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "e1f8fab6e2bddec33ff8b34c867f361199d367d3ba296cd668152317c2ad9e82"
+      },
+      {
+        "id": "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_all_golden_outputs_end_in_single_newline",
+        "line": 237,
+        "assertions": [
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "1c20cc0f59d32c15c42d9463acf96d1756ff33cabecc9658973b3b14d6b1b6aa"
+      },
+      {
+        "id": "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_exact_output_and_idempotence",
+        "line": 243,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "3a41ed428d0637d6d76c9d9dde8e27e43724159d726bb182fd231654ff887cf5"
+      }
+    ],
+    "imports": [
+      "import textwrap",
+      "import unittest",
+      "from formatter import format_sql"
+    ],
+    "fixtures": [
+      "GOLDEN"
+    ],
+    "class_fixtures": {
+      "ContractGoldenTests": []
+    },
+    "local_helpers": [
+      "sql"
+    ],
+    "calls": [
+      "GOLDEN.items",
+      "cases.items",
+      "expected.endswith",
+      "format_sql",
+      "repr",
+      "result.endswith",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertTrue",
+      "self.subTest",
+      "sql",
+      "textwrap.dedent",
+      "textwrap.dedent(s).strip",
+      "unittest.main"
+    ],
+    "sha256": "81ade817abaa4e3ecc3d660110b7c60f751c1da1c3eb3dc73e77e1fdf6809788",
+    "purpose": "Тот же golden + уникальные проверки final newline/operators",
+    "wall_seconds_approx": 14.918971457984298,
+    "new_modules": [
+      "tests.contract.test_contract_golden"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_cases",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "b3d52d80ac165745381c57c12e49003bc70fefa9b45411f69a31dfde321c1f64"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_p1_multiline_literal_preserved",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "4002a289bf153ec2d893545344aa25810321ca4a878250b617d265b815c5cd50"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_p1_blank_line_whitespace_removed",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "cb42389551b042598732dd6827f3175d5238ed77210c9a9e6c6dfc5446b05c96"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_p1_group_order_comments",
+        "line": 96,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "9ccc446ade50ebe2efe8237802b55387116e8821ac2e10a9c43da3f250cdc00c"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+        "line": 117,
+        "assertions": [],
+        "body_sha256": "bd30e1b1d944714768e534bc24cabc66851dac9e9093f514e3ea0fc38585bd1e"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_groupby_header_comment_nested",
+        "line": 123,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "c1b0e9d943d36281337977c211d45914b12298b15fba1940e7127c15c4f877ba"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_rejects_changed_sql",
+        "line": 135,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "d23b960089cd8ecb5e7c3209a62285b76caa6165def0c59a2a938d32fdfef624"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_spacing_before_sections_and_join",
+        "line": 145,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "4481e9a7cb81d9e194d0e8fcce50ce6d007e43cbad4399a272b2effb6de00a3e"
+      },
+      {
+        "id": "tests.regression.test_formatter.FormatterTests.test_spacing_invisible_blank_lines",
+        "line": 158,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "6fa6283419ea022924b6ac9a95145e076f459439fffd9bf8063d45b6dc8bf1a5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_cr_inputs_preserve_protected_bytes_on_both_calls",
+        "line": 166,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "3fd61ded57c17e220e37dc0186d973bdea7ac8f482134a905fb11b6f457df6fb"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_cr_formatting_keeps_stdout_clean",
+        "line": 190,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "a409023cc6db6bc4d6513142ac991cb895eaea44a7820ef8abc6efcdf4dc6606"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_nested_select_overlap_is_stable_and_preserves_sql",
+        "line": 199,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "046013e158b38eb91cd2254136c5b4b2294b050064edc0039e8d87fc4447aefc"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_nested_query_with_literals_and_comments_is_preserved",
+        "line": 234,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "a5d3fa6f92ecd47b575dbd7f4f6c7e09057de4eb12b80e911ce49affcabcdce7"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_ast_edits_retain_rule_and_atomic_group",
+        "line": 250,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertGreaterEqual",
+          "self.assertIn",
+          "self.assertIsNotNone",
+          "self.assertTrue"
+        ],
+        "body_sha256": "a2c1d4847b86afd17c2bff54edd777fa9875f759d809d1d1a3f02e0e35851174"
+      },
+      {
+        "id": "tests.regression.test_formatter.B2SafetyTests.test_select_word_in_literal_is_not_a_nested_query",
+        "line": 263,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "5d9cf70cad50571079508fb05668597703f5b276e8180e0cab2d23ff9da45512"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_exact_simple_outputs",
+        "line": 291,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "d2df2e48e55626713fb769300923807386b1945707784ef9edf66b802fa779bb"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_simple_idempotence_independently",
+        "line": 296,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "62bb432ca551d5a4c0e97a82d241ca567291e00d4acda3f023ca5f200ca48b1b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_simple_token_preservation_independently",
+        "line": 303,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "fd82b6587cef37a1407aea09e564dfb3e9ee728b8476e0fa840d095cc3eb0446"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_whitespace_variants_have_one_result",
+        "line": 319,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "e34ef4fb0f7d2d2a2fc80f8c3a0ee9418d6e70083743994084425baf7c341d23"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_comparison_operators_remain_whole",
+        "line": 331,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "49db089154269190c680c595f18bca4f9999d8d19f2c8e82b04a12d52ce4bf09"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_comment_attachment_and_literal_bytes",
+        "line": 341,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "5df44595028ead1b04ae91cf8f00ba3b17bb87386ec1e61300237e73a44cdc80"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_new_pass_skips_out_of_scope_constructs",
+        "line": 360,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "e6060784f2b5f3689318faf83cd0824896131c0ac12bdfec07211c1d855335d0"
+      },
+      {
+        "id": "tests.regression.test_formatter.B31SimpleQueryTests.test_boundary_pass_edits_only_whitespace",
+        "line": 378,
+        "assertions": [
+          "self.assertFalse",
+          "self.assertIsNotNone",
+          "self.assertTrue"
+        ],
+        "body_sha256": "a1b6dd0d5f9953c8808fe09f8b2ec816d4a40b273adc591db8e8da7171d66bff"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_exact_nested_outputs",
+        "line": 417,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "319e4fda0bdb7d4bf4913e3365573cc6d9bd4ff1a38fcddf85ea605f24954bec"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_nested_idempotence_independently",
+        "line": 422,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "16be97e37a45b8e51f4c8126a9718e9d58a758f788dafa0eab18eeeac9dcb96e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_nested_tokens_literals_comments_independently",
+        "line": 428,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "d33e0f767623fd6a9d12fa127f9b6c4993aac90222e455fc551df9630ab4d603"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_indentation_ignores_original_columns",
+        "line": 441,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "728c78a52e8ae27dab40fc5f110605ae648fb06374012a26d7c14a8b7067827e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_where_prefix_is_exact_and_validator_stays_strict",
+        "line": 450,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertRaises"
+        ],
+        "body_sha256": "7c4d0d934077f4c43583b65ecc6a171afd9b946677798550bc3ae74794b6f28e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_existing_prefix_siblings_and_multiline_literals_are_stable",
+        "line": 466,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "2ceefba9e8b9c74709d3af01186b3812a1855ef5a1214fb9ab1f17649be9d95b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_no_parent_edit_covers_child_and_no_e001_is_suppressed",
+        "line": 485,
+        "assertions": [
+          "self.assertFalse"
+        ],
+        "body_sha256": "48bb331bb34266161fd83c2e49c0fc09c91cbd97d9afbae8a8a8745be2412a34"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_nested_prepass_group_rejects_protection_or_conflict_atomically",
+        "line": 505,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertGreater",
+          "self.assertTrue"
+        ],
+        "body_sha256": "d901a14ad1a052564f2d9bc63d292e414ac777a565178b63f470507da1333c8c"
+      },
+      {
+        "id": "tests.regression.test_formatter.B32NestedQueryTests.test_out_of_scope_queries_are_not_claimed",
+        "line": 522,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "8bceb4da4afb0a3e6f0dda9cd225764b514d2c594c9b3154f79f2dc3b57adb8e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_exact_basic_outputs",
+        "line": 557,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "3a18deceaba043d9014e14ecb595b3bc7a108475b88f1f302724a48fcae5da4e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_basic_idempotence_independently",
+        "line": 562,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "b40e5fe33ad770e1fa59b15ee6b78fc782953f77f9b10c68c80097343e35449c"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_basic_validation_independently",
+        "line": 568,
+        "assertions": [],
+        "body_sha256": "c3935977f9fd6a708fef7358417c0bde4baa82d61b1a00c5867fe82baf65bcdb"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_all_nine_former_basic_failures_match_existing_goldens",
+        "line": 574,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c9a64aeafc993483c02ac032bcd48c656a1802dc1511b501ef4b9e387aa94e05"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_nested_mixed_case_headers_and_prefix_are_stable",
+        "line": 595,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "51c35e86043bb7c77d75d42d05d7b1b3097542553de8a8034b2a49e9185512d8"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_compact_header_boundaries_are_atomic_and_stable",
+        "line": 606,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "d8bb8d093c4cd827dd5b14455bf00056c38ec76bf2729d6b66b2a505666794e1"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_operator_spacing_preserves_comments_literals_and_unary_signs",
+        "line": 618,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "296647e4c12e701639579389b092dd89062dbd42beb20c2cddc626dde7e82150"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33BasicClauseTests.test_prefix_stays_single_and_between_is_not_an_and_chain",
+        "line": 632,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "4caf0076a170ada09274edb999b05a69b91afef847e245c9a59511b01a084967"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_only_ast_clause_headers_can_be_uppercased",
+        "line": 656,
+        "assertions": [
+          "self.assertAccepted",
+          "self.assertRejected"
+        ],
+        "body_sha256": "dd05879cbbe53318829e30eed9e5a003cc95a9280ac466a2c5e5e509d547e101"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_tokens_order_types_and_clause_ownership_remain_strict",
+        "line": 674,
+        "assertions": [
+          "self.assertRejected"
+        ],
+        "body_sha256": "9964680e8703af1dccd90bdafa8306c5abac9ccf655e846ae0f7047f01c99f3a"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_exact_prefix_allowed_for_eligible_where_only",
+        "line": 687,
+        "assertions": [
+          "self.assertAccepted"
+        ],
+        "body_sha256": "308635e4e86cd481c1ba4870e0524f8fd103b6ab81575deef3b1820bf2288ece"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_prefix_rejected_for_single_between_or_and_wrong_locations",
+        "line": 694,
+        "assertions": [
+          "self.assertRejected"
+        ],
+        "body_sha256": "b09cca4bc8d9f9ea15f885b37c006ad9cdd81c33b3d73305eabcbdd56853ae82"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_existing_prefix_cannot_be_removed_or_duplicated",
+        "line": 707,
+        "assertions": [
+          "self.assertAccepted",
+          "self.assertRejected"
+        ],
+        "body_sha256": "b327860cd7801cc3e077b1a2efe808c972713f1f89c2280e98db9d7b9b33f476"
+      },
+      {
+        "id": "tests.regression.test_formatter.B33StrictValidatorTests.test_nested_where_eligibility_does_not_leak_to_parent_or_sibling",
+        "line": 714,
+        "assertions": [
+          "self.assertAccepted",
+          "self.assertRejected"
+        ],
+        "body_sha256": "c7db81d7d47181d7e601e8d9e6107a24f8fccd92e6650fc652b83878757fca61"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_exact_first_output",
+        "line": 744,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "2ffce0549806ea81da98592927762e99340be0cb38989167cd7e476ebb5a7720"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_idempotence_independent_of_expected",
+        "line": 749,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "300673b45a4225a28100d95af6391a321d71787025c17128fd258a0044cfee0b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_token_and_comment_preservation_independently",
+        "line": 755,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "229054e2c85689fafa0c86f68239c1cc285211fbe5fd0a3366ce016f3f6e223b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_whitespace_variants_have_identical_first_result",
+        "line": 763,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "ad53b0cca2cf6ea3ddda27548c10590fcd4ed3248bac1b2eb5a25fab5a53067f"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_both_original_group_order_goldens",
+        "line": 776,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "5768ba14b1a68ca2282f767681e3d339787cf0fd343dab63a38a1e2e358a8002"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_multiple_from_with_each_list_clause",
+        "line": 784,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "e9b8bf83f5ed1532bd83e4765f81be9206da6ee9927d3817c95e7e22685ce4c5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_having_predicate_bytes_are_preserved_with_b44_layout",
+        "line": 792,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "2e4b9eb985ccab1ab00d9fa496a03eec9adc6eae8e75e7187d11fd8562a6991d"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_window_order_and_other_future_contexts_not_claimed",
+        "line": 807,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "3013b601d00e0bfbd2e061c1148c5fb9b0c969d8d6b285c8ac47400e0d7cd30f"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_comments_literals_and_existing_where_with_order",
+        "line": 821,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "ad874778a5f85f3b102a69384b75beb78baf9ea4bce725e2e8a4d67da574f4e4"
+      },
+      {
+        "id": "tests.regression.test_formatter.B41ClauseContextTests.test_new_list_edits_remain_one_atomic_group",
+        "line": 835,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "6859135a9284957b6a465a494cd8b1e26290160e57c18bc00207bb1f49b367ab"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_literal_multiple_conditions_whitespace_variants",
+        "line": 864,
+        "assertions": [],
+        "body_sha256": "371c950c1eb2e3435d4f852f06894b4f0af4ffdbbeea013e5a63e3fc6999d2bf"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_single_condition_join_variants",
+        "line": 874,
+        "assertions": [],
+        "body_sha256": "8011eca028588cc2f55a1dc51812700c4f0b35dad619864985baa46e9b8d77d7"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_comment_above_join",
+        "line": 880,
+        "assertions": [],
+        "body_sha256": "b869e2e9d60a9f096926f2225a8a3b27c4d1f3fffb1fde54970935e60404a224"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_trailing_comments_keep_attachment",
+        "line": 887,
+        "assertions": [],
+        "body_sha256": "d4956b0c1f4442ffafdb6eafab4a678f2fa49aad56ab90a6c601895e27c6e896"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_multiple_joins_and_comment",
+        "line": 893,
+        "assertions": [],
+        "body_sha256": "16b3454f65277c0fe454d6b007e43f83c395c829f0ee31264e77636cb9f228cf"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_literals_and_existing_keyword_case_preserved",
+        "line": 897,
+        "assertions": [],
+        "body_sha256": "7b0271a7951c0ec86c85347567ccd24c5e5c7758c5eab7c167baf0eca0fa8063"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_between_and_parenthesized_or",
+        "line": 901,
+        "assertions": [],
+        "body_sha256": "989f2cd706e0a97ce2fa2ac22cb0b98154ebf9099f6f6bea6939f34ad1dc5145"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_where_group_order_remain_stable",
+        "line": 905,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "9cc96e43e9cf52911f9e1abc45ea9296bf150160674882737cb0386d035589f3"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_join_subqueries_and_window_queries_not_claimed",
+        "line": 915,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "18a89b2df36dca2aa9f3306fbedace9dc24efd69e3d0ac7635404b4a2d8ece23"
+      },
+      {
+        "id": "tests.regression.test_formatter.B42JoinTests.test_narrow_edits_atomic_and_order_independent",
+        "line": 926,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "a42451c914a5c0b032a8d4eb97d65adf988cf7ebbc906e829c7aaeee3cf279aa"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_standalone_comments_and_leading_commas",
+        "line": 969,
+        "assertions": [],
+        "body_sha256": "e9d96611ea3fb2c8fa909b3463cd39cbdc0ad10f139242c4bb6b524a3c48ea93"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_trailing_line_comments",
+        "line": 975,
+        "assertions": [],
+        "body_sha256": "7350a985376c4c993e4627a45d76e7dcffe94c3b413462aa4ed96e5addc428f8"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_comment_chain_and_multiline_bytes",
+        "line": 981,
+        "assertions": [],
+        "body_sha256": "b79fab8e3a4a03b60e6f4c35655629184935a5c6458e53b1e8e7cd3c4dbd1667"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_inline_block_one_line_and_multiline_input",
+        "line": 986,
+        "assertions": [],
+        "body_sha256": "ec9ee478af49bcf76afacfe2abd1d61ea14a544ae161c58efbc036b0b9d357c5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_expressions_literals_and_modifiers_opaque",
+        "line": 992,
+        "assertions": [],
+        "body_sha256": "1329764600bc205b7fa38208a77d8c5fbcd84bd29658d366cdf80ce9f292ab61"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_header_and_final_comments",
+        "line": 998,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "087715553600fc49090bfafe57486f550010afc09eee1a8c5c9d13f789cd69dd"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_ambiguous_and_mixed_chains_refuse_entire_list",
+        "line": 1007,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIsNone",
+          "self.assertTrue"
+        ],
+        "body_sha256": "b5045dde205902915a8df16d0e8990b2f01cb17464e27e942f0434f71b252637"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_atomicity_protection_conflicts_and_order",
+        "line": 1027,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "0ee9983fa1e9093e113ba67088f178eafbcefe473bf5e3abae329fd3e6b1c3d0"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_query_group_integration_and_future_scope",
+        "line": 1052,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "5fafe318630c0b71c6ab68e5ab2db1a30d7fd35e28c3b350789c2ea6926cc80a"
+      },
+      {
+        "id": "tests.regression.test_formatter.B43CommentedClauseTests.test_join_where_and_both_lists",
+        "line": 1062,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "190ecbf3d46b51fdcd7776f61780405c5f39aca24c798a236ec058783a59a804"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_single_and_multiple_conditions",
+        "line": 1093,
+        "assertions": [],
+        "body_sha256": "03a90eceeaba3ee89e29792123bc5d88e9b0d64afa72ca0b6a28401b74608023"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_between_or_and_brackets",
+        "line": 1098,
+        "assertions": [],
+        "body_sha256": "e2dca169612c04199748881aea2d58205f0965ef81fe560d3d6772b2078e0f85"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_case_literals_and_existing_prefix",
+        "line": 1108,
+        "assertions": [],
+        "body_sha256": "9ac93f5e721a2aa7ece0500d28a86b238d9e8f4a5dd0ef30a34153316a888b9b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_comments_and_header_comments",
+        "line": 1114,
+        "assertions": [],
+        "body_sha256": "5342e0fd73e9683eaff2bc5c8c9485ffa5e5dbb81419d579649f91060f998963"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_subquery_ands_do_not_trigger_outer_prefix",
+        "line": 1124,
+        "assertions": [],
+        "body_sha256": "c5e03ee94b4b1beeff5686772d5a211cdceeb4df999ba1176428d17be7b0cb61"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_whitespace_variants_and_both_goldens",
+        "line": 1132,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "89bf230cab9e6c3393f006b5c3d6c5544b201dabf20b15cc7c0456b9dd7aac2e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingTests.test_having_edits_are_atomic",
+        "line": 1141,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c7ce486b50aaa737cb333904a94fd36071823c7854ba77c6d8fbba73606dd330"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingValidatorTests.test_only_eligible_having_prefix_is_accepted",
+        "line": 1174,
+        "assertions": [
+          "self.assert_valid"
+        ],
+        "body_sha256": "4e78dd671a6430919cee0ad0e34e44031d8a25daa622e2afe3f2f24d6c4c75f2"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingValidatorTests.test_single_or_between_and_bracketed_are_ineligible",
+        "line": 1181,
+        "assertions": [
+          "self.assert_invalid"
+        ],
+        "body_sha256": "bc48650bdbae1b3b1088b0a3b6171c84363a0b582ff222154783d4f4c56dd601"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingValidatorTests.test_wrong_scopes_and_nested_having",
+        "line": 1187,
+        "assertions": [
+          "self.assert_invalid",
+          "self.assert_valid"
+        ],
+        "body_sha256": "7ee8850af750f0f0950536683ff00e71162b1767078eaa143fd2245dfebacd86"
+      },
+      {
+        "id": "tests.regression.test_formatter.B44HavingValidatorTests.test_duplicates_removal_changes_and_case_rejected",
+        "line": 1199,
+        "assertions": [
+          "self.assert_invalid",
+          "self.assert_valid"
+        ],
+        "body_sha256": "7f545ff042a58be31d7bbe7eb5cb9cb92b395ea0c2deed16bcc95006c1f55cab"
+      },
+      {
+        "id": "tests.regression.test_formatter.B45IntegrationTests.test_join_subqueries_remain_out_of_scope",
+        "line": 1263,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "f71d818dadcb29574998492f31d978e21de03af51c6a0605e7a38b5680028ceb"
+      },
+      {
+        "id": "tests.regression.test_formatter.B45IntegrationTests.test_exact_matrix",
+        "line": 1273,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "a39092f33ed04de9e6d89e4a2154c7cc4fa8bce871d69211c8ec7c252345a883"
+      },
+      {
+        "id": "tests.regression.test_formatter.B45IntegrationTests.test_matrix_invariants",
+        "line": 1278,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "4edf08848bc2f875201a28670905e29dd0aa7c6cd8542b6de16e480c1185b227"
+      },
+      {
+        "id": "tests.regression.test_formatter.B45IntegrationTests.test_matrix_edits_are_atomic",
+        "line": 1300,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "e90028e3b0b145e09e0f4855a735b65900e5625ec82d81d96e5ce3942ac19246"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_three_old_goldens",
+        "line": 1342,
+        "assertions": [],
+        "body_sha256": "54da2f979a10a6c53c6845ef8beab9f1c3021d0e18300edb4cfd88e8fe4150aa"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_where_scopes_are_independent",
+        "line": 1351,
+        "assertions": [],
+        "body_sha256": "ffaa70df889bb968a0716a114e1e173626c9bb357ac9115acef2743584c1f1ba"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_join_group_having_order",
+        "line": 1357,
+        "assertions": [],
+        "body_sha256": "28f92158d268d19540f2e12847f6a1e23dabc802e60406e6e82943edf74aca7c"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_nested_select_inside_cte",
+        "line": 1361,
+        "assertions": [],
+        "body_sha256": "672941a5a58072e7ea82e9bd4e3d46badb507033ab873ae383614a041f166bc4"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_leading_and_body_comment_chain",
+        "line": 1365,
+        "assertions": [],
+        "body_sha256": "3f825e9a91a25bd099ccd46446b06833dafd593f523241c89a2a8ded4d7baa48"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_trailing_comment_stays_with_previous_cte",
+        "line": 1369,
+        "assertions": [],
+        "body_sha256": "8ad8139b161127571838c93031641bab03d1f2bff0393d203d167c4b0857cc90"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_keyword_case_columns_and_literals",
+        "line": 1373,
+        "assertions": [],
+        "body_sha256": "dc9183561a64ead2ae461968a66aaea7542ea9d47215f0a4dd00d1c5b06f0999"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_scalar_select_and_multiline_inputs",
+        "line": 1377,
+        "assertions": [],
+        "body_sha256": "fbd76ad2fe0882fac94a9ec80d1ac117c133b0e8ec8f3b3af64902347768e8e8"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_ambiguous_separator_is_not_guessed",
+        "line": 1383,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "3e6164183e08e9bc4396d72d79bc88492a380a37d8ba2bd85eee40a1c52534a1"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_cte_edits_atomic_with_protection_conflict_and_order",
+        "line": 1395,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "d7a64e229cff7733a13b47717cb6b4d7b8e3d5d612a8a564aac458efd24a6bed"
+      },
+      {
+        "id": "tests.regression.test_formatter.B51CTETests.test_future_constructs_and_join_subqueries_not_claimed",
+        "line": 1422,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "d6eb8c1a587970da6fcf6bdc0a30abd860ca744e3d4a754821a3e353b972d5ff"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_three_old_goldens",
+        "line": 1449,
+        "assertions": [],
+        "body_sha256": "abd34d724d9e1898c5c089d3dd5936be8075f8f9800443c1781285536b5c1b90"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_operators_preserve_case_and_multiline_input",
+        "line": 1457,
+        "assertions": [],
+        "body_sha256": "c3af5bc3e00581aa08ae10687ae512263fb1fe96dee88dcc07c5daf18c319595"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_three_branches_and_precedence",
+        "line": 1465,
+        "assertions": [],
+        "body_sha256": "e9cabae2df94abb91f3e1e3235da7ddea3f447566c1892a9d44b76ed4f752987"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_parenthesized_set",
+        "line": 1469,
+        "assertions": [],
+        "body_sha256": "b1f2cacf1dceaccf39bfbab05ee7e870a74d4e32a1ed3d7e5894205e4685c25b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_independent_where_scopes",
+        "line": 1473,
+        "assertions": [],
+        "body_sha256": "faf2d639cf015b8ca7c2ab66629093896d2a1ee957b7ae4b20f27166cda76284"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_global_order_group_and_having",
+        "line": 1477,
+        "assertions": [],
+        "body_sha256": "f597635a648f4589716b77b13005332b0f322cc7981b384b53cc72297853ddbc"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_cte_body_and_main_set",
+        "line": 1481,
+        "assertions": [],
+        "body_sha256": "df518c404ee5acf1586ee6c8e62f6655600a384a4543acdb957a3d44365869fe"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_nested_set_in_where",
+        "line": 1485,
+        "assertions": [],
+        "body_sha256": "262369aad8d775b5fa71fc8e46a94a7e365f4a7050b1ea106efef90aeab4cecd"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_literals_are_opaque",
+        "line": 1489,
+        "assertions": [],
+        "body_sha256": "880155908d54120f4e69410a1dc5211b3b260fdbba878a6d95009d24a99f3277"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_comments_around_operator",
+        "line": 1493,
+        "assertions": [],
+        "body_sha256": "9ed04a5e8cd17e1ce2f85b8f256cfacd1e8d84f8442fea83e2f6cbf79475708c"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_ambiguous_comment",
+        "line": 1499,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "8f63c98022800b32b214c0d2b4c564d56119cb3ee94e610c95f847524520a833"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_atomic_protection_and_conflicts",
+        "line": 1510,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "a507030ee05c0429c8f05af19960c34c76c601882524732bbabcca426f140373"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_validator_rejects_changes_between_branches",
+        "line": 1532,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "a704cada284c8147ecca653039545c42f5fb6ed6d995d1254fc30466409d88c6"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_nested_parenthesized_set_is_rendered_once",
+        "line": 1542,
+        "assertions": [],
+        "body_sha256": "608bba89e226bd4e71d9cfac4e3b0a4cb7e6393a689365fd4c7e501868b73a14"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_derived_set_and_branch_local_order",
+        "line": 1546,
+        "assertions": [],
+        "body_sha256": "8902fec0ec63436b5f3ba58bda90b63a9cbea0fd608bb79643b9f76d5d6c05cc"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_comment_inside_operator_and_global_order_list",
+        "line": 1552,
+        "assertions": [],
+        "body_sha256": "43167a43db12106543bcd0244a46d23c1debd4a9c567947ccaf64176ba7275d5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_both_branch_predicates_and_join",
+        "line": 1556,
+        "assertions": [],
+        "body_sha256": "da7d7c4f7953d7f9e9e6fa00325f499760c0ae63494a44b1be7479b7a7407916"
+      },
+      {
+        "id": "tests.regression.test_formatter.B52SetOperationTests.test_future_constructs_not_claimed",
+        "line": 1560,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "100f1d5c703c7147734b503977cb8ab878a2acbf62f3664cfb22d42ccf8a8631"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_two_old_goldens",
+        "line": 1585,
+        "assertions": [],
+        "body_sha256": "196389d79a589065756fce3f1ba11ad28890106d1e9f5a978ee10dc948a3a2b1"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_simple_and_empty_window",
+        "line": 1591,
+        "assertions": [],
+        "body_sha256": "f066ae2c9d20a17c62a153bfe34aa7575237828c43712b2e27efc5ee5f65f12b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_multiple_windows_and_outer_order",
+        "line": 1597,
+        "assertions": [],
+        "body_sha256": "574e03848193ab7b609ae8eea2907918df40c2667de8329dbd70c375977b0f22"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_partition_and_order_expression_lists",
+        "line": 1601,
+        "assertions": [],
+        "body_sha256": "d156bed6aed60eb3a32d09bf92bc2789aa866dcd08f99faa4746e9fa97193f41"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_rows_range_frames_are_opaque",
+        "line": 1605,
+        "assertions": [],
+        "body_sha256": "cb82237ab28a5841ea34a7f1c3c07554e9038f03cd6efeb1fe2f4ab012f1e11f"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_arguments_literals_and_case_are_opaque",
+        "line": 1614,
+        "assertions": [],
+        "body_sha256": "9525ac0814a57acf5463fe63327bf092d89835cc6fa5bfe42a1d1ba7d10bc485"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_multiline_function_arguments_and_nested_query",
+        "line": 1620,
+        "assertions": [],
+        "body_sha256": "5ef8b60e3d22cfe757fddb6b29c34edcf024b9ea407e191312597e868efbf4c0"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_mixed_comment_chain_refuses_list_edits",
+        "line": 1626,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c8a9d81c338c3b96432ffdca21bdf309127612cb24c964e285b18786ba157d34"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_where_group_having_and_outer_order",
+        "line": 1638,
+        "assertions": [],
+        "body_sha256": "3ea2cf7ea5bfd5560c472f5e230e64d4e21ae6b157df44bd173a5ba66be090db"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_cte_window",
+        "line": 1642,
+        "assertions": [],
+        "body_sha256": "b266073cae92d155d5632090404548c64709fe343fb1a670afc1e1085f76c4e7"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_set_operation_windows",
+        "line": 1646,
+        "assertions": [],
+        "body_sha256": "5e60ece07216d50edfa5669ec8dfef01ad4c36727d3a5d18384f6ced00602338"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_multiline_and_compact_inputs",
+        "line": 1650,
+        "assertions": [],
+        "body_sha256": "e3ae28924eae8a3ecdc7aef7313fd4df7140fa742694addc75e9d6967675da5b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_list_comments",
+        "line": 1656,
+        "assertions": [],
+        "body_sha256": "f2d5ff3ea9ca8560b1218c91efc8afa72f718a5190a06a0fcc2b1e59e1786890"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_boundary_and_frame_comments",
+        "line": 1660,
+        "assertions": [],
+        "body_sha256": "a21cc9259a95de5330ae13249f7ae528b7d48cc035f954511f1bb638f20d2e86"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_comment_next_to_window_expression",
+        "line": 1664,
+        "assertions": [],
+        "body_sha256": "d94f2fe11123db78aff65a179a33ccc71072faef7258f08c844c14837f6f7f57"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_ambiguous_list_comment_is_not_moved",
+        "line": 1668,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "e2b44882d443e432dafe2c9bba534a96ed48166314a1c7a8e14366a46f0884d5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_atomic_window_edits",
+        "line": 1685,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "3c0c8ea8d21ee27c3a492cb01036fd00428677acbd60995b60ab5fe3599fc34e"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_validator_rejects_window_changes",
+        "line": 1711,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "e50a7cd47bb18ed0189e0f93e27d02dd623c2305821dc36c0d99f7d4bd98d18b"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_named_window_runtime_refuses_without_partial_changes",
+        "line": 1723,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "9e31f3912a273168596d6454f64b2e240dbe9b4b5a7c60f0f104b1054dd1fd33"
+      },
+      {
+        "id": "tests.regression.test_formatter.B53WindowTests.test_unsupported_windows_and_qualify_not_claimed",
+        "line": 1735,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "79738ca0b26fd14b1059bbd5aa73aa3cbe00b33a275fd2bdd819e0909e86da04"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_three_old_goldens",
+        "line": 1769,
+        "assertions": [],
+        "body_sha256": "423697f4ddd4775484cd5996e0ec0cc7ceb79f2461e9eff474d475a8eb9ad99c"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_single_predicate_and_multiple_ands",
+        "line": 1776,
+        "assertions": [],
+        "body_sha256": "ff4cbedfb610243753f706eb2bd65570089d71944cab289e27a9a90cbed90088"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_or_and_mixed_boolean_expressions",
+        "line": 1782,
+        "assertions": [],
+        "body_sha256": "893ec5e8d3b516a06d2c4fc6c81ccdc72998df8fda2c585bfd7874eebfcfac9d"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_mixed_boolean_with_window_and_invalid_ast",
+        "line": 1788,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "9c2b023a13774e66a21d1809869423f2a12b31103d6a8c641f19bdebe0eef851"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_brackets_between_and_frame_ands",
+        "line": 1794,
+        "assertions": [],
+        "body_sha256": "07b7e559bd08f72d7e1021b253059ef669a5fed01745e0e74d2f20dfa6ccfa34"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_multiple_windows_and_outer_order",
+        "line": 1802,
+        "assertions": [],
+        "body_sha256": "b1c4f4b623bbfeaa8507e4fdd34b329ee5bcc61d558f02b4d8bcd0400bd78701"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_window_lists_and_rank",
+        "line": 1806,
+        "assertions": [],
+        "body_sha256": "6e31a685be5994f926c56467781684e1f07bc80c4a213fef3a10eee84048d8f1"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_select_and_qualify_windows_have_separate_indentation",
+        "line": 1810,
+        "assertions": [],
+        "body_sha256": "61ab1cb05af03d7e35355eb60d216551105e99655c30b144bc2d241a344d7ac0"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_where_having_and_qualify_ownership",
+        "line": 1814,
+        "assertions": [],
+        "body_sha256": "c2331d12707286125555e9a909786bd121b9c9d844c9001f8967dfbe60656dd5"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_cte_qualify",
+        "line": 1818,
+        "assertions": [],
+        "body_sha256": "c48e3b9cedd2068e649fe830bc23675fded45d193a712c18490369f44828ac52"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_set_branches_qualify",
+        "line": 1822,
+        "assertions": [],
+        "body_sha256": "b22c81913f0843999e88c3269c69dbc8da1df11eff7fe535156191d06fefc751"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_comments_before_between_and_after_conditions",
+        "line": 1826,
+        "assertions": [],
+        "body_sha256": "d1bbd0044d4d0cfdc36142e0c170e66ff828e077641bae4064b8fd7e6860f08f"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_literals_function_arguments_and_keyword_case",
+        "line": 1835,
+        "assertions": [],
+        "body_sha256": "06ba210aecc5b2a9cf7562f745d15514230382e091c197069d75568923d00b47"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_multiline_inputs",
+        "line": 1839,
+        "assertions": [],
+        "body_sha256": "3c3b424d1dd07dab6d52f1a55fa9a242a28baeffe40e927cd23679eeea270c37"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_existing_tautology_is_not_removed_or_duplicated",
+        "line": 1845,
+        "assertions": [],
+        "body_sha256": "f2fab41c6ecf42be469a6b571b106148c4fe3b47b5888e7953227578750faea7"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_ambiguous_comments",
+        "line": 1849,
+        "assertions": [],
+        "body_sha256": "38dffaf722e5c6d47831e33ecb5d2453a4643a6cfa8c4f1e7ca15bee2a80f0cc"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_named_windows_keep_e004_refusal",
+        "line": 1853,
+        "assertions": [],
+        "body_sha256": "c26d999893eb60baaba9898dd3fc13af6105a8c6450570c9b7188fad6e6bb18d"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_atomic_edits_and_protected_spans",
+        "line": 1858,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "0cfe57a99e44ac4c3120b3253f64e9527c163ab3f7d55eadaa1e76f3453080b4"
+      },
+      {
+        "id": "tests.regression.test_formatter.B54QualifyTests.test_strict_validator_rejects_qualify_changes",
+        "line": 1884,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "c84a776e380d51f1398bbb78f6088d7c29e320e29a2406ab9622f7e10006137c"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import format_clause_spacing",
+      "from formatter import format_clause_spacing",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "import contextlib",
+      "import io",
+      "from formatter import sql_tokens, validate_sql_unchanged, remove_formatter_where_prefix",
+      "from formatter import sql_tokens, validate_sql_unchanged, remove_formatter_where_prefix",
+      "from unittest.mock import patch",
+      "from formatter_modules.formatter_edits import plan_edits",
+      "from formatter import validate_sql_unchanged, sql_tokens",
+      "from formatter import sql_tokens",
+      "from formatter import sql_tokens",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import simple_query_gap_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import simple_query_gap_edits",
+      "from formatter import sql_tokens, validate_sql_unchanged, remove_formatter_where_prefix",
+      "from formatter import validate_sql_unchanged, sql_tokens",
+      "from formatter import validate_sql_unchanged",
+      "from unittest.mock import patch",
+      "from sqlfluff.core import Linter",
+      "from formatter import walk",
+      "from formatter_modules.formatter_edits import plan_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import Edit, plan_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import sql_tokens, validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged, sql_tokens",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from sqlfluff.core import Linter",
+      "from formatter import walk",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import plan_edits",
+      "from formatter import validate_sql_unchanged, sql_tokens",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import plan_edits, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import validate_sql_unchanged, sql_tokens",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import walk, validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import commented_clause_gap_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter import walk",
+      "from formatter_modules.formatter_clause_gaps import commented_clause_gap_edits",
+      "from formatter_modules.formatter_edits import Edit, plan_edits, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import plan_edits, Edit",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import plan_edits, Edit, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import plan_edits, apply_edits, Edit",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import Edit, plan_edits, apply_edits",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import Edit, plan_edits, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from sqlfluff.core import Linter",
+      "from formatter import validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from tests.contract.test_contract_golden import GOLDEN",
+      "from tests.contract.test_contract_golden_v1_2 import GOLDEN as V12",
+      "from tests.contract.test_contract_edge_v1_2 import GOLDEN as EDGE",
+      "from sqlfluff.core import Linter",
+      "from formatter_modules.formatter_clause_gaps import nested_query_gap_edits",
+      "from formatter_modules.formatter_edits import Edit, plan_edits, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter import validate_sql_unchanged"
+    ],
+    "fixtures": [
+      "CASES"
+    ],
+    "class_fixtures": {
+      "FormatterTests": [],
+      "B2SafetyTests": [],
+      "B31SimpleQueryTests": [
+        "CASES"
+      ],
+      "B32NestedQueryTests": [
+        "CASES"
+      ],
+      "B33BasicClauseTests": [
+        "CASES"
+      ],
+      "B33StrictValidatorTests": [],
+      "B41ClauseContextTests": [
+        "GROUP_ORDER",
+        "CASES"
+      ],
+      "B42JoinTests": [],
+      "B43CommentedClauseTests": [],
+      "B44HavingTests": [
+        "PREFIX"
+      ],
+      "B44HavingValidatorTests": [],
+      "B45IntegrationTests": [
+        "BASE",
+        "CASES"
+      ],
+      "B51CTETests": [],
+      "B52SetOperationTests": [],
+      "B53WindowTests": [],
+      "B54QualifyTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "CASES.items",
+      "Edit",
+      "GROUP_ORDER.replace",
+      "Linter",
+      "Linter(dialect='teradata').parse_string",
+      "all",
+      "allowed.replace",
+      "any",
+      "apply_edits",
+      "both.replace",
+      "commented.replace",
+      "commented.replace('having ', 'having 1=1 AND ').replace",
+      "commented_clause_gap_edits",
+      "contextlib.redirect_stderr",
+      "contextlib.redirect_stdout",
+      "edit.owner.startswith",
+      "edit.replacement.strip",
+      "enumerate",
+      "errors.getvalue",
+      "expected.replace",
+      "expected.replace(\"'SELECT FROM WHERE'\", \"'changed'\").replace",
+      "first.count",
+      "first.encode",
+      "format_clause_spacing",
+      "format_sql",
+      "format_sql(cases[0], diagnostics=[]).count",
+      "frame.upper",
+      "having",
+      "header.upper",
+      "id",
+      "io.StringIO",
+      "len",
+      "list",
+      "max",
+      "n.is_type",
+      "nested_query_gap_edits",
+      "next",
+      "node",
+      "normalize_case",
+      "operator.upper",
+      "output.getvalue",
+      "patch",
+      "plan_edits",
+      "protected",
+      "protected_spans",
+      "qualify_tokens",
+      "remove_formatter_where_prefix",
+      "reversed",
+      "s.get_type",
+      "s.is_type",
+      "second.encode",
+      "self.CASES.items",
+      "self._diagnostics",
+      "self.assertAccepted",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertGreater",
+      "self.assertGreaterEqual",
+      "self.assertIn",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "self.assertNotIn",
+      "self.assertRaises",
+      "self.assertRejected",
+      "self.assertTrue",
+      "self.assert_invalid",
+      "self.assert_valid",
+      "self.check_cte",
+      "self.check_having",
+      "self.check_join",
+      "self.check_list",
+      "self.check_qualify",
+      "self.check_set",
+      "self.check_window",
+      "self.subTest",
+      "set",
+      "simple_query_gap_edits",
+      "source.replace",
+      "source.replace(' HAVING ', '\\n        HAVING\\n ').replace",
+      "source.replace('WHERE ', 'WHERE 1=1 AND ').replace",
+      "source.replace('select distinct', 'SELECT distinct').replace",
+      "source.replace('select distinct', 'SELECT distinct').replace('from MixedTable', 'FROM MixedTable').replace",
+      "source[e.start:e.end].strip",
+      "source[edit.start:edit.end].strip",
+      "spans",
+      "sql_tokens",
+      "tree.recursive_crawl",
+      "unittest.main",
+      "valid.replace",
+      "validate_sql_unchanged",
+      "walk"
+    ],
+    "sha256": "76ad609eef0078e3949fa79922ad62784e2464fa6488b24c1bcff3f649e53c80",
+    "purpose": "Базовые клаузы, B2–B5 guards, scoped validator, CTE/sets/OVER/QUALIFY",
+    "wall_seconds_approx": 378.3298408749979,
+    "new_modules": [
+      "tests.regression.test_clause_interactions",
+      "tests.regression.test_commented_lists",
+      "tests.regression.test_cte_layout",
+      "tests.regression.test_edit_safety",
+      "tests.regression.test_group_order_layout",
+      "tests.regression.test_having_layout",
+      "tests.regression.test_join_layout",
+      "tests.regression.test_layout_regressions",
+      "tests.regression.test_qualify",
+      "tests.regression.test_select_layout",
+      "tests.regression.test_set_operations",
+      "tests.regression.test_validator_scopes",
+      "tests.regression.test_where_layout",
+      "tests.regression.test_windows"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter_b6.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_literals_identifiers_and_comments",
+        "line": 19,
+        "assertions": [],
+        "body_sha256": "dd67b63c0e115c4c7d4fc4421267bfb7a6cd4144ab713f35e7ceb1d64e365adb"
+      },
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_line_comments_and_empty_lines",
+        "line": 26,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "ea55678b78c13e5f9f25ace9f92fa9b99763ef9f9ce8561f540748219b336611"
+      },
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_strict_validator_detects_protected_cr_changes",
+        "line": 33,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "c73544d818db879a174b10eb01a2fa2bad5718dbeb20503eb96f11800d6cd5c7"
+      },
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_protected_sequence_type_count_and_order",
+        "line": 43,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "05e10fac569b184a19a7c4e8d5bd3f21e747848d73522c717a32305ca0886cfb"
+      },
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_detached_comment_diagnostics_are_real_refusals",
+        "line": 53,
+        "assertions": [
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "b0773fbc48f8a660c5d11915125403c2fde6946c48d94bef90b623620a55bce2"
+      },
+      {
+        "id": "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_named_window_refusal_preserves_even_external_endings",
+        "line": 61,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "dc5bcdf6546ae2fec9853eb6cdcbe333f252691494dbf6201971467733f71c57"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "B6SourcePreservationTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "all",
+      "any",
+      "enumerate",
+      "first.encode",
+      "format_sql",
+      "format_sql(first, diagnostics=d2).encode",
+      "protected_spans",
+      "repr",
+      "result.replace",
+      "result.replace('\\r\\n', '\\n').replace",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.check_source",
+      "self.subTest",
+      "source.replace",
+      "source.replace('/* one */', '/* swap */').replace",
+      "source.replace('/* one */', '/* swap */').replace('/* two */', '/* one */').replace",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "8ea69201ce9bbf7a8638582d52a1b5712a73d292a96dcd496eed1783e46b987f",
+    "purpose": "Protected content/CRLF/CR, строгие отрицательные проверки, BOM/диагностика",
+    "wall_seconds_approx": 12.153499625157565,
+    "new_modules": [
+      "tests.regression.test_source_preservation"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter_b8.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_all_five_rules_without_layout_changes",
+        "line": 20,
+        "assertions": [],
+        "body_sha256": "b1326d3a14f994dee0ffdec0e73861527fa276adeced35e36a08f59b7e6cadcb"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_keywords_cte_join_sets_and_windows",
+        "line": 26,
+        "assertions": [],
+        "body_sha256": "890716709506a9f7c56860966e9682c2d9dceeab8ba5b6e78f7833f934e43879"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_protected_content_and_original_offsets",
+        "line": 37,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "75faee8348d1ca8c03aed21ad29e29a46ffb9949c6a85e1b2d45924b3e3c3bdc"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_exact_direction_only",
+        "line": 46,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertRaises"
+        ],
+        "body_sha256": "c7a06c0e971d2885bf813b34d2f7e21bb1232902176aa280c614de1841ce30c5"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_no_case_permission_without_sqlfluff_proposal",
+        "line": 59,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "74485134920efbfb207631c1c8f04405f1bb8ca952ce8200956e325b0c4d0544"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_full_format_and_adapter",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "0c0ae57b42c3d439665713a3c1fee02a31ba4b23602eef38ab5fdd497ab39e63"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_conflict_rejects_entire_group",
+        "line": 74,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertRaises"
+        ],
+        "body_sha256": "69862da6278d47d05182be163089b075b3cd20bb08031f4b573702cc80a885ad"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_comments_cannot_reconfigure_case_rules",
+        "line": 81,
+        "assertions": [],
+        "body_sha256": "e0aecdd2495eb48d391c1ed202532ceee3a2e38556a558a314542faac8971b0d"
+      },
+      {
+        "id": "tests.regression.test_formatter_b8.B8CaseTests.test_ambiguous_unicode_and_unparsable_fail_closed",
+        "line": 85,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertRaises"
+        ],
+        "body_sha256": "556f712dad8bc47b825ec96462f30bcbb5e912cfc695842af55b7e51a645d108"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from unittest.mock import patch",
+      "from dbeaver_adapter import format_bytes",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_edits import Diagnostic",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "B8CaseTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "Diagnostic",
+      "format_bytes",
+      "format_sql",
+      "normalize_case",
+      "patch",
+      "protected_spans",
+      "self.assertEqual",
+      "self.assertRaises",
+      "self.check_case",
+      "self.subTest",
+      "source.encode",
+      "source.replace",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "f9c184227dde198d6ab2774746db0661fd313a05d6653bcd5e75df59b201fed1",
+    "purpose": "CP01–CP05, exact direction, неоднозначный AST, conflict/adapter refusal",
+    "wall_seconds_approx": 6.9068382498808205,
+    "new_modules": [
+      "tests.contract.test_case_normalization"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter_groupby_header.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_cases",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "b3d52d80ac165745381c57c12e49003bc70fefa9b45411f69a31dfde321c1f64"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_multiline_literal_preserved",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "4002a289bf153ec2d893545344aa25810321ca4a878250b617d265b815c5cd50"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_blank_line_whitespace_removed",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "cb42389551b042598732dd6827f3175d5238ed77210c9a9e6c6dfc5446b05c96"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_group_order_comments",
+        "line": 96,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "9ccc446ade50ebe2efe8237802b55387116e8821ac2e10a9c43da3f250cdc00c"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+        "line": 117,
+        "assertions": [],
+        "body_sha256": "bd30e1b1d944714768e534bc24cabc66851dac9e9093f514e3ea0fc38585bd1e"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_groupby_header_comment_nested",
+        "line": 123,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "c1b0e9d943d36281337977c211d45914b12298b15fba1940e7127c15c4f877ba"
+      },
+      {
+        "id": "tests.regression.test_formatter_groupby_header.FormatterTests.test_rejects_changed_sql",
+        "line": 135,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "d23b960089cd8ecb5e7c3209a62285b76caa6165def0c59a2a938d32fdfef624"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged"
+    ],
+    "fixtures": [
+      "CASES"
+    ],
+    "class_fixtures": {
+      "FormatterTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "CASES.items",
+      "format_sql",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotIn",
+      "self.assertRaises",
+      "self.subTest",
+      "unittest.main",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "309e6e0a2252a6aa77aadfce40e5c56d60d48d6bd92bf7649202cd64af3a54d7",
+    "purpose": "Копия общих регрессий; nested GROUP BY header comment",
+    "wall_seconds_approx": 15.036851499928162,
+    "new_modules": [
+      "tests.regression.test_layout_regressions"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter_spacing_fix.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_cases",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "b3d52d80ac165745381c57c12e49003bc70fefa9b45411f69a31dfde321c1f64"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_multiline_literal_preserved",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "4002a289bf153ec2d893545344aa25810321ca4a878250b617d265b815c5cd50"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_blank_line_whitespace_removed",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "cb42389551b042598732dd6827f3175d5238ed77210c9a9e6c6dfc5446b05c96"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_group_order_comments",
+        "line": 96,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "9ccc446ade50ebe2efe8237802b55387116e8821ac2e10a9c43da3f250cdc00c"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+        "line": 117,
+        "assertions": [],
+        "body_sha256": "bd30e1b1d944714768e534bc24cabc66851dac9e9093f514e3ea0fc38585bd1e"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_groupby_header_comment_nested",
+        "line": 123,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "c1b0e9d943d36281337977c211d45914b12298b15fba1940e7127c15c4f877ba"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_rejects_changed_sql",
+        "line": 135,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "d23b960089cd8ecb5e7c3209a62285b76caa6165def0c59a2a938d32fdfef624"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_spacing_before_sections_and_join",
+        "line": 145,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "4481e9a7cb81d9e194d0e8fcce50ce6d007e43cbad4399a272b2effb6de00a3e"
+      },
+      {
+        "id": "tests.regression.test_formatter_spacing_fix.FormatterTests.test_spacing_invisible_blank_lines",
+        "line": 158,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "6fa6283419ea022924b6ac9a95145e076f459439fffd9bf8063d45b6dc8bf1a5"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import format_clause_spacing",
+      "from formatter import format_clause_spacing"
+    ],
+    "fixtures": [
+      "CASES"
+    ],
+    "class_fixtures": {
+      "FormatterTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "CASES.items",
+      "format_clause_spacing",
+      "format_sql",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotIn",
+      "self.assertRaises",
+      "self.subTest",
+      "unittest.main",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "92f46a4908551ec5d4c965a91a3433bb4a7399bf514ba0889e1f7213797655be",
+    "purpose": "Копия общих регрессий и секционных пробелов",
+    "wall_seconds_approx": 14.587446124991402,
+    "new_modules": [
+      "tests.regression.test_layout_regressions"
+    ]
+  },
+  {
+    "module": "tests/regression/test_formatter_stage9.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_cases",
+        "line": 66,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "b3d52d80ac165745381c57c12e49003bc70fefa9b45411f69a31dfde321c1f64"
+      },
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_p1_multiline_literal_preserved",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "4002a289bf153ec2d893545344aa25810321ca4a878250b617d265b815c5cd50"
+      },
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_p1_blank_line_whitespace_removed",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertNotIn"
+        ],
+        "body_sha256": "cb42389551b042598732dd6827f3175d5238ed77210c9a9e6c6dfc5446b05c96"
+      },
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_p1_group_order_comments",
+        "line": 96,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "9ccc446ade50ebe2efe8237802b55387116e8821ac2e10a9c43da3f250cdc00c"
+      },
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+        "line": 117,
+        "assertions": [],
+        "body_sha256": "bd30e1b1d944714768e534bc24cabc66851dac9e9093f514e3ea0fc38585bd1e"
+      },
+      {
+        "id": "tests.regression.test_formatter_stage9.FormatterTests.test_rejects_changed_sql",
+        "line": 123,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "d23b960089cd8ecb5e7c3209a62285b76caa6165def0c59a2a938d32fdfef624"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql",
+      "from formatter import validate_sql_unchanged",
+      "from formatter import validate_sql_unchanged"
+    ],
+    "fixtures": [
+      "CASES"
+    ],
+    "class_fixtures": {
+      "FormatterTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "CASES.items",
+      "format_sql",
+      "self.assertEqual",
+      "self.assertIn",
+      "self.assertNotIn",
+      "self.assertRaises",
+      "self.subTest",
+      "unittest.main",
+      "validate_sql_unchanged"
+    ],
+    "sha256": "601cb1c85764bcf94cdfd652ca9a7cdd690d4adf0e20af1fa33e965024ed6a28",
+    "purpose": "Копия общих регрессий комментариев, literals, idempotence",
+    "wall_seconds_approx": 13.808712875004858,
+    "new_modules": [
+      "tests.regression.test_layout_regressions"
+    ]
+  },
+  {
+    "module": "tests/regression/test_select_indent.py",
+    "methods": [
+      {
+        "id": "tests.regression.test_select_indent.SelectIndentTests.test_multiline_select_with_leading_commas",
+        "line": 6,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "d82864fbe4978a29619cc1211e7542d216e2a9a9bb03fae273d731c9f55587c8"
+      },
+      {
+        "id": "tests.regression.test_select_indent.SelectIndentTests.test_nested_select_indent",
+        "line": 19,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "056716255fba131706f5b7d7c9c1fbb465a098b88db4955d86d67b899b1702c4"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "SelectIndentTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "format_sql",
+      "self.assertEqual",
+      "self.assertIn",
+      "unittest.main"
+    ],
+    "sha256": "b0b8c683860d83f351c50c22754b887c76ac535321bed2d25ce908ac6a791920",
+    "purpose": "Ведущие запятые и nested SELECT; самостоятельные inputs",
+    "wall_seconds_approx": 2.3507152090314776,
+    "new_modules": [
+      "tests.regression.test_select_indent"
+    ]
+  },
+  {
+    "module": "tests/unit/test_b102_integration.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_b102_integration.GrammarIntegrationTests.test_header_selection_is_lexical",
+        "line": 10,
+        "assertions": [
+          "self.assertFalse",
+          "self.assertTrue"
+        ],
+        "body_sha256": "d56492a2fab387b2b42913cd78b7f227e8db5c64d48b252a34df7ab12fbdf126"
+      },
+      {
+        "id": "tests.unit.test_b102_integration.GrammarIntegrationTests.test_runtime_and_case_share_grammar_and_source_map",
+        "line": 15,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn"
+        ],
+        "body_sha256": "5a8734808c4809037bf638b4b9b48d0f80d40cd2d1ea7d67f7e2a1666d27ebc8"
+      },
+      {
+        "id": "tests.unit.test_b102_integration.GrammarIntegrationTests.test_dml_combinations",
+        "line": 28,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "172bd5f9a8ca524ca7fa0bb29744fbb49a2c8fd0a9db8a3fb6dd0c942a5289dd"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter import format_sql, validate_sql_unchanged",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter_modules.formatter_runtime import source_linter",
+      "from formatter_modules.formatter_dialect import is_procedure",
+      "from tests.unit.test_procedure_prototype import walk"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "GrammarIntegrationTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "any",
+      "format_sql",
+      "is_procedure",
+      "n.is_type",
+      "normalize_case",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertTrue",
+      "self.subTest",
+      "source_linter",
+      "source_linter().parse_string",
+      "validate_sql_unchanged",
+      "walk"
+    ],
+    "sha256": "ed582018e8789a77dcb6c3b7cf645fd1b87a46d95a2d312b85701d770e74d2ce",
+    "purpose": "Runtime/case grammar selection, SourceMap, самостоятельный DML",
+    "wall_seconds_approx": 5.582281250040978,
+    "new_modules": [
+      "tests.contract.test_procedure_runtime"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_clause_gaps.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_multiple",
+        "line": 23,
+        "assertions": [],
+        "body_sha256": "3b83050451319dc56aaafef82b57e85d8ca2fac8b76ed2c7340c382dc85da0e5"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_order_multiple",
+        "line": 25,
+        "assertions": [],
+        "body_sha256": "41969d1e8fa7ad7c9c07c56e26ed0067df74f9f1d0c295b04f9caf2f4a8ced2a"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_single",
+        "line": 27,
+        "assertions": [],
+        "body_sha256": "33828bd018b4fc40c0fc9600dd8a5f56897511c314da16da8dae15622fd5ec42"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_single",
+        "line": 29,
+        "assertions": [],
+        "body_sha256": "a540ac5e8053957d3e1d5fb27cf842282352f1bd101e58f6975e6085d39deae1"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_multiple",
+        "line": 31,
+        "assertions": [],
+        "body_sha256": "1b1b5f0f0e4c4297ab7bc8901c1061c11767975fc1d64e0e7bd911625bbc1a06"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_comment_skipped",
+        "line": 33,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "b717943387582f8300dfede0745b3ee38e229a6369a8081740edbd6bdae5e200"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_join_skipped",
+        "line": 36,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "e191cf9327d72a693a99cd810854c8bcc1296c4ab1423522a895c1a802c0a06c"
+      },
+      {
+        "id": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_function_comma_not_split",
+        "line": 40,
+        "assertions": [],
+        "body_sha256": "abf0e25691d6ef79ff6841eb1836f08d9fed7f64662e337ccefa63b361904d18"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from types import SimpleNamespace",
+      "from formatter_modules.formatter_clause_gaps import clause_gap_edits",
+      "from formatter_modules.formatter_edits import apply_edits"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "Segment": [],
+      "ClauseGapTests": []
+    },
+    "local_helpers": [
+      "Segment",
+      "clause"
+    ],
+    "calls": [
+      "Segment",
+      "SimpleNamespace",
+      "apply_edits",
+      "clause",
+      "clause_gap_edits",
+      "enumerate",
+      "expected[:i].count",
+      "len",
+      "list",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "self.check",
+      "slice",
+      "unittest.main"
+    ],
+    "sha256": "4fe5bfe2c045a362d62a827a6dbdb677f49a081053d104dc1fa0bb1d1a98a6a2",
+    "purpose": "Точечные clause edits, одиночные/множественные элементы, comments/JOIN отказ",
+    "wall_seconds_approx": 0.0005213329568505287,
+    "new_modules": [
+      "tests.unit.test_formatter_clause_gaps"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_comment_lists.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_comment_lists.Tests.test_standalone_comment_before_leading_comma",
+        "line": 20,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIsNotNone"
+        ],
+        "body_sha256": "c75be0c88d3bf1e42ed9d5d7478713452d9cc934c38593f3e45660d2779a5a21"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists.Tests.test_trailing_comment_is_not_moved",
+        "line": 28,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "3905b78edc04c88238462dceffeb1d73a419c58b9f17c8c426087752f8fc52e5"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists.Tests.test_comma_before_comment_not_reordered",
+        "line": 33,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "15ce6119b513acec3cbb08bcfdb511375233d1a0f92ea09f4f75fd13bc22d3d7"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from dataclasses import dataclass",
+      "from formatter_modules.formatter_comment_lists_preserve_layout import commented_select_edits",
+      "from formatter_modules.formatter_edits import apply_edits"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "Marker": [],
+      "Seg": [],
+      "Tests": []
+    },
+    "local_helpers": [
+      "Marker",
+      "Seg",
+      "clause"
+    ],
+    "calls": [
+      "Marker",
+      "Seg",
+      "apply_edits",
+      "clause",
+      "commented_select_edits",
+      "len",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "slice",
+      "sql.index",
+      "unittest.main"
+    ],
+    "sha256": "c8423bf0ac17012231970a216b727978d39fb4f2e28fe3f089cdae5e3a47bb22",
+    "purpose": "Исторический preserve-layout helper; 3 уникальных comment inputs",
+    "wall_seconds_approx": 0.00021974998526275158,
+    "new_modules": [
+      "tests.regression.test_comment_attachment"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_comment_lists_v2.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment",
+        "line": 20,
+        "assertions": [],
+        "body_sha256": "baee75abd806656e245de26b16ed392bfca03ab4ac61cf7a90dd643edfed0b9e"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment_indented",
+        "line": 23,
+        "assertions": [],
+        "body_sha256": "de58024deec6854747a41f254731ec2349af9ae59d5d84c215f1de4d0347e47b"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment_preserves_literal",
+        "line": 26,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIsNotNone"
+        ],
+        "body_sha256": "8ffbb61028c5908cbc79f2f2a417f2f7a1b9281028f74b7c595d82af6af503ff"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_ambiguous_comment_skipped",
+        "line": 36,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "8dd579b808f52cfdf059d477902603b17f4b0e11bacf618dc89030e27955b2c3"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from .test_formatter_comment_lists import clause",
+      "from formatter_modules.formatter_comment_lists import commented_select_edits",
+      "from formatter_modules.formatter_edits import apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "InlineCommentTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "apply_edits",
+      "clause",
+      "commented_select_edits",
+      "len",
+      "plan_edits",
+      "protected_spans",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "self.run_case",
+      "sql.index",
+      "sql.rfind",
+      "unittest.main"
+    ],
+    "sha256": "1560e0ad6bb0583cf962bfe2ef8563ebaf8d229a96c3e7e81115bec9d735bdc2",
+    "purpose": "Канонический helper: inline comments, literal comma, ambiguous gap",
+    "wall_seconds_approx": 0.00030933297239243984,
+    "new_modules": [
+      "tests.unit.test_inline_comment_lists"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_comment_lists_v3.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_comment_before_second_item",
+        "line": 18,
+        "assertions": [],
+        "body_sha256": "901b4b15f3e4927f69e59f1bf5665a476a59f16d0c1cb6a12f577ca7e9b64f8a"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_two_comments_before_item",
+        "line": 21,
+        "assertions": [],
+        "body_sha256": "029a6bb298239eb2925ace64be716448fee2f3e23055f97052ab9c43c1214d91"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_comment_before_first_item",
+        "line": 25,
+        "assertions": [],
+        "body_sha256": "eba7267e8776fb5564977a068a1d0586871dd0e8f8f8da4ba765b29500907668"
+      },
+      {
+        "id": "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_ambiguous_blank_line",
+        "line": 28,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "277aa7c43f95d4d33ab72c5e6cab9218e65008c33147f3f2a41e08734b16ca62"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from .test_formatter_comment_lists import clause",
+      "from formatter_modules.formatter_comment_lists import commented_select_edits",
+      "from formatter_modules.formatter_edits import apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "CommentListStage9Tests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "apply_edits",
+      "clause",
+      "commented_select_edits",
+      "len",
+      "plan_edits",
+      "protected_spans",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "self.check",
+      "source.index",
+      "unittest.main"
+    ],
+    "sha256": "5d4a23d23fe8b3f9170de1c4cbfefd8a8b5d42e9a8694c69216065cd52400521",
+    "purpose": "Канонический helper: standalone/chain/header comments, ambiguous gap",
+    "wall_seconds_approx": 0.00033216713927686214,
+    "new_modules": [
+      "tests.unit.test_standalone_comment_lists"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_edits.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_apply_from_right_to_left",
+        "line": 8,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "a31140a86c03b673477d82136033f9ecdc94be36261dd42e0fb17ee4cb70e8ff"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_overlap_is_reported",
+        "line": 14,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "49aaa5542a82cab81a3a1f55e40597b4c90aced804735bb45ce0fa149632b358"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_span",
+        "line": 20,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "8a41f612c7ff248f7ba0a5c792d7e529c726f4ac0131d30e3bde416a97dfe2ba"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_invalid_offsets_raise",
+        "line": 25,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "8b1ff0ac52c4588b61ed556a3bf654cb9b5b0965c943e67d2f3ce38278477ff5"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_diagnostics_only_to_stderr_stream",
+        "line": 29,
+        "assertions": [
+          "self.assertIn"
+        ],
+        "body_sha256": "6902c4523550ad7ac929067922c00c8ba9fe4bd1e17f25ac3d7e0fd19945c462"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_group_is_applied_as_a_unit",
+        "line": 35,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "b2421d8e205952eefbbbf7236d515536610d71dd730e4424a2bf0333fba82347"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_member_rejects_entire_group",
+        "line": 42,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "ad50183142cc3cc299fc05147e90b40c340b4dfbc6d2f21caad059a58c0cf79f"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_conflicting_member_rejects_entire_group",
+        "line": 50,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "a30526c10ad373faae2bdce42278ddd1739cd192de72576929c59429bb4c5ae4"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_internal_overlap_rejects_group",
+        "line": 58,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "8a52ea0a2617c5a95ba7242a3ea6fc303b4086a6d3dcec9dbecc8f13a6cef722"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_insertions_conflict",
+        "line": 68,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "1fe03f10311db24bd81fcdafbfc91e7ed9f017dc93e671d458f05299def499cf"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_conflict_rolls_back_group",
+        "line": 75,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "8fb6e203f7a2d1b12b82ce4d65fe504332e8487144da08861d9f48d07465729a"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_disjoint_groups_apply_right_to_left_in_any_proposal_order",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "d192ec4da0a9d4179818f8525ad7a48808dd52f6ddb3886517fa7ea87199531a"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_insertion_at_replacement_boundaries",
+        "line": 91,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "ceb5ad6d4a58fa2ffdc3d0810208687181cd3d999c22f1f3da8d7738e2ad8eff"
+      },
+      {
+        "id": "tests.unit.test_formatter_edits.EditPlannerTests.test_noop_does_not_block_real_edit",
+        "line": 101,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "ffe2daf88a64757deeb3e6b4828e7c4cd1b46c9d4a2985a67c9f13313f6f69a3"
+      }
+    ],
+    "imports": [
+      "import io",
+      "import unittest",
+      "from formatter_modules.formatter_edits import Edit, apply_edits, emit_diagnostics, plan_edits"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "EditPlannerTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "Edit",
+      "apply_edits",
+      "emit_diagnostics",
+      "io.StringIO",
+      "len",
+      "list",
+      "output.getvalue",
+      "plan_edits",
+      "reversed",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertRaises",
+      "self.subTest",
+      "unittest.main"
+    ],
+    "sha256": "d63f0ba8de1c0604f8ffe1f415aaf484ae2c25a1bb86ac7049b847aacfd70867",
+    "purpose": "Planner: пересечения, одинаковые позиции, protected spans, атомарные группы",
+    "wall_seconds_approx": 0.000610999995842576,
+    "new_modules": [
+      "tests.unit.test_formatter_edits"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_guarded_pass.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_safe_whitespace_change",
+        "line": 6,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "8928215b2dfe3f01ee4291a96b1648e30c9ed926da7b4f6eee76f0b9380d631e"
+      },
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_line_comment",
+        "line": 11,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "4edfb04212b8b5e501fee203fa423ed8ea25abec8449324eec0b63768326180c"
+      },
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_literal",
+        "line": 17,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "fd4de92458e48841c40247fa1939d3b332d9ececa9fde2f455fa10487c565bc9"
+      },
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_formats_outside_literal",
+        "line": 23,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "9aaad6749782477ff199ffaa8a7f8d6acadeec6362bbb15b5a5195acff60efda"
+      },
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_ambiguous_comment_gap",
+        "line": 29,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "d4a0a0763291f6a3213d830aecadb4d7220f3fb220e1145884181858a7c31cef"
+      },
+      {
+        "id": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_idempotent_pass",
+        "line": 35,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "462509ee70dea084d90cd8da08062388ef87a2c6af65e9b436af26b6c04ec3f7"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter_modules.formatter_guarded_pass import guarded_pass"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "GuardedPassTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "guarded_pass",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertTrue",
+      "unittest.main",
+      "x.replace"
+    ],
+    "sha256": "2984f578546a199c9d45379497fe940efcf5907129104acf824c4a4dace23400",
+    "purpose": "Сохранность токенов при охраняемом проходе и откат",
+    "wall_seconds_approx": 0.0005370420403778553,
+    "new_modules": [
+      "tests.unit.test_formatter_guarded_pass"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_list_gaps.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_list_gaps.GapTests.test_literal",
+        "line": 26,
+        "assertions": [],
+        "body_sha256": "d44b7c2b591c555fa53449f712d029cc69d2f2cd2dcf7531188a56119b7437c1"
+      },
+      {
+        "id": "tests.unit.test_formatter_list_gaps.GapTests.test_quoted_identifier",
+        "line": 29,
+        "assertions": [],
+        "body_sha256": "76715c6e91e180837211c9b68a19c9f39217309d9f14ce2067510d7509497727"
+      },
+      {
+        "id": "tests.unit.test_formatter_list_gaps.GapTests.test_comment_is_not_moved",
+        "line": 32,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "5223a611aab3850db93c3669061246c92e5905f4426c5bc26d1f8a0e37171546"
+      },
+      {
+        "id": "tests.unit.test_formatter_list_gaps.GapTests.test_no_rewrite_inside_expression",
+        "line": 35,
+        "assertions": [],
+        "body_sha256": "cad2eaeb6a2ea75517822b8cd56d05dce23a7197f470d097adf0eb0ed7cd8bd2"
+      },
+      {
+        "id": "tests.unit.test_formatter_list_gaps.GapTests.test_idempotent",
+        "line": 38,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "e38a3411c6d924b29da88ee0123996c61266792c0bbbccb43efd4185741e4515"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from types import SimpleNamespace",
+      "from formatter_modules.formatter_list_gaps import select_gap_edits",
+      "from formatter_modules.formatter_edits import apply_edits, plan_edits",
+      "from formatter_modules.formatter_protection import protected_spans"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "S": [],
+      "GapTests": []
+    },
+    "local_helpers": [
+      "S",
+      "make"
+    ],
+    "calls": [
+      "S",
+      "SimpleNamespace",
+      "any",
+      "apply_edits",
+      "enumerate",
+      "len",
+      "make",
+      "plan_edits",
+      "protected_spans",
+      "select_gap_edits",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIsNone",
+      "self.assertIsNotNone",
+      "self.run_case",
+      "slice",
+      "unittest.main"
+    ],
+    "sha256": "b92c9aca2b6f19ae0d6153270ec678dc9f34b6324ffaf81720580a4cdb0c0cdf",
+    "purpose": "AST list gap edits, expression commas и защитные отказы",
+    "wall_seconds_approx": 0.00034870789386332035,
+    "new_modules": [
+      "tests.unit.test_formatter_list_gaps"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_lists.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_select_random_whitespace",
+        "line": 24,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "cc8dad94239237416a3725bd70a0e28674f10442ffd2f2fd56cf83426944b8bd"
+      },
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_distinct_spelling",
+        "line": 30,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "03a05449c38516ef1550b0724601ad146bd4a1704b6750db8b3da533c44a4a59"
+      },
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_nested_expression_preserved",
+        "line": 36,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "1d1c366ccd9c8ac9584519076e39f73bc24ddabfe66ad09a66363183d1496fdb"
+      },
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_comment_skips",
+        "line": 42,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "a6fcb7aa8bb10fa88744bf17b07ddcc8b6ccc1744339956970d670d74bde4aac"
+      },
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_multiline_expression_skips",
+        "line": 48,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "580770b23703e9e07fc312a4d676f99894bccf355f992a27956c6156f8f02400"
+      },
+      {
+        "id": "tests.unit.test_formatter_lists.ListTests.test_idempotent_simple",
+        "line": 53,
+        "assertions": [
+          "self.assertIsNone"
+        ],
+        "body_sha256": "09d288ca05583acd24edf2354aabcb01972e31b5812b9bcd889542ff1230a634"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from types import SimpleNamespace",
+      "from formatter_modules.formatter_lists import normalize_simple_list"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "Segment": [],
+      "ListTests": []
+    },
+    "local_helpers": [
+      "Segment",
+      "clause"
+    ],
+    "calls": [
+      "Segment",
+      "SimpleNamespace",
+      "clause",
+      "len",
+      "list",
+      "normalize_simple_list",
+      "self.assertEqual",
+      "self.assertIsNone",
+      "slice",
+      "unittest.main"
+    ],
+    "sha256": "3910131ba8d5beb2d6d180a3fba309781de06401538cd51012bf570369b70f77",
+    "purpose": "Legacy simple-list API; реальные отдельные гарантии helper",
+    "wall_seconds_approx": 0.0003070421516895294,
+    "new_modules": [
+      "tests.unit.test_formatter_lists"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_protection.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_comments_inside_literals_are_not_comments",
+        "line": 6,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "2aba38915a9f242b2b46f13b1a0dc4d92578c25ad53e30ffa59bda57fcb810f2"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_escaped_quotes",
+        "line": 10,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "7fc7b37ed728ab269e7caa16e8936d68458ed84de2ea32b30df3a73545bbc104"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_block_comment",
+        "line": 14,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "fce45ead2fd9676ecb93c4884c9088b7ed3ede884c56004d5a75fe2ae8d33e72"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_unterminated_comment_protected",
+        "line": 17,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "0495443a4c6f16ff65bf363f9bc55541432e5ee71b81c30d2f5d78503d109139"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_edit_over_literal_is_rejected",
+        "line": 21,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse"
+        ],
+        "body_sha256": "761fe82dc873188439550b7e2de970f677413474628088a1d2c9f9e6201178ed"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_ambiguous_detached_comment",
+        "line": 28,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "ed88ca377a1cb02386968197489e8096910a1a59cb8849904542c260e6153640"
+      },
+      {
+        "id": "tests.unit.test_formatter_protection.ProtectionTests.test_adjacent_comment_is_not_ambiguous",
+        "line": 32,
+        "assertions": [
+          "self.assertFalse"
+        ],
+        "body_sha256": "164953cda4f72cc2814b8730e61c9d6181a817c8b6ed30ba06114cedeb800035"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans",
+      "from formatter_modules.formatter_edits import Edit, plan_edits"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "ProtectionTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "Edit",
+      "ambiguous_comment_spans",
+      "len",
+      "plan_edits",
+      "protected_spans",
+      "self.assertEqual",
+      "self.assertFalse",
+      "unittest.main"
+    ],
+    "sha256": "efc29a72fcea0e4590595a0c1ff8039de09e4da5742bec75e2a69e7b1c75f78b",
+    "purpose": "Точные protected ranges, escapes, comments, quoted identifiers",
+    "wall_seconds_approx": 0.00023099989630281925,
+    "new_modules": [
+      "tests.unit.test_formatter_protection"
+    ]
+  },
+  {
+    "module": "tests/unit/test_formatter_runtime.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_boundaries_and_round_trip",
+        "line": 10,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "1440a2ce5e834fdf38254445c2de1d02ea5064545109de2b75aa3cf9594ff565"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_invalid_boundaries_fail_closed",
+        "line": 21,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "5695c068fd5057996e88aeea7881e31b549991354bf2e56e2804721991b59c0d"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_ast_positions_and_raw_are_original",
+        "line": 33,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "d3759e139550ca68341d674c2559abe297e9dcad881342fa975adc384f3bc778"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_edits_touching_protected_boundaries",
+        "line": 44,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "cdf40c2807c8aed4ffd36ad8372daf3c3db1d4b55ea175678f2782ac4bd12f9b"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_mapped_conflicts_remain_atomic",
+        "line": 59,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertIn",
+          "self.assertTrue"
+        ],
+        "body_sha256": "989d4272cc8f11bef49a77d646ce60248df5e344ac68602c0184b22f5bd18947"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_external_normalization_and_line_comment_terminators",
+        "line": 73,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "163b68b9102624ac30e0828efd53e07b4d20ced2a3af84f02bc72f948c7405fb"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_config_does_not_discover_home_or_cwd",
+        "line": 81,
+        "assertions": [
+          "appdir.assert_not_called",
+          "local.assert_not_called",
+          "self.assertEqual"
+        ],
+        "body_sha256": "7d4fe77c932379f28883820b72b775ccd636fbcf7105e0952da75686d877cd62"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_inline_config_comments_are_data",
+        "line": 90,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "40f7586e68b20ba2e0a5eccacc17b91e6b7d454e3ba918208c91d42f4f7d7b23"
+      },
+      {
+        "id": "tests.unit.test_formatter_runtime.SourceMapTests.test_diagnostic_lines_count_all_physical_endings",
+        "line": 97,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "cb40f187c1c854f016a577e974c7f82cbbcc2ebadaa17eb6c6a6b7c375d639bc"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter_modules.formatter_runtime import SourceMap, source_linter, normalize_external_newlines",
+      "from formatter_modules.formatter_edits import Edit, plan_edits, apply_edits",
+      "from formatter_modules.formatter_protection import protected_spans",
+      "from formatter_modules.formatter_edits import line_number"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "SourceMapTests": []
+    },
+    "local_helpers": [],
+    "calls": [
+      "''.join",
+      "AssertionError",
+      "Edit",
+      "SourceMap",
+      "SourceMap.build",
+      "any",
+      "appdir.assert_not_called",
+      "apply_edits",
+      "check",
+      "config.get",
+      "enumerate",
+      "len",
+      "line_number",
+      "list",
+      "local.assert_not_called",
+      "mapping.normalized_offset",
+      "mapping.original_edit",
+      "mapping.original_slice",
+      "normalize_external_newlines",
+      "parsed.config.get",
+      "patch",
+      "plan_edits",
+      "protected_spans",
+      "range",
+      "restored.encode",
+      "reversed",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.subTest",
+      "slice",
+      "source.encode",
+      "source.index",
+      "source.replace",
+      "source.replace('\\r\\n', '\\n').replace",
+      "source_linter",
+      "source_linter().parse_string"
+    ],
+    "sha256": "0fcff95e6008f148c9fe4a202e6c54aee5900af71b0c8186055c318542f12caa",
+    "purpose": "Карта смещений, round-trip, invalid bounds, конфигурация и line numbers",
+    "wall_seconds_approx": 0.04315000004135072,
+    "new_modules": [
+      "tests.unit.test_formatter_runtime"
+    ]
+  },
+  {
+    "module": "tests/unit/test_procedure_prototype.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_complete_synthetic_procedure",
+        "line": 60,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "bbb3df2293d58e1255065d07c53ae942eba54253a12ae13c4ab9a600c8a596df"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_headers_and_parameters",
+        "line": 74,
+        "assertions": [],
+        "body_sha256": "ee8a858422d8109909fd24995b75ae2319f01b87c77e6c3018987ffa06844304"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_declarations_and_assignments",
+        "line": 80,
+        "assertions": [],
+        "body_sha256": "c7e7cfca875992e64010db67e4e99e19fb8046d4f901e93649228108c63a3e40"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_calls_and_opaque_literals",
+        "line": 83,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "12ef27f982c95b828545f6e21c75681a7420a9e1d3771d1bc1178cf24bcdea08"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_nested_and_consecutive_loops",
+        "line": 88,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "de907f164831dd00dcd4cad66def754bcb7842eb0caa02e808fe7ac5147e733f"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_nested_begin_end",
+        "line": 98,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "316f2f805881823ebd09a0f1f8870388c8769e33c65263315ed895cdf2770f72"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_comments_between_boundaries",
+        "line": 102,
+        "assertions": [],
+        "body_sha256": "fe9abd615bc32ae8768428ba3b37a5d20a18a413c96edd8f44182e99012dc036"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_expressions_and_nested_sql",
+        "line": 106,
+        "assertions": [],
+        "body_sha256": "2b73e5d86764ca460b1796002c8fbeadee4d7e1aec54c12dbbca169ee6447979"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_one_line_and_repeated_parse",
+        "line": 109,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "39932289095b1dbadee475f1aab9dcdb09e24d81d40dd917ad81204fd8d178e0"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_invalid_blocks_delimiters_and_syntax",
+        "line": 116,
+        "assertions": [
+          "self.assertFalse"
+        ],
+        "body_sha256": "3d369eb6b5dec97c22ab585373644ce4439b2fe9a8632b986505f48b0d07d760"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_unsupported_is_not_raw_fallback",
+        "line": 139,
+        "assertions": [
+          "self.assertFalse"
+        ],
+        "body_sha256": "d211a1032f635514866c799aed03cf04e09d6192eeb7816859d0597d70ad82a4"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_execution_tree_and_terminator_ownership",
+        "line": 144,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "09feb0c366154fee08ee6274a3ee47d3fb1683a270e1ab883e83176817f69396"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_unicode_and_multiline_protected_text",
+        "line": 160,
+        "assertions": [],
+        "body_sha256": "de0ead588fcb86e252e2009c79ba8db38ea6a6d0f2f7f24c3987d833beba29cb"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_prototype_scope_and_version",
+        "line": 166,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "1a70efd9d1717d00d146359141b19e58009210076c06b7797786a7dcf4ae48dc"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_runtime_grammar_case_and_profiles_integrated",
+        "line": 173,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertFalse",
+          "self.assertNotEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "c3710c000ec90c51958cccb9dbf0751d4b66a6878c995cccabfb98aa7007a64f"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ExistingDMLReproductionTests.test_existing_insert_select_non_idempotence",
+        "line": 189,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertIn"
+        ],
+        "body_sha256": "269e0a22acde2523b068cb741c1d75a2a6190b2f65852e2f314a50f2fa3220bc"
+      },
+      {
+        "id": "tests.unit.test_procedure_prototype.ExistingDMLReproductionTests.test_existing_delete_literal_protected_refusal",
+        "line": 200,
+        "assertions": [
+          "self.assertEqual"
+        ],
+        "body_sha256": "d4648facdf864b1817084d657f39bbe8d0a74b26d66b9415cb2cba895056922e"
+      }
+    ],
+    "imports": [
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter_modules.teradata_procedure_grammar import parse_procedure, procedure_config",
+      "from formatter_modules.formatter_runtime import source_linter",
+      "from formatter_modules.formatter_case import normalize_case",
+      "from formatter import format_sql",
+      "from dbeaver_adapter import PROFILE_FORMATTERS"
+    ],
+    "fixtures": [
+      "SYNTHETIC"
+    ],
+    "class_fixtures": {
+      "ProcedurePrototypeTests": [],
+      "ExistingDMLReproductionTests": []
+    },
+    "local_helpers": [
+      "wrap",
+      "walk"
+    ],
+    "calls": [
+      "''.join",
+      "PROFILE_FORMATTERS.values",
+      "SYNTHETIC.replace",
+      "SYNTHETIC.replace('\\n', '\\r\\n').encode",
+      "baseline.tree.recursive_crawl",
+      "block.recursive_crawl",
+      "c.get_type",
+      "child.is_type",
+      "executable_kinds",
+      "first.stringify",
+      "format_sql",
+      "formatter",
+      "formatter(original).decode",
+      "len",
+      "list",
+      "loop.recursive_crawl",
+      "next",
+      "normalize_case",
+      "parse_procedure",
+      "parsed.tree.stringify",
+      "patch",
+      "procedure_config",
+      "s.is_type",
+      "second.stringify",
+      "self.accepted",
+      "self.assertEqual",
+      "self.assertFalse",
+      "self.assertIn",
+      "self.assertNotEqual",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.subTest",
+      "source_linter",
+      "source_linter().parse_string",
+      "tree.recursive_crawl",
+      "walk",
+      "wrap"
+    ],
+    "sha256": "5972deaddf7af702cbf5ac77da5e9a6fd80518f3f8ce2fe53a96f515c803219d",
+    "purpose": "Явная процедурная грамматика, negative parser, границы листьев; 2 DML-регрессии",
+    "wall_seconds_approx": 23.147394665982574,
+    "new_modules": [
+      "tests.regression.test_dml_idempotence",
+      "tests.unit.test_procedure_grammar"
+    ]
+  },
+  {
+    "module": "tests/unit/test_profile_selector.py",
+    "methods": [
+      {
+        "id": "tests.unit.test_profile_selector.ProfileSelectorTests.test_keys_cancel_close_and_mouse",
+        "line": 56,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "8fd36a81d2776c94f782b16afd37a64c146b244c52ce912f74f636137a865d36"
+      },
+      {
+        "id": "tests.unit.test_profile_selector.ProfileSelectorTests.test_focus_denied_still_allows_mouse",
+        "line": 69,
+        "assertions": [
+          "self.assertEqual",
+          "self.assertTrue"
+        ],
+        "body_sha256": "b16b618e97a5f64e28e0886e0f11ce0b96775fdeed9fc1e7f9cfd518216d21d2"
+      },
+      {
+        "id": "tests.unit.test_profile_selector.ProfileSelectorTests.test_callback_failure_is_not_success",
+        "line": 76,
+        "assertions": [
+          "self.assertRaises",
+          "self.assertTrue"
+        ],
+        "body_sha256": "b5de7e2b7828915b7b0fd50e4c16ef6ebca1bfc89d1949369e373d4f20c59633"
+      },
+      {
+        "id": "tests.unit.test_profile_selector.ProfileSelectorTests.test_window_creation_failure",
+        "line": 82,
+        "assertions": [
+          "self.assertRaises"
+        ],
+        "body_sha256": "7c604095130b7ae1e24bbb7a5648d1b19efef756b241e00228af888770e40a5b"
+      }
+    ],
+    "imports": [
+      "import sys",
+      "from types import SimpleNamespace",
+      "import unittest",
+      "from unittest.mock import patch",
+      "from formatter_modules.profile_selector import select_profile"
+    ],
+    "fixtures": [],
+    "class_fixtures": {
+      "FakeTk": [],
+      "ProfileSelectorTests": []
+    },
+    "local_helpers": [
+      "FakeTk"
+    ],
+    "calls": [
+      "FakeTk",
+      "RuntimeError",
+      "SimpleNamespace",
+      "callback",
+      "fake.TclError",
+      "patch.dict",
+      "patch.object",
+      "select_profile",
+      "self.TclError",
+      "self.assertEqual",
+      "self.assertRaises",
+      "self.assertTrue",
+      "self.buttons[self.event[6:]]",
+      "self.close_callback",
+      "self.event.startswith",
+      "self.focus_callback",
+      "self.key_callback",
+      "self.report_callback_exception",
+      "self.subTest",
+      "self.timers.append",
+      "self.topmost.append",
+      "self.widget"
+    ],
+    "sha256": "824e83a6b536613933af58f2579d18900a8459064a90b57447065cf20989f047",
+    "purpose": "Fake Tk: клавиши/мышь/focus/cancel/errors без графического окружения",
+    "wall_seconds_approx": 0.0011192918755114079,
+    "new_modules": [
+      "tests.unit.test_profile_selector"
+    ]
+  }
+]

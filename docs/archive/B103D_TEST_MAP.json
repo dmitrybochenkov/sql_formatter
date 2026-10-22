@@ -1,0 +1,1434 @@
+{
+  "tests.unit.test_profile_selector.ProfileSelectorTests.test_keys_cancel_close_and_mouse": {
+    "new": "tests.unit.test_profile_selector.ProfileSelectorTests.test_keys_cancel_close_and_mouse",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_profile_selector.ProfileSelectorTests.test_focus_denied_still_allows_mouse": {
+    "new": "tests.unit.test_profile_selector.ProfileSelectorTests.test_focus_denied_still_allows_mouse",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_profile_selector.ProfileSelectorTests.test_callback_failure_is_not_success": {
+    "new": "tests.unit.test_profile_selector.ProfileSelectorTests.test_callback_failure_is_not_success",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_profile_selector.ProfileSelectorTests.test_window_creation_failure": {
+    "new": "tests.unit.test_profile_selector.ProfileSelectorTests.test_window_creation_failure",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_list_gaps.GapTests.test_literal": {
+    "new": "tests.unit.test_formatter_list_gaps.GapTests.test_literal",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_list_gaps.GapTests.test_quoted_identifier": {
+    "new": "tests.unit.test_formatter_list_gaps.GapTests.test_quoted_identifier",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_list_gaps.GapTests.test_comment_is_not_moved": {
+    "new": "tests.unit.test_formatter_list_gaps.GapTests.test_comment_is_not_moved",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_list_gaps.GapTests.test_no_rewrite_inside_expression": {
+    "new": "tests.unit.test_formatter_list_gaps.GapTests.test_no_rewrite_inside_expression",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_list_gaps.GapTests.test_idempotent": {
+    "new": "tests.unit.test_formatter_list_gaps.GapTests.test_idempotent",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_select_random_whitespace": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_select_random_whitespace",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_distinct_spelling": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_distinct_spelling",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_nested_expression_preserved": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_nested_expression_preserved",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_comment_skips": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_comment_skips",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_multiline_expression_skips": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_multiline_expression_skips",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_lists.ListTests.test_idempotent_simple": {
+    "new": "tests.unit.test_formatter_lists.ListTests.test_idempotent_simple",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_comments_inside_literals_are_not_comments": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_comments_inside_literals_are_not_comments",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_escaped_quotes": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_escaped_quotes",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_block_comment": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_block_comment",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_unterminated_comment_protected": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_unterminated_comment_protected",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_edit_over_literal_is_rejected": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_edit_over_literal_is_rejected",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_ambiguous_detached_comment": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_ambiguous_detached_comment",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_protection.ProtectionTests.test_adjacent_comment_is_not_ambiguous": {
+    "new": "tests.unit.test_formatter_protection.ProtectionTests.test_adjacent_comment_is_not_ambiguous",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_boundaries_and_round_trip": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_boundaries_and_round_trip",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_invalid_boundaries_fail_closed": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_invalid_boundaries_fail_closed",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_ast_positions_and_raw_are_original": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_ast_positions_and_raw_are_original",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_edits_touching_protected_boundaries": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_edits_touching_protected_boundaries",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_mapped_conflicts_remain_atomic": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_mapped_conflicts_remain_atomic",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_external_normalization_and_line_comment_terminators": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_external_normalization_and_line_comment_terminators",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_config_does_not_discover_home_or_cwd": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_config_does_not_discover_home_or_cwd",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_inline_config_comments_are_data": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_inline_config_comments_are_data",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_runtime.SourceMapTests.test_diagnostic_lines_count_all_physical_endings": {
+    "new": "tests.unit.test_formatter_runtime.SourceMapTests.test_diagnostic_lines_count_all_physical_endings",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_complete_synthetic_procedure": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_complete_synthetic_procedure",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_headers_and_parameters": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_headers_and_parameters",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_declarations_and_assignments": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_declarations_and_assignments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_calls_and_opaque_literals": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_calls_and_opaque_literals",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_nested_and_consecutive_loops": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_nested_and_consecutive_loops",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_nested_begin_end": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_nested_begin_end",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_comments_between_boundaries": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_comments_between_boundaries",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_expressions_and_nested_sql": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_expressions_and_nested_sql",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_one_line_and_repeated_parse": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_one_line_and_repeated_parse",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_invalid_blocks_delimiters_and_syntax": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_invalid_blocks_delimiters_and_syntax",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_unsupported_is_not_raw_fallback": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_unsupported_is_not_raw_fallback",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_execution_tree_and_terminator_ownership": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_execution_tree_and_terminator_ownership",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_unicode_and_multiline_protected_text": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_unicode_and_multiline_protected_text",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_prototype_scope_and_version": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_prototype_scope_and_version",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ProcedurePrototypeTests.test_runtime_grammar_case_and_profiles_integrated": {
+    "new": "tests.unit.test_procedure_grammar.ProcedurePrototypeTests.test_runtime_grammar_case_and_profiles_integrated",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ExistingDMLReproductionTests.test_existing_insert_select_non_idempotence": {
+    "new": "tests.regression.test_dml_idempotence.ExistingDMLReproductionTests.test_insert_select_with_join_is_idempotent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_procedure_prototype.ExistingDMLReproductionTests.test_existing_delete_literal_protected_refusal": {
+    "new": "tests.regression.test_dml_idempotence.ExistingDMLReproductionTests.test_delete_literal_formats_without_protected_refusal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_safe_whitespace_change": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_safe_whitespace_change",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_line_comment": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_line_comment",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_literal": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_literal",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_formats_outside_literal": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_formats_outside_literal",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_ambiguous_comment_gap": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_preserves_ambiguous_comment_gap",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_idempotent_pass": {
+    "new": "tests.unit.test_formatter_guarded_pass.GuardedPassTests.test_idempotent_pass",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_multiple": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_multiple",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_order_multiple": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_order_multiple",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_single": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_group_single",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_single": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_single",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_multiple": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_from_multiple",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_comment_skipped": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_comment_skipped",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_join_skipped": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_join_skipped",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_function_comma_not_split": {
+    "new": "tests.unit.test_formatter_clause_gaps.ClauseGapTests.test_function_comma_not_split",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_apply_from_right_to_left": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_apply_from_right_to_left",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_overlap_is_reported": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_overlap_is_reported",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_span": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_span",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_invalid_offsets_raise": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_invalid_offsets_raise",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_diagnostics_only_to_stderr_stream": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_diagnostics_only_to_stderr_stream",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_group_is_applied_as_a_unit": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_group_is_applied_as_a_unit",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_member_rejects_entire_group": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_protected_member_rejects_entire_group",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_conflicting_member_rejects_entire_group": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_conflicting_member_rejects_entire_group",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_internal_overlap_rejects_group": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_internal_overlap_rejects_group",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_insertions_conflict": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_insertions_conflict",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_conflict_rolls_back_group": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_same_position_conflict_rolls_back_group",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_disjoint_groups_apply_right_to_left_in_any_proposal_order": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_disjoint_groups_apply_right_to_left_in_any_proposal_order",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_insertion_at_replacement_boundaries": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_insertion_at_replacement_boundaries",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_edits.EditPlannerTests.test_noop_does_not_block_real_edit": {
+    "new": "tests.unit.test_formatter_edits.EditPlannerTests.test_noop_does_not_block_real_edit",
+    "reason": "unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment": {
+    "new": "tests.unit.test_inline_comment_lists.InlineCommentTests.test_inline_comment",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment_indented": {
+    "new": "tests.unit.test_inline_comment_lists.InlineCommentTests.test_inline_comment_indented",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_inline_comment_preserves_literal": {
+    "new": "tests.unit.test_inline_comment_lists.InlineCommentTests.test_inline_comment_preserves_literal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v2.InlineCommentTests.test_ambiguous_comment_skipped": {
+    "new": "tests.unit.test_inline_comment_lists.InlineCommentTests.test_ambiguous_comment_skipped",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_comment_before_second_item": {
+    "new": "tests.unit.test_standalone_comment_lists.CommentListStage9Tests.test_comment_before_second_item",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_two_comments_before_item": {
+    "new": "tests.unit.test_standalone_comment_lists.CommentListStage9Tests.test_two_comments_before_item",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_comment_before_first_item": {
+    "new": "tests.unit.test_standalone_comment_lists.CommentListStage9Tests.test_comment_before_first_item",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists_v3.CommentListStage9Tests.test_ambiguous_blank_line": {
+    "new": "tests.unit.test_standalone_comment_lists.CommentListStage9Tests.test_ambiguous_blank_line",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_b102_integration.GrammarIntegrationTests.test_header_selection_is_lexical": {
+    "new": "tests.contract.test_procedure_runtime.GrammarIntegrationTests.test_header_selection_is_lexical",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_b102_integration.GrammarIntegrationTests.test_runtime_and_case_share_grammar_and_source_map": {
+    "new": "tests.contract.test_procedure_runtime.GrammarIntegrationTests.test_runtime_and_case_share_grammar_and_source_map",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_b102_integration.GrammarIntegrationTests.test_dml_combinations": {
+    "new": "tests.contract.test_procedure_runtime.GrammarIntegrationTests.test_dml_combinations",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.unit.test_formatter_comment_lists.Tests.test_standalone_comment_before_leading_comma": {
+    "new": "tests.regression.test_comment_attachment.CommentAttachmentTests.test_standalone_comment_before_leading_comma",
+    "reason": "historical helper-only expectations replaced by public attachment, exact protected bytes, strict validation, clean diagnostics and idempotence; same unique input"
+  },
+  "tests.unit.test_formatter_comment_lists.Tests.test_trailing_comment_is_not_moved": {
+    "new": "tests.regression.test_comment_attachment.CommentAttachmentTests.test_trailing_comment_is_not_moved",
+    "reason": "historical helper-only expectations replaced by public attachment, exact protected bytes, strict validation, clean diagnostics and idempotence; same unique input"
+  },
+  "tests.unit.test_formatter_comment_lists.Tests.test_comma_before_comment_not_reordered": {
+    "new": "tests.regression.test_comment_attachment.CommentAttachmentTests.test_trailing_comma_moves_without_detaching_comment",
+    "reason": "historical helper-only expectations replaced by public attachment, exact protected bytes, strict validation, clean diagnostics and idempotence; same unique input"
+  },
+  "tests.contract.test_contract_b6.B6ContractTests.test_all_supported_constructs_share_canonical_lf": {
+    "new": "tests.contract.test_source_transport.B6ContractTests.test_all_supported_constructs_share_canonical_lf",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b6.B6ContractTests.test_cli_reads_exact_bytes_before_formatter": {
+    "new": "tests.contract.test_source_transport.B6ContractTests.test_cli_reads_exact_bytes_before_formatter",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b6.B6ContractTests.test_cwd_foreign_configuration_and_cli": {
+    "new": "tests.contract.test_source_transport.B6ContractTests.test_cwd_foreign_configuration_and_cli",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_profiles_endings_bom_and_idempotence": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_profiles_endings_bom_and_idempotence",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_merged_adapter_subprocess_and_arbitrary_cwd": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_merged_adapter_subprocess_and_arbitrary_cwd",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_cli_no_gui_success_and_failure_bytes": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_cli_no_gui_success_and_failure_bytes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_invalid_ambiguous_and_e004_original_bytes": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_invalid_ambiguous_and_e004_original_bytes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_protected_multiline_bytes_and_validator_negative": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_protected_multiline_bytes_and_validator_negative",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_actual_conflicts_and_protected_ranges_abort_transaction": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_actual_conflicts_and_protected_ranges_abort_transaction",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_execution_scopes_and_prefixes_stay_separate": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_execution_scopes_and_prefixes_stay_separate",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_bom_cannot_be_removed_by_validator": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_bom_cannot_be_removed_by_validator",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_unstable_nested_layout_refuses_whole_procedure": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_unstable_nested_layout_refuses_whole_procedure",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102_transport.ProcedureTransportTests.test_dml_literals_comments_and_long_in_lists": {
+    "new": "tests.contract.test_procedure_transport.ProcedureTransportTests.test_dml_literals_comments_and_long_in_lists",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_multiline_in_is_formatted_without_atomic_rollback": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_multiline_in_is_formatted_without_atomic_rollback",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_synthetic_construct_matrix": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_synthetic_construct_matrix",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_tracing_is_opt_in_and_does_not_change_result": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_tracing_is_opt_in_and_does_not_change_result",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_logs_and_streams_never_include_payload": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_logs_and_streams_never_include_payload",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_headless_diagnostic_and_merged_adapter": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_headless_diagnostic_and_merged_adapter",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103_diagnostics.B103DiagnosisTests.test_stage_of_grammar_failure_is_distinct": {
+    "new": "tests.contract.test_diagnostics.B103DiagnosisTests.test_stage_of_grammar_failure_is_distinct",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_success_exact_and_repeat": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_success_exact_and_repeat",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_failures_return_original_with_bom_and_endings": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_failures_return_original_with_bom_and_endings",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_unicode_protected_endings": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_unicode_protected_endings",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_warning_result_is_validated_and_logged": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_warning_result_is_validated_and_logged",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_exception_and_unexpected_output_are_quiet": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_exception_and_unexpected_output_are_quiet",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_log_failure_does_not_change_output": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_log_failure_does_not_change_output",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_read_and_argument_errors_never_emit_diagnostics": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_read_and_argument_errors_never_emit_diagnostics",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_paths_foreign_configuration_and_import": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_paths_foreign_configuration_and_import",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_missing_dependency_is_safe": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_missing_dependency_is_safe",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_supported_cli_interface": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_supported_cli_interface",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_log_rotation_and_safe_fields": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_log_rotation_and_safe_fields",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_output_and_read_permission_failures_are_silent": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_output_and_read_permission_failures_are_silent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b7.B7AdapterTests.test_success_with_unexpected_print_returns_original": {
+    "new": "tests.contract.test_adapter.B7AdapterTests.test_success_with_unexpected_print_returns_original",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_simple_golden": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_simple_golden",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_nested_blocks_and_consecutive_loops": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_nested_blocks_and_consecutive_loops",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_full_synthetic_and_dml_depth": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_full_synthetic_and_dml_depth",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_comments_remain_attached": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_comments_remain_attached",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_multiline_protected_and_endings": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_multiline_protected_and_endings",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_one_line_and_indented_inputs_equal": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_one_line_and_indented_inputs_equal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_ambiguous_comment_returns_entire_original": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_ambiguous_comment_returns_entire_original",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_invalid_or_unsupported_returns_entire_original": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_invalid_or_unsupported_returns_entire_original",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_no_partial_edits_on_planner_failure": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_no_partial_edits_on_planner_failure",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_validator_rejects_structural_and_token_changes": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_validator_rejects_structural_and_token_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b102.ProcedureLayoutTests.test_failure_of_nested_formatter_rolls_back_whole_procedure": {
+    "new": "tests.contract.test_procedure_layout.ProcedureLayoutTests.test_failure_of_nested_formatter_rolls_back_whole_procedure",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_golden.ContractGoldenTests.test_exact_output_and_idempotence": {
+    "new": "tests.contract.test_contract_golden.ContractGoldenTests.test_exact_output_and_idempotence",
+    "reason": "unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_both_profile_routes_are_explicit": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_both_profile_routes_are_explicit",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_profiles_match_b8_and_are_idempotent": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_profiles_match_b8_and_are_idempotent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_cancel_and_unknown_profile_never_format": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_cancel_and_unknown_profile_never_format",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_gui_errors_and_noisy_gui_return_original": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_gui_errors_and_noisy_gui_return_original",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_format_failure_and_e004_preserve_bytes": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_format_failure_and_e004_preserve_bytes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_merged_subprocess_transport_and_sequential_calls": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_merged_subprocess_transport_and_sequential_calls",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_cli_and_imports_do_not_load_tk": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_cli_and_imports_do_not_load_tk",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_gui_failure_in_merged_subprocess": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_gui_failure_in_merged_subprocess",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b9.B9AdapterTests.test_cancel_with_unwritable_log": {
+    "new": "tests.contract.test_adapter_profiles.B9AdapterTests.test_cancel_with_unwritable_log",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_lists_keep_relative_continuation_columns": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_lists_keep_relative_continuation_columns",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_sequential_inserts_and_nested_blocks_loops": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_sequential_inserts_and_nested_blocks_loops",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_expressions_nested_parentheses_functions_and_comments": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_expressions_nested_parentheses_functions_and_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_protected_multiline_values_and_mixed_endings": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_protected_multiline_values_and_mixed_endings",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_both_profiles_have_identical_successful_results": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_both_profiles_have_identical_successful_results",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_outer_margin_inverse_preserves_opaque_and_blank_lines": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_outer_margin_inverse_preserves_opaque_and_blank_lines",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_b103b_indentation.ProceduralDmlIndentationTests.test_ambiguous_insufficient_margin_keeps_atomic_refusal": {
+    "new": "tests.regression.test_procedure_dml_indentation.ProceduralDmlIndentationTests.test_ambiguous_insufficient_margin_keeps_atomic_refusal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_operator_spacing_and_final_newline": {
+    "new": "tests.contract.test_contract_golden.ContractGoldenTests.test_operator_spacing_and_final_newline",
+    "reason": "identical GOLDEN, format_sql calls, assertions, unittest context; unique newline checks retained"
+  },
+  "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_all_golden_outputs_end_in_single_newline": {
+    "new": "tests.contract.test_contract_golden.ContractGoldenTests.test_all_golden_outputs_end_in_single_newline",
+    "reason": "identical GOLDEN, format_sql calls, assertions, unittest context; unique newline checks retained"
+  },
+  "tests.contract.test_contract_golden_v1_2.ContractGoldenTests.test_exact_output_and_idempotence": {
+    "new": "tests.contract.test_contract_golden.ContractGoldenTests.test_exact_output_and_idempotence",
+    "reason": "identical GOLDEN, format_sql calls, assertions, unittest context; unique newline checks retained"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_exact_and_idempotent": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractEdgeGoldenTests.test_exact_and_idempotent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_same_query_different_whitespace_same_result": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractEdgeGoldenTests.test_same_query_different_whitespace_same_result",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_no_stdout_side_effect_from_format_sql": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractEdgeGoldenTests.test_no_stdout_side_effect_from_format_sql",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractEdgeGoldenTests.test_import_preserves_stdout": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractEdgeGoldenTests.test_import_preserves_stdout",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_ambiguous_comment_warns_and_keeps_text": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractWarningTests.test_ambiguous_comment_warns_and_keeps_text",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_valid_comment_no_ambiguity_warning": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractWarningTests.test_valid_comment_no_ambiguity_warning",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.contract.test_contract_edge_v1_2.ContractWarningTests.test_top_level_and_or_warns_without_inserting_true": {
+    "new": "tests.contract.test_edge_cases_and_cli.ContractWarningTests.test_top_level_and_or_warns_without_inserting_true",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_select_indent.SelectIndentTests.test_multiline_select_with_leading_commas": {
+    "new": "tests.regression.test_select_indent.SelectIndentTests.test_multiline_select_with_leading_commas",
+    "reason": "unchanged"
+  },
+  "tests.regression.test_select_indent.SelectIndentTests.test_nested_select_indent": {
+    "new": "tests.regression.test_select_indent.SelectIndentTests.test_nested_select_indent",
+    "reason": "unchanged"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_cases": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_cases",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_multiline_literal_preserved": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_multiline_literal_preserved",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_blank_line_whitespace_removed": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_blank_line_whitespace_removed",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_group_order_comments": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_group_order_comments",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_p1_comments_and_literal_tokens_unchanged": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_groupby_header_comment_nested": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_groupby_header_comment_nested",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_groupby_header.FormatterTests.test_rejects_changed_sql": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_rejects_changed_sql",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_cases": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_cases",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_p1_multiline_literal_preserved": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_multiline_literal_preserved",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_p1_blank_line_whitespace_removed": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_blank_line_whitespace_removed",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_p1_group_order_comments": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_group_order_comments",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_p1_comments_and_literal_tokens_unchanged": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_stage9.FormatterTests.test_rejects_changed_sql": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_rejects_changed_sql",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_literals_identifiers_and_comments": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_literals_identifiers_and_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_line_comments_and_empty_lines": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_line_comments_and_empty_lines",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_strict_validator_detects_protected_cr_changes": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_strict_validator_detects_protected_cr_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_protected_sequence_type_count_and_order": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_protected_sequence_type_count_and_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_detached_comment_diagnostics_are_real_refusals": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_detached_comment_diagnostics_are_real_refusals",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b6.B6SourcePreservationTests.test_named_window_refusal_preserves_even_external_endings": {
+    "new": "tests.regression.test_source_preservation.B6SourcePreservationTests.test_named_window_refusal_preserves_even_external_endings",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_cases": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_cases",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_p1_multiline_literal_preserved": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_multiline_literal_preserved",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_p1_blank_line_whitespace_removed": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_blank_line_whitespace_removed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_p1_group_order_comments": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_group_order_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_p1_comments_and_literal_tokens_unchanged": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_groupby_header_comment_nested": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_groupby_header_comment_nested",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_rejects_changed_sql": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_rejects_changed_sql",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_spacing_before_sections_and_join": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_spacing_before_sections_and_join",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.FormatterTests.test_spacing_invisible_blank_lines": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_spacing_invisible_blank_lines",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_cr_inputs_preserve_protected_bytes_on_both_calls": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_cr_inputs_preserve_protected_bytes_on_both_calls",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_cr_formatting_keeps_stdout_clean": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_cr_formatting_keeps_stdout_clean",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_nested_select_overlap_is_stable_and_preserves_sql": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_nested_select_overlap_is_stable_and_preserves_sql",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_nested_query_with_literals_and_comments_is_preserved": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_nested_query_with_literals_and_comments_is_preserved",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_ast_edits_retain_rule_and_atomic_group": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_ast_edits_retain_rule_and_atomic_group",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B2SafetyTests.test_select_word_in_literal_is_not_a_nested_query": {
+    "new": "tests.regression.test_edit_safety.B2SafetyTests.test_select_word_in_literal_is_not_a_nested_query",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_exact_simple_outputs": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_exact_simple_outputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_simple_idempotence_independently": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_simple_idempotence_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_simple_token_preservation_independently": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_simple_token_preservation_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_whitespace_variants_have_one_result": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_whitespace_variants_have_one_result",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_comparison_operators_remain_whole": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_comparison_operators_remain_whole",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_comment_attachment_and_literal_bytes": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_comment_attachment_and_literal_bytes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_new_pass_skips_out_of_scope_constructs": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_new_pass_skips_out_of_scope_constructs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B31SimpleQueryTests.test_boundary_pass_edits_only_whitespace": {
+    "new": "tests.regression.test_select_layout.B31SimpleQueryTests.test_boundary_pass_edits_only_whitespace",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_exact_nested_outputs": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_exact_nested_outputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_nested_idempotence_independently": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_nested_idempotence_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_nested_tokens_literals_comments_independently": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_nested_tokens_literals_comments_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_indentation_ignores_original_columns": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_indentation_ignores_original_columns",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_where_prefix_is_exact_and_validator_stays_strict": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_where_prefix_is_exact_and_validator_stays_strict",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_existing_prefix_siblings_and_multiline_literals_are_stable": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_existing_prefix_siblings_and_multiline_literals_are_stable",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_no_parent_edit_covers_child_and_no_e001_is_suppressed": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_no_parent_edit_covers_child_and_no_e001_is_suppressed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_nested_prepass_group_rejects_protection_or_conflict_atomically": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_nested_prepass_group_rejects_protection_or_conflict_atomically",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B32NestedQueryTests.test_out_of_scope_queries_are_not_claimed": {
+    "new": "tests.regression.test_select_layout.B32NestedQueryTests.test_out_of_scope_queries_are_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_exact_basic_outputs": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_exact_basic_outputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_basic_idempotence_independently": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_basic_idempotence_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_basic_validation_independently": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_basic_validation_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_all_nine_former_basic_failures_match_existing_goldens": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_all_nine_former_basic_failures_match_existing_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_nested_mixed_case_headers_and_prefix_are_stable": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_nested_mixed_case_headers_and_prefix_are_stable",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_compact_header_boundaries_are_atomic_and_stable": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_compact_header_boundaries_are_atomic_and_stable",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_operator_spacing_preserves_comments_literals_and_unary_signs": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_operator_spacing_preserves_comments_literals_and_unary_signs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33BasicClauseTests.test_prefix_stays_single_and_between_is_not_an_and_chain": {
+    "new": "tests.regression.test_where_layout.B33BasicClauseTests.test_prefix_stays_single_and_between_is_not_an_and_chain",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_only_ast_clause_headers_can_be_uppercased": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_only_ast_clause_headers_can_be_uppercased",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_tokens_order_types_and_clause_ownership_remain_strict": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_tokens_order_types_and_clause_ownership_remain_strict",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_exact_prefix_allowed_for_eligible_where_only": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_exact_prefix_allowed_for_eligible_where_only",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_prefix_rejected_for_single_between_or_and_wrong_locations": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_prefix_rejected_for_single_between_or_and_wrong_locations",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_existing_prefix_cannot_be_removed_or_duplicated": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_existing_prefix_cannot_be_removed_or_duplicated",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B33StrictValidatorTests.test_nested_where_eligibility_does_not_leak_to_parent_or_sibling": {
+    "new": "tests.regression.test_validator_scopes.B33StrictValidatorTests.test_nested_where_eligibility_does_not_leak_to_parent_or_sibling",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_exact_first_output": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_exact_first_output",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_idempotence_independent_of_expected": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_idempotence_independent_of_expected",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_token_and_comment_preservation_independently": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_token_and_comment_preservation_independently",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_whitespace_variants_have_identical_first_result": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_whitespace_variants_have_identical_first_result",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_both_original_group_order_goldens": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_both_original_group_order_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_multiple_from_with_each_list_clause": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_multiple_from_with_each_list_clause",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_having_predicate_bytes_are_preserved_with_b44_layout": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_having_predicate_bytes_are_preserved_with_b44_layout",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_window_order_and_other_future_contexts_not_claimed": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_window_order_and_other_future_contexts_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_comments_literals_and_existing_where_with_order": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_comments_literals_and_existing_where_with_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B41ClauseContextTests.test_new_list_edits_remain_one_atomic_group": {
+    "new": "tests.regression.test_group_order_layout.B41ClauseContextTests.test_new_list_edits_remain_one_atomic_group",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_literal_multiple_conditions_whitespace_variants": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_literal_multiple_conditions_whitespace_variants",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_single_condition_join_variants": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_single_condition_join_variants",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_comment_above_join": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_comment_above_join",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_trailing_comments_keep_attachment": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_trailing_comments_keep_attachment",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_multiple_joins_and_comment": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_multiple_joins_and_comment",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_literals_and_existing_keyword_case_preserved": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_literals_and_existing_keyword_case_preserved",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_between_and_parenthesized_or": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_between_and_parenthesized_or",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_where_group_order_remain_stable": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_where_group_order_remain_stable",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_join_subqueries_and_window_queries_not_claimed": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_join_subqueries_and_window_queries_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B42JoinTests.test_narrow_edits_atomic_and_order_independent": {
+    "new": "tests.regression.test_join_layout.B42JoinTests.test_narrow_edits_atomic_and_order_independent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_standalone_comments_and_leading_commas": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_standalone_comments_and_leading_commas",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_trailing_line_comments": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_trailing_line_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_comment_chain_and_multiline_bytes": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_comment_chain_and_multiline_bytes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_inline_block_one_line_and_multiline_input": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_inline_block_one_line_and_multiline_input",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_expressions_literals_and_modifiers_opaque": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_expressions_literals_and_modifiers_opaque",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_header_and_final_comments": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_header_and_final_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_ambiguous_and_mixed_chains_refuse_entire_list": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_ambiguous_and_mixed_chains_refuse_entire_list",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_atomicity_protection_conflicts_and_order": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_atomicity_protection_conflicts_and_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_query_group_integration_and_future_scope": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_query_group_integration_and_future_scope",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B43CommentedClauseTests.test_join_where_and_both_lists": {
+    "new": "tests.regression.test_commented_lists.B43CommentedClauseTests.test_join_where_and_both_lists",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_single_and_multiple_conditions": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_single_and_multiple_conditions",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_between_or_and_brackets": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_between_or_and_brackets",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_case_literals_and_existing_prefix": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_case_literals_and_existing_prefix",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_comments_and_header_comments": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_comments_and_header_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_subquery_ands_do_not_trigger_outer_prefix": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_subquery_ands_do_not_trigger_outer_prefix",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_whitespace_variants_and_both_goldens": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_whitespace_variants_and_both_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingTests.test_having_edits_are_atomic": {
+    "new": "tests.regression.test_having_layout.B44HavingTests.test_having_edits_are_atomic",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingValidatorTests.test_only_eligible_having_prefix_is_accepted": {
+    "new": "tests.regression.test_validator_scopes.B44HavingValidatorTests.test_only_eligible_having_prefix_is_accepted",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingValidatorTests.test_single_or_between_and_bracketed_are_ineligible": {
+    "new": "tests.regression.test_validator_scopes.B44HavingValidatorTests.test_single_or_between_and_bracketed_are_ineligible",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingValidatorTests.test_wrong_scopes_and_nested_having": {
+    "new": "tests.regression.test_validator_scopes.B44HavingValidatorTests.test_wrong_scopes_and_nested_having",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B44HavingValidatorTests.test_duplicates_removal_changes_and_case_rejected": {
+    "new": "tests.regression.test_validator_scopes.B44HavingValidatorTests.test_duplicates_removal_changes_and_case_rejected",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B45IntegrationTests.test_join_subqueries_remain_out_of_scope": {
+    "new": "tests.regression.test_clause_interactions.B45IntegrationTests.test_join_subqueries_remain_out_of_scope",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B45IntegrationTests.test_exact_matrix": {
+    "new": "tests.regression.test_clause_interactions.B45IntegrationTests.test_exact_matrix",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B45IntegrationTests.test_matrix_invariants": {
+    "new": "tests.regression.test_clause_interactions.B45IntegrationTests.test_matrix_invariants",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B45IntegrationTests.test_matrix_edits_are_atomic": {
+    "new": "tests.regression.test_clause_interactions.B45IntegrationTests.test_matrix_edits_are_atomic",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_three_old_goldens": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_three_old_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_where_scopes_are_independent": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_where_scopes_are_independent",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_join_group_having_order": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_join_group_having_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_nested_select_inside_cte": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_nested_select_inside_cte",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_leading_and_body_comment_chain": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_leading_and_body_comment_chain",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_trailing_comment_stays_with_previous_cte": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_trailing_comment_stays_with_previous_cte",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_keyword_case_columns_and_literals": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_keyword_case_columns_and_literals",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_scalar_select_and_multiline_inputs": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_scalar_select_and_multiline_inputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_ambiguous_separator_is_not_guessed": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_ambiguous_separator_is_not_guessed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_cte_edits_atomic_with_protection_conflict_and_order": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_cte_edits_atomic_with_protection_conflict_and_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B51CTETests.test_future_constructs_and_join_subqueries_not_claimed": {
+    "new": "tests.regression.test_cte_layout.B51CTETests.test_future_constructs_and_join_subqueries_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_three_old_goldens": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_three_old_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_operators_preserve_case_and_multiline_input": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_operators_preserve_case_and_multiline_input",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_three_branches_and_precedence": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_three_branches_and_precedence",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_parenthesized_set": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_parenthesized_set",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_independent_where_scopes": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_independent_where_scopes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_global_order_group_and_having": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_global_order_group_and_having",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_cte_body_and_main_set": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_cte_body_and_main_set",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_nested_set_in_where": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_nested_set_in_where",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_literals_are_opaque": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_literals_are_opaque",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_comments_around_operator": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_comments_around_operator",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_ambiguous_comment": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_ambiguous_comment",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_atomic_protection_and_conflicts": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_atomic_protection_and_conflicts",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_validator_rejects_changes_between_branches": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_validator_rejects_changes_between_branches",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_nested_parenthesized_set_is_rendered_once": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_nested_parenthesized_set_is_rendered_once",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_derived_set_and_branch_local_order": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_derived_set_and_branch_local_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_comment_inside_operator_and_global_order_list": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_comment_inside_operator_and_global_order_list",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_both_branch_predicates_and_join": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_both_branch_predicates_and_join",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B52SetOperationTests.test_future_constructs_not_claimed": {
+    "new": "tests.regression.test_set_operations.B52SetOperationTests.test_future_constructs_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_two_old_goldens": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_two_old_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_simple_and_empty_window": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_simple_and_empty_window",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_multiple_windows_and_outer_order": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_multiple_windows_and_outer_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_partition_and_order_expression_lists": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_partition_and_order_expression_lists",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_rows_range_frames_are_opaque": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_rows_range_frames_are_opaque",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_arguments_literals_and_case_are_opaque": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_arguments_literals_and_case_are_opaque",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_multiline_function_arguments_and_nested_query": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_multiline_function_arguments_and_nested_query",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_mixed_comment_chain_refuses_list_edits": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_mixed_comment_chain_refuses_list_edits",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_where_group_having_and_outer_order": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_where_group_having_and_outer_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_cte_window": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_cte_window",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_set_operation_windows": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_set_operation_windows",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_multiline_and_compact_inputs": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_multiline_and_compact_inputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_list_comments": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_list_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_boundary_and_frame_comments": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_boundary_and_frame_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_comment_next_to_window_expression": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_comment_next_to_window_expression",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_ambiguous_list_comment_is_not_moved": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_ambiguous_list_comment_is_not_moved",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_atomic_window_edits": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_atomic_window_edits",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_validator_rejects_window_changes": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_validator_rejects_window_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_named_window_runtime_refuses_without_partial_changes": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_named_window_runtime_refuses_without_partial_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B53WindowTests.test_unsupported_windows_and_qualify_not_claimed": {
+    "new": "tests.regression.test_windows.B53WindowTests.test_unsupported_windows_and_qualify_not_claimed",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_three_old_goldens": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_three_old_goldens",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_single_predicate_and_multiple_ands": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_single_predicate_and_multiple_ands",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_or_and_mixed_boolean_expressions": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_or_and_mixed_boolean_expressions",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_mixed_boolean_with_window_and_invalid_ast": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_mixed_boolean_with_window_and_invalid_ast",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_brackets_between_and_frame_ands": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_brackets_between_and_frame_ands",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_multiple_windows_and_outer_order": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_multiple_windows_and_outer_order",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_window_lists_and_rank": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_window_lists_and_rank",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_select_and_qualify_windows_have_separate_indentation": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_select_and_qualify_windows_have_separate_indentation",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_where_having_and_qualify_ownership": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_where_having_and_qualify_ownership",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_cte_qualify": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_cte_qualify",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_set_branches_qualify": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_set_branches_qualify",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_comments_before_between_and_after_conditions": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_comments_before_between_and_after_conditions",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_literals_function_arguments_and_keyword_case": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_literals_function_arguments_and_keyword_case",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_multiline_inputs": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_multiline_inputs",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_existing_tautology_is_not_removed_or_duplicated": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_existing_tautology_is_not_removed_or_duplicated",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_ambiguous_comments": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_ambiguous_comments",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_named_windows_keep_e004_refusal": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_named_windows_keep_e004_refusal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_atomic_edits_and_protected_spans": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_atomic_edits_and_protected_spans",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter.B54QualifyTests.test_strict_validator_rejects_qualify_changes": {
+    "new": "tests.regression.test_qualify.B54QualifyTests.test_strict_validator_rejects_qualify_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_cases": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_cases",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_multiline_literal_preserved": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_multiline_literal_preserved",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_blank_line_whitespace_removed": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_blank_line_whitespace_removed",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_group_order_comments": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_group_order_comments",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_p1_comments_and_literal_tokens_unchanged": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_p1_comments_and_literal_tokens_unchanged",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_groupby_header_comment_nested": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_groupby_header_comment_nested",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_rejects_changed_sql": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_rejects_changed_sql",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_spacing_before_sections_and_join": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_spacing_before_sections_and_join",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_spacing_fix.FormatterTests.test_spacing_invisible_blank_lines": {
+    "new": "tests.regression.test_layout_regressions.FormatterTests.test_spacing_invisible_blank_lines",
+    "reason": "exact AST method duplicate; identical CASES, imports and plain unittest context"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_all_five_rules_without_layout_changes": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_all_five_rules_without_layout_changes",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_keywords_cte_join_sets_and_windows": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_keywords_cte_join_sets_and_windows",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_protected_content_and_original_offsets": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_protected_content_and_original_offsets",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_exact_direction_only": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_exact_direction_only",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_no_case_permission_without_sqlfluff_proposal": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_no_case_permission_without_sqlfluff_proposal",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_full_format_and_adapter": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_full_format_and_adapter",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_conflict_rejects_entire_group": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_conflict_rejects_entire_group",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_comments_cannot_reconfigure_case_rules": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_comments_cannot_reconfigure_case_rules",
+    "reason": "moved; method body and assertions unchanged"
+  },
+  "tests.regression.test_formatter_b8.B8CaseTests.test_ambiguous_unicode_and_unparsable_fail_closed": {
+    "new": "tests.contract.test_case_normalization.B8CaseTests.test_ambiguous_unicode_and_unparsable_fail_closed",
+    "reason": "moved; method body and assertions unchanged"
+  }
+}

@@ -1,4 +1,5 @@
 """Synthetic regression coverage for local/procedural DML coordinates."""
+from tests.helpers.assertions import assert_protected_spans_preserved
 import unittest
 from itertools import cycle
 
@@ -7,7 +8,7 @@ from formatter_modules.formatter_procedure import local_dml_fragment, indented_f
 from formatter_modules.formatter_runtime import source_linter
 from formatter_modules.formatter_protection import protected_spans
 from dbeaver_adapter import PROFILE_FORMATTERS
-from tests.unit.test_procedure_prototype import wrap, walk
+from tests.helpers.fixtures import wrap, walk
 
 
 class ProceduralDmlIndentationTests(unittest.TestCase):
@@ -16,8 +17,7 @@ class ProceduralDmlIndentationTests(unittest.TestCase):
         result = format_sql(sql, diagnostics=diagnostics)
         self.assertEqual(diagnostics, [])
         validate_sql_unchanged(sql, result)
-        self.assertEqual([(p.kind, sql[p.start:p.end]) for p in protected_spans(sql)],
-                         [(p.kind, result[p.start:p.end]) for p in protected_spans(result)])
+        assert_protected_spans_preserved(self, sql, result)
         for _ in range(2):
             diagnostics = []
             self.assertEqual(format_sql(result, diagnostics=diagnostics), result)
