@@ -1,0 +1,3842 @@
+{
+  "baseline": {
+    "instrumented_s": 28.574024207890034,
+    "profile": [
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 0.000903894,
+        "cumulative_s": 0.007946791
+      },
+      {
+        "file": "formatter.py",
+        "function": "clean_blank_line_whitespace.<locals>.<genexpr>",
+        "calls": 2610,
+        "self_s": 0.001048198,
+        "cumulative_s": 0.008086882
+      },
+      {
+        "file": "formatter.py",
+        "function": "walk",
+        "calls": 732515,
+        "self_s": 0.10464981300000001,
+        "cumulative_s": 0.10464981300000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged.<locals>.protected_values",
+        "calls": 44,
+        "self_s": 4.6332e-05,
+        "cumulative_s": 0.013988831
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.verify_dialect_specified",
+        "calls": 177,
+        "self_s": 0.00010280800000000001,
+        "cumulative_s": 0.000153384
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged.<locals>.has_prefix",
+        "calls": 90,
+        "self_s": 0.000128131,
+        "cumulative_s": 0.00014295400000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing.<locals>.visual_blank.<locals>.<genexpr>",
+        "calls": 280,
+        "self_s": 0.00011042400000000001,
+        "cumulative_s": 0.00016541800000000002
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons.<locals>.<lambda>",
+        "calls": 10,
+        "self_s": 1.9990000000000003e-06,
+        "cumulative_s": 1.9990000000000003e-06
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing.<locals>.visual_blank",
+        "calls": 120,
+        "self_s": 0.000140733,
+        "cumulative_s": 0.00039824200000000004
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_snapshot.<locals>.collect.<locals>.<genexpr>",
+        "calls": 360,
+        "self_s": 0.00031876800000000004,
+        "cumulative_s": 0.0012509630000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.338e-05,
+        "cumulative_s": 8.258400000000001e-05
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "source_linter",
+        "calls": 138,
+        "self_s": 0.00023233000000000002,
+        "cumulative_s": 1.5736023300000002
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceLinter.__init__",
+        "calls": 138,
+        "self_s": 0.00018828100000000002,
+        "cumulative_s": 1.5733700000000002
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "_tokens",
+        "calls": 34,
+        "self_s": 5.3047e-05,
+        "cumulative_s": 0.04427346
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons.<locals>.<genexpr>",
+        "calls": 2610,
+        "self_s": 0.001167138,
+        "cumulative_s": 0.008685181
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_snapshot.<locals>.<genexpr>",
+        "calls": 23150,
+        "self_s": 0.009675484,
+        "cumulative_s": 0.074663589
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_select_field_indents.<locals>.<genexpr>",
+        "calls": 2620,
+        "self_s": 0.001108248,
+        "cumulative_s": 0.008292246000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "remove_select_blank_lines.<locals>.<genexpr>",
+        "calls": 2620,
+        "self_s": 0.001115886,
+        "cumulative_s": 0.008464629000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 2410,
+        "self_s": 0.0010311950000000002,
+        "cumulative_s": 0.007656672000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 1275,
+        "self_s": 0.000550356,
+        "cumulative_s": 0.004039796
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 1525,
+        "self_s": 0.000625373,
+        "cumulative_s": 0.003950807000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 2290,
+        "self_s": 0.001555825,
+        "cumulative_s": 0.009662695
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "project_config",
+        "calls": 138,
+        "self_s": 0.000958306,
+        "cumulative_s": 1.5731817190000001
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<lambda>",
+        "calls": 26,
+        "self_s": 2.3998000000000003e-05,
+        "cumulative_s": 0.000175958
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.copy",
+        "calls": 189,
+        "self_s": 0.000988119,
+        "cumulative_s": 0.21557820500000002
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__setstate__",
+        "calls": 189,
+        "self_s": 0.000352091,
+        "cumulative_s": 0.0007839520000000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._initialise_dialect",
+        "calls": 185,
+        "self_s": 0.000840171,
+        "cumulative_s": 1.5349187960000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__getstate__",
+        "calls": 189,
+        "self_s": 0.000508844,
+        "cumulative_s": 0.000847257
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_section",
+        "calls": 3882,
+        "self_s": 0.0026416570000000004,
+        "cumulative_s": 0.004225850000000001
+      },
+      {
+        "file": "formatter_dialect.py",
+        "function": "select_config",
+        "calls": 177,
+        "self_s": 0.004618676,
+        "cumulative_s": 0.7754262540000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._handle_comma_separated_values",
+        "calls": 185,
+        "self_s": 0.000821331,
+        "cumulative_s": 0.002036787
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.violations_from_segments",
+        "calls": 190,
+        "self_s": 0.008795732,
+        "cumulative_s": 0.07008091000000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get",
+        "calls": 2950,
+        "self_s": 0.002044955,
+        "cumulative_s": 0.005576203
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.from_path",
+        "calls": 172,
+        "self_s": 0.0031730430000000004,
+        "cumulative_s": 1.9665119130000002
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_templater",
+        "calls": 185,
+        "self_s": 0.00043449900000000003,
+        "cumulative_s": 0.005703036000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "TemplateElement.to_segment",
+        "calls": 44783,
+        "self_s": 0.017646526000000003,
+        "cumulative_s": 0.17849757400000002
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._verify_rust_config",
+        "calls": 185,
+        "self_s": 0.000267463,
+        "cumulative_s": 0.000426786
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parse",
+        "calls": 12,
+        "self_s": 5.2792000000000005e-05,
+        "cumulative_s": 0.008847163
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.__init__",
+        "calls": 190,
+        "self_s": 0.000608968,
+        "cumulative_s": 0.005065873
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.__init__",
+        "calls": 12,
+        "self_s": 2.2930000000000003e-06,
+        "cumulative_s": 2.2930000000000003e-06
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>",
+        "calls": 26,
+        "self_s": 0.000228568,
+        "cumulative_s": 0.0064119170000000005
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parsestr",
+        "calls": 12,
+        "self_s": 5.8753000000000005e-05,
+        "cumulative_s": 0.008905916
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 14366,
+        "self_s": 0.002465549,
+        "cumulative_s": 0.004976174000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "RegexLexer._match",
+        "calls": 367298,
+        "self_s": 0.10387085600000001,
+        "cumulative_s": 0.319273515
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.__init__",
+        "calls": 230,
+        "self_s": 0.000549717,
+        "cumulative_s": 0.010100956000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer._match",
+        "calls": 465180,
+        "self_s": 0.12259367500000001,
+        "cumulative_s": 0.21499609800000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.arithmetic_walk",
+        "calls": 16070,
+        "self_s": 0.0044943150000000005,
+        "cumulative_s": 0.012574095
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer._subdivide",
+        "calls": 44783,
+        "self_s": 0.008172210000000001,
+        "cumulative_s": 0.008172210000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.lex",
+        "calls": 190,
+        "self_s": 0.0018776530000000002,
+        "cumulative_s": 2.42248029
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.elements_to_segments",
+        "calls": 190,
+        "self_s": 0.009038544,
+        "cumulative_s": 0.5025957950000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.map_template_slices",
+        "calls": 190,
+        "self_s": 0.044075729,
+        "cumulative_s": 0.111349289
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parse",
+        "calls": 178,
+        "self_s": 0.001333572,
+        "cumulative_s": 21.921433624000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.gap",
+        "calls": 330,
+        "self_s": 0.000326964,
+        "cumulative_s": 0.000553468
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits",
+        "calls": 20,
+        "self_s": 0.00033671600000000003,
+        "cumulative_s": 0.0046042900000000005
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.boundary",
+        "calls": 50,
+        "self_s": 3.8289000000000006e-05,
+        "cumulative_s": 0.00017783300000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.join_boundary",
+        "calls": 100,
+        "self_s": 5.6031000000000006e-05,
+        "cumulative_s": 0.00020616200000000002
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.body_units",
+        "calls": 6,
+        "self_s": 8.0704e-05,
+        "cumulative_s": 20.875639667
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.items",
+        "calls": 2,
+        "self_s": 2.2001e-05,
+        "cumulative_s": 8.0542e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment",
+        "calls": 10,
+        "self_s": 0.00037255700000000003,
+        "cumulative_s": 0.002112956
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators",
+        "calls": 6,
+        "self_s": 7.3929e-05,
+        "cumulative_s": 0.000257417
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.boundary",
+        "calls": 102,
+        "self_s": 6.1374e-05,
+        "cumulative_s": 0.000257336
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml",
+        "calls": 10,
+        "self_s": 0.0051623910000000005,
+        "cumulative_s": 20.873313250000002
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "normalize_case.<locals>.parse",
+        "calls": 34,
+        "self_s": 0.0009420440000000001,
+        "cumulative_s": 5.278946797000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.match",
+        "calls": 832478,
+        "self_s": 0.56735994,
+        "cumulative_s": 1.5240501640000002
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.lex_match",
+        "calls": 190,
+        "self_s": 0.206715841,
+        "cumulative_s": 1.7348286320000001
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 301,
+        "self_s": 2.9910000000000003e-05,
+        "cumulative_s": 2.9910000000000003e-05
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "apply_edits",
+        "calls": 73,
+        "self_s": 0.00024953400000000004,
+        "cumulative_s": 0.000367333
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "_owned_walk",
+        "calls": 15695,
+        "self_s": 0.003816124,
+        "cumulative_s": 0.008153219
+      },
+      {
+        "file": "lexer.py",
+        "function": "TemplateElement.from_element",
+        "calls": 44783,
+        "self_s": 0.024890603,
+        "cumulative_s": 0.042607254000000004
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._lex_templated_file.<locals>.<genexpr>",
+        "calls": 34477,
+        "self_s": 0.005566322,
+        "cumulative_s": 0.009102358000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "RegexLexer.__post_init__",
+        "calls": 205,
+        "self_s": 0.00017620800000000002,
+        "cumulative_s": 0.009374461
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<lambda>.<locals>.<genexpr>",
+        "calls": 327,
+        "self_s": 6.3742e-05,
+        "cumulative_s": 6.3742e-05
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "edits_overlap",
+        "calls": 14065,
+        "self_s": 0.0025106250000000003,
+        "cumulative_s": 0.0025106250000000003
+      },
+      {
+        "file": "formatter_protection.py",
+        "function": "ambiguous_comment_spans",
+        "calls": 42,
+        "self_s": 3.5873e-05,
+        "cumulative_s": 0.010272249
+      },
+      {
+        "file": "formatter_protection.py",
+        "function": "protected_spans",
+        "calls": 229,
+        "self_s": 0.028748156,
+        "cumulative_s": 0.062514867
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "stage",
+        "calls": 46,
+        "self_s": 0.00028800500000000003,
+        "cumulative_s": 0.016558084
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.__init__",
+        "calls": 177,
+        "self_s": 0.000332948,
+        "cumulative_s": 0.001050539
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.__post_init__",
+        "calls": 25,
+        "self_s": 2.751e-06,
+        "cumulative_s": 2.751e-06
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.construct_segment",
+        "calls": 44783,
+        "self_s": 0.039259748000000004,
+        "cumulative_s": 0.160851048
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_gap_edits",
+        "calls": 10,
+        "self_s": 4.8831e-05,
+        "cumulative_s": 0.013546247
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "indented_fragment",
+        "calls": 10,
+        "self_s": 0.000424496,
+        "cumulative_s": 0.002654041
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._normalise_newlines",
+        "calls": 177,
+        "self_s": 0.00029368300000000004,
+        "cumulative_s": 0.00702772
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_fix_parsed.<locals>.is_first_linter_pass",
+        "calls": 204,
+        "self_s": 5.6088e-05,
+        "cumulative_s": 5.6088e-05
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.__init__",
+        "calls": 177,
+        "self_s": 0.000471148,
+        "cumulative_s": 0.001249088
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.get_rulepack",
+        "calls": 34,
+        "self_s": 0.000272211,
+        "cumulative_s": 0.286378544
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.owned_brackets",
+        "calls": 2380,
+        "self_s": 0.0019852100000000003,
+        "cumulative_s": 0.007280459
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.6878e-05,
+        "cumulative_s": 0.00019308400000000002
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "apply_edits.<locals>.<lambda>",
+        "calls": 301,
+        "self_s": 2.6315e-05,
+        "cumulative_s": 2.6315e-05
+      },
+      {
+        "file": "formatter_guarded_pass.py",
+        "function": "guarded_pass.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 2.0840000000000003e-06,
+        "cumulative_s": 2.0840000000000003e-06
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "_walk",
+        "calls": 259303,
+        "self_s": 0.035884732,
+        "cumulative_s": 0.035884732
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 6.696500000000001e-05,
+        "cumulative_s": 0.000312952
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 6.122e-06,
+        "cumulative_s": 6.122e-06
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 4.9592e-05,
+        "cumulative_s": 0.00027366500000000003
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.9206000000000002e-05,
+        "cumulative_s": 3.8374e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 1.6461e-05,
+        "cumulative_s": 5.5082000000000006e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.7424e-05,
+        "cumulative_s": 3.7877000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 190,
+        "self_s": 6.6234e-05,
+        "cumulative_s": 0.000278659
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 160,
+        "self_s": 5.3124e-05,
+        "cumulative_s": 0.000222668
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.region.<locals>.<genexpr>",
+        "calls": 80,
+        "self_s": 3.0924000000000004e-05,
+        "cumulative_s": 0.00011462700000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 2290,
+        "self_s": 0.00088418,
+        "cumulative_s": 0.0061007200000000004
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>.<genexpr>",
+        "calls": 50,
+        "self_s": 2.0505e-05,
+        "cumulative_s": 8.0377e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 110,
+        "self_s": 3.4549000000000004e-05,
+        "cumulative_s": 0.00015904500000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 690,
+        "self_s": 0.00029304600000000004,
+        "cumulative_s": 0.002805288
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.arithmetic_walk.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 1.7954e-05,
+        "cumulative_s": 5.0328e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 1.7500000000000002e-06,
+        "cumulative_s": 1.7500000000000002e-06
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>",
+        "calls": 26,
+        "self_s": 0.00010299,
+        "cumulative_s": 0.00024304300000000002
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<lambda>",
+        "calls": 40,
+        "self_s": 1.4537000000000002e-05,
+        "cumulative_s": 1.4537000000000002e-05
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<lambda>",
+        "calls": 20,
+        "self_s": 7.626e-06,
+        "cumulative_s": 7.626e-06
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 1.7712000000000003e-05,
+        "cumulative_s": 1.7712000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.<lambda>",
+        "calls": 70,
+        "self_s": 2.2916000000000002e-05,
+        "cumulative_s": 2.2916000000000002e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.<lambda>",
+        "calls": 70,
+        "self_s": 2.0252000000000002e-05,
+        "cumulative_s": 2.0252000000000002e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 4.999e-06,
+        "cumulative_s": 1.4165e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 4.205e-06,
+        "cumulative_s": 1.2999e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 4.085e-06,
+        "cumulative_s": 1.2585e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 9.669e-06,
+        "cumulative_s": 1.8460000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.0544000000000002e-05,
+        "cumulative_s": 0.00011037300000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 2.0042000000000002e-05,
+        "cumulative_s": 5.2294000000000004e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 0.00045363300000000005,
+        "cumulative_s": 0.003091331
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.start",
+        "calls": 2545,
+        "self_s": 0.000367967,
+        "cumulative_s": 0.000367967
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.stop",
+        "calls": 2545,
+        "self_s": 0.00040042400000000003,
+        "cumulative_s": 0.00040042400000000003
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.4087e-05,
+        "cumulative_s": 5.9877e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 5.8750000000000005e-06,
+        "cumulative_s": 1.4001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.2214e-05,
+        "cumulative_s": 6.4997e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.7000000000000002e-05,
+        "cumulative_s": 4.9292e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.2045e-05,
+        "cumulative_s": 3.7793e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.propose",
+        "calls": 40,
+        "self_s": 1.0873e-05,
+        "cumulative_s": 1.0873e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 40,
+        "self_s": 3.6289000000000004e-05,
+        "cumulative_s": 0.000144375
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 640,
+        "self_s": 0.000225314,
+        "cumulative_s": 0.001109891
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 3.3916000000000005e-05,
+        "cumulative_s": 7.5543e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "code",
+        "calls": 70,
+        "self_s": 0.00015629200000000001,
+        "cumulative_s": 0.000279211
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.gap",
+        "calls": 104,
+        "self_s": 7.8254e-05,
+        "cumulative_s": 0.00020125400000000002
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.kind",
+        "calls": 20,
+        "self_s": 2.8708e-05,
+        "cumulative_s": 9.8997e-05
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 1.9664e-05,
+        "cumulative_s": 1.9664e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.locate",
+        "calls": 2280,
+        "self_s": 0.001846235,
+        "cumulative_s": 0.007388498
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 2.0208e-05,
+        "cumulative_s": 0.001158458
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 2.627e-06,
+        "cumulative_s": 2.627e-06
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "indented_fragment.<locals>.<genexpr>",
+        "calls": 180,
+        "self_s": 2.5911000000000003e-05,
+        "cumulative_s": 2.5911000000000003e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment.<locals>.<genexpr>",
+        "calls": 110,
+        "self_s": 1.3664000000000002e-05,
+        "cumulative_s": 1.3664000000000002e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.5875e-05,
+        "cumulative_s": 3.3665000000000004e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureDeclareSegment",
+        "calls": 1,
+        "self_s": 6.916e-06,
+        "cumulative_s": 8.9417e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "statement_margin_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 3.0830000000000004e-06,
+        "cumulative_s": 3.0830000000000004e-06
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.edit",
+        "calls": 234,
+        "self_s": 0.000159702,
+        "cumulative_s": 0.00039574300000000005
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "walk",
+        "calls": 68054,
+        "self_s": 0.009023214,
+        "cumulative_s": 0.009023214
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 2659,
+        "self_s": 0.001001381,
+        "cumulative_s": 0.008619128
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators.<locals>.<genexpr>",
+        "calls": 8,
+        "self_s": 9.460000000000001e-06,
+        "cumulative_s": 1.4834e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators.<locals>.<genexpr>",
+        "calls": 8,
+        "self_s": 5.962000000000001e-06,
+        "cumulative_s": 9.042e-06
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 140,
+        "self_s": 4.0536e-05,
+        "cumulative_s": 9.4411e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 1.2458e-05,
+        "cumulative_s": 2.7960000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 5.3788e-05,
+        "cumulative_s": 0.00040737600000000004
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 9.668000000000001e-06,
+        "cumulative_s": 1.7543e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 6.509300000000001e-05,
+        "cumulative_s": 0.000111793
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 7.1648e-05,
+        "cumulative_s": 0.000125041
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 9.8176e-05,
+        "cumulative_s": 0.000139256
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 7.9628e-05,
+        "cumulative_s": 0.000142292
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 6.666e-06,
+        "cumulative_s": 1.45e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 5.6153e-05,
+        "cumulative_s": 9.5666e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 4.9872000000000006e-05,
+        "cumulative_s": 8.5042e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 7.7172e-05,
+        "cumulative_s": 0.00013383
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 9.011400000000001e-05,
+        "cumulative_s": 0.00016774200000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 6.832000000000001e-06,
+        "cumulative_s": 1.4457e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.9625000000000003e-05,
+        "cumulative_s": 9.937100000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_parts.<locals>.<genexpr>",
+        "calls": 200,
+        "self_s": 0.00011287200000000001,
+        "cumulative_s": 0.000354123
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.items.<locals>.<genexpr>",
+        "calls": 2,
+        "self_s": 3.75e-07,
+        "cumulative_s": 3.75e-07
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureDefinitionSegment",
+        "calls": 1,
+        "self_s": 6.79e-06,
+        "cumulative_s": 0.000110167
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 1.9876e-05,
+        "cumulative_s": 3.6167e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureExecutableSegment",
+        "calls": 1,
+        "self_s": 7.208e-06,
+        "cumulative_s": 0.000103875
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment.<locals>.<genexpr>",
+        "calls": 55,
+        "self_s": 1.0631e-05,
+        "cumulative_s": 1.0631e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureSecuritySegment",
+        "calls": 1,
+        "self_s": 1.7500000000000002e-06,
+        "cumulative_s": 4.3833000000000005e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "stop",
+        "calls": 128,
+        "self_s": 4.1419000000000004e-05,
+        "cumulative_s": 4.1419000000000004e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "start",
+        "calls": 398,
+        "self_s": 9.7032e-05,
+        "cumulative_s": 9.7032e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 4,
+        "self_s": 5.625e-06,
+        "cumulative_s": 1.775e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.0335e-05,
+        "cumulative_s": 5.0876000000000006e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureParameterSegment",
+        "calls": 1,
+        "self_s": 6.876000000000001e-06,
+        "cumulative_s": 0.00014466700000000002
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureSetSegment",
+        "calls": 1,
+        "self_s": 2.666e-06,
+        "cumulative_s": 4.6333000000000005e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureParse",
+        "calls": 1,
+        "self_s": 2.458e-06,
+        "cumulative_s": 2.458e-06
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureFileSegment",
+        "calls": 1,
+        "self_s": 2.2080000000000003e-06,
+        "cumulative_s": 2.6333e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 2659,
+        "self_s": 0.0010090890000000001,
+        "cumulative_s": 0.00886718
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "ProcedureRefusal",
+        "calls": 1,
+        "self_s": 1.083e-06,
+        "cumulative_s": 1.083e-06
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureBlockSegment",
+        "calls": 1,
+        "self_s": 5.2090000000000004e-06,
+        "cumulative_s": 8.3792e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureCallSegment",
+        "calls": 1,
+        "self_s": 4.875e-06,
+        "cumulative_s": 6.3458e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureWhileSegment",
+        "calls": 1,
+        "self_s": 5.5420000000000005e-06,
+        "cumulative_s": 0.00015412500000000002
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "event",
+        "calls": 46,
+        "self_s": 0.000937243,
+        "cumulative_s": 0.016114747000000002
+      },
+      {
+        "file": "formatter_guarded_pass.py",
+        "function": "guarded_pass",
+        "calls": 50,
+        "self_s": 0.010959809000000001,
+        "cumulative_s": 5.1219808350000005
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits",
+        "calls": 78,
+        "self_s": 0.0005574180000000001,
+        "cumulative_s": 0.00777466
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_snapshot",
+        "calls": 66,
+        "self_s": 0.015716557000000003,
+        "cumulative_s": 11.001966958
+      },
+      {
+        "file": "formatter.py",
+        "function": "clean_blank_line_whitespace",
+        "calls": 10,
+        "self_s": 0.0012944290000000002,
+        "cumulative_s": 1.263433999
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons",
+        "calls": 10,
+        "self_s": 0.001056509,
+        "cumulative_s": 1.262598667
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceMap.build",
+        "calls": 189,
+        "self_s": 0.033646023000000004,
+        "cumulative_s": 0.135368825
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceLinter.parse_string",
+        "calls": 144,
+        "self_s": 0.004737825,
+        "cumulative_s": 19.376665702
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceMap.__post_init__",
+        "calls": 189,
+        "self_s": 0.046664091000000005,
+        "cumulative_s": 0.07458516500000001
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "normalize_external_newlines",
+        "calls": 12,
+        "self_s": 0.0008968400000000001,
+        "cumulative_s": 0.016175919
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__init__",
+        "calls": 185,
+        "self_s": 0.002409309,
+        "cumulative_s": 2.145456954
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_templater_class",
+        "calls": 185,
+        "self_s": 0.001355777,
+        "cumulative_s": 0.005133327
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.remove_templated_errors",
+        "calls": 34,
+        "self_s": 1.0834e-05,
+        "cumulative_s": 1.0834e-05
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.parse_rendered",
+        "calls": 178,
+        "self_s": 0.003540745,
+        "cumulative_s": 23.880899507000002
+      },
+      {
+        "file": "formatter_dialect.py",
+        "function": "is_procedure",
+        "calls": 188,
+        "self_s": 0.005320638,
+        "cumulative_s": 0.7947507420000001
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "_tokens.<locals>.visit",
+        "calls": 8052,
+        "self_s": 0.015684487,
+        "cumulative_s": 0.044220413
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "statement_margin_edits",
+        "calls": 10,
+        "self_s": 6.0168000000000004e-05,
+        "cumulative_s": 0.00013425
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 2.4e-05,
+        "cumulative_s": 0.00202575
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "procedure_config",
+        "calls": 12,
+        "self_s": 0.00023733300000000003,
+        "cumulative_s": 0.10833616700000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged",
+        "calls": 22,
+        "self_s": 0.017006899000000002,
+        "cumulative_s": 14.940762585000002
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_groupby_header_comments",
+        "calls": 10,
+        "self_s": 0.0011861600000000001,
+        "cumulative_s": 1.1737939990000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing",
+        "calls": 10,
+        "self_s": 0.0015620850000000002,
+        "cumulative_s": 0.0035750400000000002
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_snapshot.<locals>.collect",
+        "calls": 23084,
+        "self_s": 0.037241338000000006,
+        "cumulative_s": 0.115782039
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.region",
+        "calls": 20,
+        "self_s": 6.880100000000001e-05,
+        "cumulative_s": 0.000231835
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_select_field_indents",
+        "calls": 10,
+        "self_s": 0.00128263,
+        "cumulative_s": 1.268662124
+      },
+      {
+        "file": "formatter.py",
+        "function": "remove_select_blank_lines",
+        "calls": 10,
+        "self_s": 0.003030183,
+        "cumulative_s": 1.281023958
+      },
+      {
+        "file": "lexer.py",
+        "function": "_iter_segments",
+        "calls": 44973,
+        "self_s": 0.133805691,
+        "cumulative_s": 0.489629158
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits",
+        "calls": 20,
+        "self_s": 0.000333802,
+        "cumulative_s": 0.006002622
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins",
+        "calls": 20,
+        "self_s": 0.0005292970000000001,
+        "cumulative_s": 0.0025015840000000003
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.render",
+        "calls": 42,
+        "self_s": 0.001241041,
+        "cumulative_s": 20.875891708
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.add_edits",
+        "calls": 20,
+        "self_s": 0.000283384,
+        "cumulative_s": 0.0014832080000000002
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql",
+        "calls": 12,
+        "self_s": 0.016712357,
+        "cumulative_s": 28.309708541000003
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure",
+        "calls": 3,
+        "self_s": 0.003336875,
+        "cumulative_s": 28.30917
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._lex_templated_file",
+        "calls": 177,
+        "self_s": 0.015673248,
+        "cumulative_s": 1.90194879
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.render_string",
+        "calls": 177,
+        "self_s": 0.0023878280000000003,
+        "cumulative_s": 0.020094381
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._parse_tokens",
+        "calls": 178,
+        "self_s": 0.049202447,
+        "cumulative_s": 22.011200584
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_fix_parsed",
+        "calls": 34,
+        "self_s": 0.0017650790000000001,
+        "cumulative_s": 0.24129708300000002
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_parsed",
+        "calls": 34,
+        "self_s": 0.000642636,
+        "cumulative_s": 0.24228733100000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_parts",
+        "calls": 112,
+        "self_s": 0.007428086,
+        "cumulative_s": 0.057250286000000004
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "normalize_case",
+        "calls": 34,
+        "self_s": 0.0033663300000000003,
+        "cumulative_s": 6.554185375
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits",
+        "calls": 10,
+        "self_s": 0.0028374370000000004,
+        "cumulative_s": 0.09653800000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render",
+        "calls": 20,
+        "self_s": 0.004031117,
+        "cumulative_s": 0.047815543
+      }
+    ],
+    "trace": [
+      {
+        "stage": "normalize",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "END",
+        "elapsed_ms": 3.707
+      },
+      {
+        "stage": "parse",
+        "code": "START"
+      },
+      {
+        "stage": "parse",
+        "code": "END",
+        "elapsed_ms": 581.125
+      },
+      {
+        "stage": "layout",
+        "code": "START",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 116
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 116,
+        "elapsed_ms": 2094.442
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 343
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 343,
+        "elapsed_ms": 1923.258
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 570
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 570,
+        "elapsed_ms": 1941.692
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 804
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 804,
+        "elapsed_ms": 1906.592
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 1059
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 1059,
+        "elapsed_ms": 1954.218
+      },
+      {
+        "stage": "layout",
+        "code": "END",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0,
+        "elapsed_ms": 10474.801
+      },
+      {
+        "stage": "planner",
+        "code": "START"
+      },
+      {
+        "stage": "planner",
+        "code": "END",
+        "elapsed_ms": 6.251
+      },
+      {
+        "stage": "case",
+        "code": "START"
+      },
+      {
+        "stage": "case",
+        "code": "END",
+        "elapsed_ms": 669.581
+      },
+      {
+        "stage": "validate",
+        "code": "START"
+      },
+      {
+        "stage": "validate",
+        "code": "END",
+        "elapsed_ms": 2341.63
+      },
+      {
+        "stage": "repeat",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "END",
+        "elapsed_ms": 6.392
+      },
+      {
+        "stage": "parse",
+        "code": "START"
+      },
+      {
+        "stage": "parse",
+        "code": "END",
+        "elapsed_ms": 616.005
+      },
+      {
+        "stage": "layout",
+        "code": "START",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 11,
+        "offset": 148
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 11,
+        "offset": 148,
+        "elapsed_ms": 1939.515
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 36,
+        "offset": 618
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 36,
+        "offset": 618,
+        "elapsed_ms": 1908.532
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 61,
+        "offset": 1088
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 61,
+        "offset": 1088,
+        "elapsed_ms": 1984.889
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 87,
+        "offset": 1576
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 87,
+        "offset": 1576,
+        "elapsed_ms": 1907.952
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 116,
+        "offset": 2170
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 116,
+        "offset": 2170,
+        "elapsed_ms": 1963.507
+      },
+      {
+        "stage": "layout",
+        "code": "END",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0,
+        "elapsed_ms": 10401.802
+      },
+      {
+        "stage": "planner",
+        "code": "START"
+      },
+      {
+        "stage": "planner",
+        "code": "END",
+        "elapsed_ms": 0.344
+      },
+      {
+        "stage": "case",
+        "code": "START"
+      },
+      {
+        "stage": "case",
+        "code": "END",
+        "elapsed_ms": 661.471
+      },
+      {
+        "stage": "validate",
+        "code": "START"
+      },
+      {
+        "stage": "validate",
+        "code": "END",
+        "elapsed_ms": 2639.256
+      },
+      {
+        "stage": "repeat",
+        "code": "END",
+        "elapsed_ms": 14341.77
+      }
+    ],
+    "adapter": {
+      "elapsed_s": 0.8280545000452548,
+      "stdout_sha256": "b7c28b6c3881dc8d2650c2a2487be234a24f96f93a6f1d276a545b2c55f1a578",
+      "stderr_bytes": 0,
+      "trace": [
+        {
+          "stage": "read",
+          "code": "START"
+        },
+        {
+          "stage": "read",
+          "code": "END",
+          "elapsed_ms": 0.81
+        },
+        {
+          "stage": "profile",
+          "code": "START"
+        },
+        {
+          "stage": "profile",
+          "code": "END",
+          "elapsed_ms": 0.1
+        },
+        {
+          "stage": "decode",
+          "code": "START"
+        },
+        {
+          "stage": "decode",
+          "code": "END",
+          "elapsed_ms": 0.225
+        },
+        {
+          "stage": "adapter_format",
+          "code": "START"
+        },
+        {
+          "stage": "adapter_format",
+          "code": "END",
+          "elapsed_ms": 441.065
+        },
+        {
+          "stage": "adapter_validate",
+          "code": "START"
+        },
+        {
+          "stage": "adapter_validate",
+          "code": "END",
+          "elapsed_ms": 58.224
+        }
+      ]
+    }
+  },
+  "candidate": {
+    "instrumented_s": 14.671555500011891,
+    "profile": [
+      {
+        "file": "formatter_request.py",
+        "function": "request_scope.<locals>.call",
+        "calls": 34,
+        "self_s": 0.002832241,
+        "cumulative_s": 14.403880667000001
+      },
+      {
+        "file": "formatter_request.py",
+        "function": "proof_memo.<locals>.decorate.<locals>.call",
+        "calls": 100,
+        "self_s": 0.0037292120000000004,
+        "cumulative_s": 3.7552134550000003
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_templater_class",
+        "calls": 90,
+        "self_s": 0.0005432060000000001,
+        "cumulative_s": 0.001984796
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__init__",
+        "calls": 90,
+        "self_s": 0.00124182,
+        "cumulative_s": 1.0754857930000001
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.remove_templated_errors",
+        "calls": 5,
+        "self_s": 1.624e-06,
+        "cumulative_s": 1.624e-06
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 0.0009265330000000001,
+        "cumulative_s": 0.007935211000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "clean_blank_line_whitespace.<locals>.<genexpr>",
+        "calls": 2610,
+        "self_s": 0.001060182,
+        "cumulative_s": 0.008106077
+      },
+      {
+        "file": "formatter.py",
+        "function": "walk",
+        "calls": 532347,
+        "self_s": 0.074435441,
+        "cumulative_s": 0.074435441
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_snapshot",
+        "calls": 66,
+        "self_s": 0.00010321600000000001,
+        "cumulative_s": 1.963820499
+      },
+      {
+        "file": "formatter.py",
+        "function": "<lambda>",
+        "calls": 66,
+        "self_s": 1.3872e-05,
+        "cumulative_s": 1.3872e-05
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged.<locals>.protected_values",
+        "calls": 44,
+        "self_s": 3.7000000000000005e-05,
+        "cumulative_s": 0.013627795000000002
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "project_config",
+        "calls": 78,
+        "self_s": 0.000406382,
+        "cumulative_s": 0.878104961
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged.<locals>.has_prefix",
+        "calls": 90,
+        "self_s": 0.00010258600000000001,
+        "cumulative_s": 0.000115798
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing.<locals>.visual_blank.<locals>.<genexpr>",
+        "calls": 280,
+        "self_s": 0.000110246,
+        "cumulative_s": 0.00022866700000000002
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "source_linter",
+        "calls": 78,
+        "self_s": 0.00010971,
+        "cumulative_s": 0.878292544
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons.<locals>.<lambda>",
+        "calls": 10,
+        "self_s": 1.7070000000000001e-06,
+        "cumulative_s": 1.7070000000000001e-06
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing.<locals>.visual_blank",
+        "calls": 120,
+        "self_s": 0.000262212,
+        "cumulative_s": 0.000582211
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_data.<locals>.collect.<locals>.<genexpr>",
+        "calls": 56,
+        "self_s": 4.1506000000000005e-05,
+        "cumulative_s": 0.00018212500000000002
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.0089e-05,
+        "cumulative_s": 7.466800000000001e-05
+      },
+      {
+        "file": "formatter_request.py",
+        "function": "_Request.__init__",
+        "calls": 1,
+        "self_s": 4.208e-06,
+        "cumulative_s": 4.458e-06
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceLinter.__init__",
+        "calls": 78,
+        "self_s": 7.7873e-05,
+        "cumulative_s": 0.8781828340000001
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "_tokens",
+        "calls": 5,
+        "self_s": 9.958e-06,
+        "cumulative_s": 0.011667083
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<lambda>",
+        "calls": 26,
+        "self_s": 1.787e-05,
+        "cumulative_s": 0.000159454
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons.<locals>.<genexpr>",
+        "calls": 2610,
+        "self_s": 0.001128553,
+        "cumulative_s": 0.008300128
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_data.<locals>.<genexpr>",
+        "calls": 3666,
+        "self_s": 0.001432923,
+        "cumulative_s": 0.011829890000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_select_field_indents.<locals>.<genexpr>",
+        "calls": 2620,
+        "self_s": 0.00109063,
+        "cumulative_s": 0.008221057
+      },
+      {
+        "file": "formatter.py",
+        "function": "remove_select_blank_lines.<locals>.<genexpr>",
+        "calls": 2620,
+        "self_s": 0.0011064690000000001,
+        "cumulative_s": 0.008253424
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 2410,
+        "self_s": 0.001023887,
+        "cumulative_s": 0.007500515
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 1275,
+        "self_s": 0.000532033,
+        "cumulative_s": 0.003961813000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.<genexpr>",
+        "calls": 1525,
+        "self_s": 0.000644936,
+        "cumulative_s": 0.0038702240000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 2290,
+        "self_s": 0.0015868420000000002,
+        "cumulative_s": 0.009700652
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._lex_templated_file",
+        "calls": 88,
+        "self_s": 0.007584948,
+        "cumulative_s": 0.934522371
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._parse_tokens",
+        "calls": 89,
+        "self_s": 0.019638646000000003,
+        "cumulative_s": 10.91292683
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_fix_parsed",
+        "calls": 5,
+        "self_s": 0.000313871,
+        "cumulative_s": 0.060014292000000004
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_parsed",
+        "calls": 5,
+        "self_s": 0.00010237700000000001,
+        "cumulative_s": 0.060163876000000005
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits",
+        "calls": 49,
+        "self_s": 0.00046143700000000003,
+        "cumulative_s": 0.007745042000000001
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.render_string",
+        "calls": 88,
+        "self_s": 0.001054856,
+        "cumulative_s": 0.008844208000000001
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "normalize_case",
+        "calls": 5,
+        "self_s": 0.000727461,
+        "cumulative_s": 1.7848194570000002
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits",
+        "calls": 20,
+        "self_s": 0.000410046,
+        "cumulative_s": 0.005928417
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "event",
+        "calls": 46,
+        "self_s": 0.0007803640000000001,
+        "cumulative_s": 0.012668707000000001
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure",
+        "calls": 3,
+        "self_s": 0.0012080790000000001,
+        "cumulative_s": 14.403174833000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "validate_sql_unchanged",
+        "calls": 22,
+        "self_s": 0.0013452490000000002,
+        "cumulative_s": 2.992803291
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.copy",
+        "calls": 94,
+        "self_s": 0.000599369,
+        "cumulative_s": 0.10554904200000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.verify_dialect_specified",
+        "calls": 88,
+        "self_s": 5.4757000000000004e-05,
+        "cumulative_s": 7.8464e-05
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__setstate__",
+        "calls": 94,
+        "self_s": 0.000127803,
+        "cumulative_s": 0.000288461
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._initialise_dialect",
+        "calls": 90,
+        "self_s": 0.00034258000000000004,
+        "cumulative_s": 0.7671942500000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.__getstate__",
+        "calls": 94,
+        "self_s": 0.000209072,
+        "cumulative_s": 0.000354701
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_section",
+        "calls": 1574,
+        "self_s": 0.0010183100000000001,
+        "cumulative_s": 0.001569405
+      },
+      {
+        "file": "formatter_dialect.py",
+        "function": "select_config",
+        "calls": 88,
+        "self_s": 0.001908708,
+        "cumulative_s": 0.373582087
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._handle_comma_separated_values",
+        "calls": 90,
+        "self_s": 0.00040129300000000005,
+        "cumulative_s": 0.0009595340000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.violations_from_segments",
+        "calls": 95,
+        "self_s": 0.0040712610000000005,
+        "cumulative_s": 0.033977924
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get",
+        "calls": 1313,
+        "self_s": 0.0008660940000000001,
+        "cumulative_s": 0.002324192
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.from_path",
+        "calls": 83,
+        "self_s": 0.0009861660000000001,
+        "cumulative_s": 0.9311000840000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig.get_templater",
+        "calls": 90,
+        "self_s": 0.00021604000000000003,
+        "cumulative_s": 0.002257582
+      },
+      {
+        "file": "lexer.py",
+        "function": "TemplateElement.to_segment",
+        "calls": 22383,
+        "self_s": 0.008727491,
+        "cumulative_s": 0.08592347900000001
+      },
+      {
+        "file": "fluffconfig.py",
+        "function": "FluffConfig._verify_rust_config",
+        "calls": 90,
+        "self_s": 0.00012534700000000002,
+        "cumulative_s": 0.000175841
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parse",
+        "calls": 12,
+        "self_s": 5.6251e-05,
+        "cumulative_s": 0.009459456
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.__init__",
+        "calls": 95,
+        "self_s": 0.00027041,
+        "cumulative_s": 0.002514581
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.__init__",
+        "calls": 12,
+        "self_s": 2.1230000000000003e-06,
+        "cumulative_s": 2.1230000000000003e-06
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>",
+        "calls": 26,
+        "self_s": 0.00035042900000000003,
+        "cumulative_s": 0.006608915000000001
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parsestr",
+        "calls": 12,
+        "self_s": 6.1501e-05,
+        "cumulative_s": 0.009520957
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 14366,
+        "self_s": 0.0025011960000000002,
+        "cumulative_s": 0.005054783
+      },
+      {
+        "file": "lexer.py",
+        "function": "RegexLexer._match",
+        "calls": 184133,
+        "self_s": 0.052028324,
+        "cumulative_s": 0.157607293
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.__init__",
+        "calls": 135,
+        "self_s": 0.000303077,
+        "cumulative_s": 0.0079985
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer._match",
+        "calls": 235708,
+        "self_s": 0.062263567000000006,
+        "cumulative_s": 0.108199393
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.arithmetic_walk",
+        "calls": 16070,
+        "self_s": 0.004470119000000001,
+        "cumulative_s": 0.012364573
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.parse_rendered",
+        "calls": 89,
+        "self_s": 0.0018135120000000002,
+        "cumulative_s": 11.812684747
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "edits_overlap",
+        "calls": 14065,
+        "self_s": 0.002553587,
+        "cumulative_s": 0.002553587
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "stage",
+        "calls": 46,
+        "self_s": 0.00025709400000000003,
+        "cumulative_s": 0.013061295
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment",
+        "calls": 10,
+        "self_s": 0.000341935,
+        "cumulative_s": 0.0020469150000000003
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "normalize_case.<locals>.parse",
+        "calls": 5,
+        "self_s": 0.000174331,
+        "cumulative_s": 1.313396417
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.match",
+        "calls": 419841,
+        "self_s": 0.28459960900000003,
+        "cumulative_s": 0.7498258760000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.lex_match",
+        "calls": 95,
+        "self_s": 0.10274912900000001,
+        "cumulative_s": 0.854570496
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 301,
+        "self_s": 2.8989000000000003e-05,
+        "cumulative_s": 2.8989000000000003e-05
+      },
+      {
+        "file": "lexer.py",
+        "function": "TemplateElement.from_element",
+        "calls": 22383,
+        "self_s": 0.011938334,
+        "cumulative_s": 0.020705621
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._lex_templated_file.<locals>.<genexpr>",
+        "calls": 17176,
+        "self_s": 0.0027596770000000003,
+        "cumulative_s": 0.004567394000000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "RegexLexer.__post_init__",
+        "calls": 110,
+        "self_s": 8.5961e-05,
+        "cumulative_s": 0.0075961710000000005
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<lambda>.<locals>.<genexpr>",
+        "calls": 327,
+        "self_s": 6.2783e-05,
+        "cumulative_s": 6.2783e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "start",
+        "calls": 398,
+        "self_s": 9.0668e-05,
+        "cumulative_s": 9.0668e-05
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.__init__",
+        "calls": 88,
+        "self_s": 0.00013221900000000002,
+        "cumulative_s": 0.00040833700000000004
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.__post_init__",
+        "calls": 25,
+        "self_s": 2.751e-06,
+        "cumulative_s": 2.751e-06
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer.construct_segment",
+        "calls": 22383,
+        "self_s": 0.01934558,
+        "cumulative_s": 0.07719598800000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_gap_edits",
+        "calls": 10,
+        "self_s": 6.4959e-05,
+        "cumulative_s": 0.013363791000000002
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "indented_fragment",
+        "calls": 10,
+        "self_s": 0.000394171,
+        "cumulative_s": 0.0026042500000000002
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter._normalise_newlines",
+        "calls": 88,
+        "self_s": 0.000105839,
+        "cumulative_s": 0.0027140930000000003
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.lint_fix_parsed.<locals>.is_first_linter_pass",
+        "calls": 30,
+        "self_s": 9.250000000000001e-06,
+        "cumulative_s": 9.250000000000001e-06
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.__init__",
+        "calls": 88,
+        "self_s": 0.00020541500000000002,
+        "cumulative_s": 0.000562747
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "apply_edits",
+        "calls": 44,
+        "self_s": 0.000216705,
+        "cumulative_s": 0.000317665
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "_owned_walk",
+        "calls": 15695,
+        "self_s": 0.0037685950000000005,
+        "cumulative_s": 0.007997447000000001
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "<lambda>",
+        "calls": 34,
+        "self_s": 7.998e-06,
+        "cumulative_s": 7.998e-06
+      },
+      {
+        "file": "linter.py",
+        "function": "Linter.get_rulepack",
+        "calls": 5,
+        "self_s": 4.7041000000000006e-05,
+        "cumulative_s": 0.211124583
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.owned_brackets",
+        "calls": 2380,
+        "self_s": 0.0019225380000000001,
+        "cumulative_s": 0.007142002000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 4.5459e-05,
+        "cumulative_s": 0.00022499800000000002
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "apply_edits.<locals>.<lambda>",
+        "calls": 301,
+        "self_s": 2.599e-05,
+        "cumulative_s": 2.599e-05
+      },
+      {
+        "file": "formatter_guarded_pass.py",
+        "function": "guarded_pass.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 1.7920000000000002e-06,
+        "cumulative_s": 1.7920000000000002e-06
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "_walk",
+        "calls": 177686,
+        "self_s": 0.023755817000000002,
+        "cumulative_s": 0.023755817000000002
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 5.2053000000000005e-05,
+        "cumulative_s": 0.000296215
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 6.290000000000001e-06,
+        "cumulative_s": 6.290000000000001e-06
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 4.5504000000000003e-05,
+        "cumulative_s": 0.000268545
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.0249000000000002e-05,
+        "cumulative_s": 3.8791e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 2.6453000000000002e-05,
+        "cumulative_s": 6.454e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.6956e-05,
+        "cumulative_s": 3.6206000000000005e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 190,
+        "self_s": 8.0462e-05,
+        "cumulative_s": 0.00029037800000000004
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 160,
+        "self_s": 5.3737000000000004e-05,
+        "cumulative_s": 0.000222415
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.region.<locals>.<genexpr>",
+        "calls": 80,
+        "self_s": 2.9371e-05,
+        "cumulative_s": 0.00011158000000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 2290,
+        "self_s": 0.000869265,
+        "cumulative_s": 0.005838994
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>.<genexpr>",
+        "calls": 50,
+        "self_s": 1.7753e-05,
+        "cumulative_s": 7.000000000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 110,
+        "self_s": 3.5777e-05,
+        "cumulative_s": 0.000159533
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 690,
+        "self_s": 0.00028496,
+        "cumulative_s": 0.002714461
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.arithmetic_walk.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 1.7375000000000002e-05,
+        "cumulative_s": 4.9042e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 2.041e-06,
+        "cumulative_s": 2.041e-06
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.locate",
+        "calls": 2280,
+        "self_s": 0.001846303,
+        "cumulative_s": 0.00736775
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 2.1375e-05,
+        "cumulative_s": 0.0012551670000000002
+      },
+      {
+        "file": "formatter_edits.py",
+        "function": "plan_edits.<locals>.<genexpr>",
+        "calls": 26,
+        "self_s": 0.00010201000000000001,
+        "cumulative_s": 0.000227545
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<lambda>",
+        "calls": 40,
+        "self_s": 1.0005e-05,
+        "cumulative_s": 1.0005e-05
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<lambda>",
+        "calls": 20,
+        "self_s": 4.963000000000001e-06,
+        "cumulative_s": 4.963000000000001e-06
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 60,
+        "self_s": 1.6956e-05,
+        "cumulative_s": 1.6956e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.<lambda>",
+        "calls": 70,
+        "self_s": 1.8376e-05,
+        "cumulative_s": 1.8376e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.<lambda>",
+        "calls": 70,
+        "self_s": 1.7715000000000002e-05,
+        "cumulative_s": 1.7715000000000002e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 1.5878e-05,
+        "cumulative_s": 2.4752000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 4.167e-06,
+        "cumulative_s": 1.2833e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 4.96e-06,
+        "cumulative_s": 1.3334000000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 9.131000000000001e-06,
+        "cumulative_s": 1.7628e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.1629000000000002e-05,
+        "cumulative_s": 0.000110791
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 2.2423000000000002e-05,
+        "cumulative_s": 5.4254000000000006e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 0.000442788,
+        "cumulative_s": 0.003041293
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.start",
+        "calls": 2545,
+        "self_s": 0.000339163,
+        "cumulative_s": 0.000339163
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.stop",
+        "calls": 2545,
+        "self_s": 0.00034329,
+        "cumulative_s": 0.00034329
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.8041000000000002e-05,
+        "cumulative_s": 6.3373e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 6.503e-06,
+        "cumulative_s": 1.3918000000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.3376e-05,
+        "cumulative_s": 6.4375e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 3.1834e-05,
+        "cumulative_s": 4.7916e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 2.0878000000000002e-05,
+        "cumulative_s": 3.4086000000000005e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.propose",
+        "calls": 40,
+        "self_s": 1.0624e-05,
+        "cumulative_s": 1.0624e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>.<genexpr>",
+        "calls": 40,
+        "self_s": 0.00010346400000000001,
+        "cumulative_s": 0.00020546100000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 640,
+        "self_s": 0.000271591,
+        "cumulative_s": 0.001227288
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 3.3258e-05,
+        "cumulative_s": 6.5169e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "code",
+        "calls": 70,
+        "self_s": 0.00013554000000000002,
+        "cumulative_s": 0.00025041800000000003
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.gap",
+        "calls": 104,
+        "self_s": 7.425900000000001e-05,
+        "cumulative_s": 0.00019425100000000002
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.kind",
+        "calls": 20,
+        "self_s": 2.6964e-05,
+        "cumulative_s": 8.5918e-05
+      },
+      {
+        "file": "formatter_list_gaps.py",
+        "function": "select_gap_edits.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 1.9214000000000003e-05,
+        "cumulative_s": 1.9214000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 2.4560000000000003e-06,
+        "cumulative_s": 2.4560000000000003e-06
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "indented_fragment.<locals>.<genexpr>",
+        "calls": 180,
+        "self_s": 2.3534000000000002e-05,
+        "cumulative_s": 2.3534000000000002e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment.<locals>.<genexpr>",
+        "calls": 110,
+        "self_s": 1.2998000000000002e-05,
+        "cumulative_s": 1.2998000000000002e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.4916e-05,
+        "cumulative_s": 3.1457e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureDeclareSegment",
+        "calls": 1,
+        "self_s": 6.749e-06,
+        "cumulative_s": 8.6e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "statement_margin_edits.<locals>.<genexpr>",
+        "calls": 10,
+        "self_s": 2.9980000000000003e-06,
+        "cumulative_s": 2.9980000000000003e-06
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.edit",
+        "calls": 234,
+        "self_s": 0.000160586,
+        "cumulative_s": 0.00039924700000000004
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "walk",
+        "calls": 68054,
+        "self_s": 0.008990181,
+        "cumulative_s": 0.008990181
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 2659,
+        "self_s": 0.000984181,
+        "cumulative_s": 0.008631296
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators.<locals>.<genexpr>",
+        "calls": 8,
+        "self_s": 9.624000000000001e-06,
+        "cumulative_s": 1.4623e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators.<locals>.<genexpr>",
+        "calls": 8,
+        "self_s": 7.169e-06,
+        "cumulative_s": 1.096e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 140,
+        "self_s": 4.2713e-05,
+        "cumulative_s": 9.6382e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 1.2461000000000001e-05,
+        "cumulative_s": 2.7127000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 40,
+        "self_s": 5.4093000000000005e-05,
+        "cumulative_s": 0.000401921
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 7.544e-06,
+        "cumulative_s": 1.5293e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 6.313e-05,
+        "cumulative_s": 0.00010966400000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 6.945100000000001e-05,
+        "cumulative_s": 0.000123542
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 5.9284000000000004e-05,
+        "cumulative_s": 0.00010128900000000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 7.756000000000001e-05,
+        "cumulative_s": 0.000136584
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.2748e-05,
+        "cumulative_s": 2.0206000000000003e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 5.4687e-05,
+        "cumulative_s": 9.303700000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 30,
+        "self_s": 4.7707e-05,
+        "cumulative_s": 8.299800000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 8.27e-05,
+        "cumulative_s": 0.000140123
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 50,
+        "self_s": 9.1524e-05,
+        "cumulative_s": 0.00016104000000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.1459e-05,
+        "cumulative_s": 1.9417e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.9374e-05,
+        "cumulative_s": 9.604100000000001e-05
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_parts.<locals>.<genexpr>",
+        "calls": 122,
+        "self_s": 5.6166000000000004e-05,
+        "cumulative_s": 0.00019654400000000002
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.items.<locals>.<genexpr>",
+        "calls": 2,
+        "self_s": 3.34e-07,
+        "cumulative_s": 3.34e-07
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureDefinitionSegment",
+        "calls": 1,
+        "self_s": 7.04e-06,
+        "cumulative_s": 0.000117416
+      },
+      {
+        "file": "formatter_trace.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 2.2625e-05,
+        "cumulative_s": 4e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureExecutableSegment",
+        "calls": 1,
+        "self_s": 7.333000000000001e-06,
+        "cumulative_s": 0.00010333300000000001
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml.<locals>.<genexpr>",
+        "calls": 20,
+        "self_s": 1.3168000000000002e-05,
+        "cumulative_s": 3.4168e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "stop",
+        "calls": 128,
+        "self_s": 3.8706000000000005e-05,
+        "cumulative_s": 3.8706000000000005e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 4,
+        "self_s": 3.625e-06,
+        "cumulative_s": 1.1041000000000002e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureParameterSegment",
+        "calls": 1,
+        "self_s": 6.8330000000000005e-06,
+        "cumulative_s": 0.00011362500000000001
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureSetSegment",
+        "calls": 1,
+        "self_s": 2.791e-06,
+        "cumulative_s": 4.5833e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "local_dml_fragment.<locals>.<genexpr>",
+        "calls": 55,
+        "self_s": 1.1874e-05,
+        "cumulative_s": 1.1874e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureSecuritySegment",
+        "calls": 1,
+        "self_s": 1.6260000000000002e-06,
+        "cumulative_s": 4.0792000000000005e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureFileSegment",
+        "calls": 1,
+        "self_s": 2.041e-06,
+        "cumulative_s": 2.6333e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureParse",
+        "calls": 1,
+        "self_s": 2.708e-06,
+        "cumulative_s": 2.708e-06
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.<genexpr>",
+        "calls": 2659,
+        "self_s": 0.001006053,
+        "cumulative_s": 0.00876742
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "ProcedureRefusal",
+        "calls": 1,
+        "self_s": 7.91e-07,
+        "cumulative_s": 7.91e-07
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureBlockSegment",
+        "calls": 1,
+        "self_s": 5.584e-06,
+        "cumulative_s": 8.354200000000001e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureCallSegment",
+        "calls": 1,
+        "self_s": 1.1375e-05,
+        "cumulative_s": 7.5166e-05
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "ProcedureWhileSegment",
+        "calls": 1,
+        "self_s": 4.626e-06,
+        "cumulative_s": 9.0042e-05
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceMap.build",
+        "calls": 100,
+        "self_s": 0.017561072,
+        "cumulative_s": 0.07051887400000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_data",
+        "calls": 6,
+        "self_s": 0.001476873,
+        "cumulative_s": 1.651814874
+      },
+      {
+        "file": "formatter.py",
+        "function": "clean_blank_line_whitespace",
+        "calls": 10,
+        "self_s": 0.001286367,
+        "cumulative_s": 1.3701660820000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_semicolons",
+        "calls": 10,
+        "self_s": 0.001043129,
+        "cumulative_s": 1.315235084
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceLinter.parse_string",
+        "calls": 84,
+        "self_s": 0.002452591,
+        "cumulative_s": 10.848411457000001
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "SourceMap.__post_init__",
+        "calls": 100,
+        "self_s": 0.024095110000000003,
+        "cumulative_s": 0.038866869000000005
+      },
+      {
+        "file": "formatter_runtime.py",
+        "function": "normalize_external_newlines",
+        "calls": 12,
+        "self_s": 0.0009231240000000001,
+        "cumulative_s": 0.015962375
+      },
+      {
+        "file": "formatter_case.py",
+        "function": "_tokens.<locals>.visit",
+        "calls": 2133,
+        "self_s": 0.0039495170000000005,
+        "cumulative_s": 0.011657125
+      },
+      {
+        "file": "formatter_protection.py",
+        "function": "ambiguous_comment_spans",
+        "calls": 42,
+        "self_s": 4.8378e-05,
+        "cumulative_s": 0.010085334000000001
+      },
+      {
+        "file": "formatter_dialect.py",
+        "function": "is_procedure",
+        "calls": 99,
+        "self_s": 0.002643681,
+        "cumulative_s": 0.454461418
+      },
+      {
+        "file": "formatter_protection.py",
+        "function": "protected_spans",
+        "calls": 200,
+        "self_s": 0.023913213000000003,
+        "cumulative_s": 0.052548830000000005
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "statement_margin_edits",
+        "calls": 10,
+        "self_s": 4.6423000000000006e-05,
+        "cumulative_s": 0.000117084
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.gap",
+        "calls": 330,
+        "self_s": 0.000327695,
+        "cumulative_s": 0.000547911
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "<module>",
+        "calls": 1,
+        "self_s": 2.1294e-05,
+        "cumulative_s": 0.001887042
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.operators",
+        "calls": 6,
+        "self_s": 7.137300000000001e-05,
+        "cumulative_s": 0.00025825
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits",
+        "calls": 20,
+        "self_s": 0.000386118,
+        "cumulative_s": 0.004539039
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.boundary",
+        "calls": 50,
+        "self_s": 3.3372000000000005e-05,
+        "cumulative_s": 0.00016212300000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.join_boundary",
+        "calls": 100,
+        "self_s": 4.9667000000000004e-05,
+        "cumulative_s": 0.00019983400000000003
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.body_units",
+        "calls": 6,
+        "self_s": 7.604500000000001e-05,
+        "cumulative_s": 10.736218667000001
+      },
+      {
+        "file": "teradata_procedure_grammar.py",
+        "function": "procedure_config",
+        "calls": 6,
+        "self_s": 0.00011138000000000001,
+        "cumulative_s": 0.052638875
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.items",
+        "calls": 2,
+        "self_s": 2.2751000000000003e-05,
+        "cumulative_s": 8.000100000000001e-05
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.dml",
+        "calls": 10,
+        "self_s": 0.0021132990000000003,
+        "cumulative_s": 10.734206082
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.boundary",
+        "calls": 102,
+        "self_s": 5.4788000000000005e-05,
+        "cumulative_s": 0.00024366300000000003
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_select_field_indents",
+        "calls": 10,
+        "self_s": 0.0012651210000000001,
+        "cumulative_s": 1.220224958
+      },
+      {
+        "file": "formatter.py",
+        "function": "_validation_data.<locals>.collect",
+        "calls": 3660,
+        "self_s": 0.005759164000000001,
+        "cumulative_s": 0.017803544
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql.<locals>.add_edits",
+        "calls": 20,
+        "self_s": 0.00027753,
+        "cumulative_s": 0.001460418
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_clause_spacing",
+        "calls": 10,
+        "self_s": 0.001612752,
+        "cumulative_s": 0.004134542000000001
+      },
+      {
+        "file": "formatter.py",
+        "function": "normalize_groupby_header_comments",
+        "calls": 10,
+        "self_s": 0.001126487,
+        "cumulative_s": 1.138564001
+      },
+      {
+        "file": "formatter.py",
+        "function": "remove_select_blank_lines",
+        "calls": 10,
+        "self_s": 0.0028951980000000003,
+        "cumulative_s": 1.2141193750000001
+      },
+      {
+        "file": "formatter_procedure.py",
+        "function": "format_procedure.<locals>.render",
+        "calls": 42,
+        "self_s": 0.0009885900000000001,
+        "cumulative_s": 10.736463291000002
+      },
+      {
+        "file": "formatter_guarded_pass.py",
+        "function": "guarded_pass",
+        "calls": 50,
+        "self_s": 0.009139047,
+        "cumulative_s": 5.163742544000001
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "commented_clause_gap_edits.<locals>.region",
+        "calls": 20,
+        "self_s": 6.0457e-05,
+        "cumulative_s": 0.00021441800000000002
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render_joins",
+        "calls": 20,
+        "self_s": 0.000596251,
+        "cumulative_s": 0.0025480420000000004
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "table_alias_parts",
+        "calls": 64,
+        "self_s": 0.004403553,
+        "cumulative_s": 0.034867163
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits",
+        "calls": 10,
+        "self_s": 0.00312821,
+        "cumulative_s": 0.096180208
+      },
+      {
+        "file": "formatter_clause_gaps.py",
+        "function": "nested_query_gap_edits.<locals>.render",
+        "calls": 20,
+        "self_s": 0.004431148,
+        "cumulative_s": 0.047758042
+      },
+      {
+        "file": "formatter.py",
+        "function": "format_sql",
+        "calls": 12,
+        "self_s": 0.012907551000000001,
+        "cumulative_s": 14.403737084000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.lex",
+        "calls": 95,
+        "self_s": 0.0009394560000000001,
+        "cumulative_s": 1.200091789
+      },
+      {
+        "file": "lexer.py",
+        "function": "StringLexer._subdivide",
+        "calls": 22383,
+        "self_s": 0.003792908,
+        "cumulative_s": 0.003792908
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.elements_to_segments",
+        "calls": 95,
+        "self_s": 0.0041191710000000005,
+        "cumulative_s": 0.24296941400000002
+      },
+      {
+        "file": "lexer.py",
+        "function": "PyLexer.map_template_slices",
+        "calls": 95,
+        "self_s": 0.034181852,
+        "cumulative_s": 0.066910088
+      },
+      {
+        "file": "parser.py",
+        "function": "Parser.parse",
+        "calls": 88,
+        "self_s": 0.000516078,
+        "cumulative_s": 10.768663379000001
+      },
+      {
+        "file": "lexer.py",
+        "function": "_iter_segments",
+        "calls": 22478,
+        "self_s": 0.064445366,
+        "cumulative_s": 0.237193747
+      }
+    ],
+    "trace": [
+      {
+        "stage": "normalize",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "END",
+        "elapsed_ms": 3.697
+      },
+      {
+        "stage": "parse",
+        "code": "START"
+      },
+      {
+        "stage": "parse",
+        "code": "END",
+        "elapsed_ms": 584.269
+      },
+      {
+        "stage": "layout",
+        "code": "START",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 116
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 116,
+        "elapsed_ms": 1925.446
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 343
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 343,
+        "elapsed_ms": 847.434
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 570
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 570,
+        "elapsed_ms": 851.297
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 804
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 804,
+        "elapsed_ms": 845.845
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 1059
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 1,
+        "offset": 1059,
+        "elapsed_ms": 859.834
+      },
+      {
+        "stage": "layout",
+        "code": "END",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0,
+        "elapsed_ms": 5971.66
+      },
+      {
+        "stage": "planner",
+        "code": "START"
+      },
+      {
+        "stage": "planner",
+        "code": "END",
+        "elapsed_ms": 6.48
+      },
+      {
+        "stage": "case",
+        "code": "START"
+      },
+      {
+        "stage": "case",
+        "code": "END",
+        "elapsed_ms": 649.986
+      },
+      {
+        "stage": "validate",
+        "code": "START"
+      },
+      {
+        "stage": "validate",
+        "code": "END",
+        "elapsed_ms": 1821.375
+      },
+      {
+        "stage": "repeat",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "START"
+      },
+      {
+        "stage": "normalize",
+        "code": "END",
+        "elapsed_ms": 6.356
+      },
+      {
+        "stage": "parse",
+        "code": "START"
+      },
+      {
+        "stage": "parse",
+        "code": "END",
+        "elapsed_ms": 611.357
+      },
+      {
+        "stage": "layout",
+        "code": "START",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 11,
+        "offset": 148
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 11,
+        "offset": 148,
+        "elapsed_ms": 1017.627
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 36,
+        "offset": 618
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 36,
+        "offset": 618,
+        "elapsed_ms": 758.827
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 61,
+        "offset": 1088
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 61,
+        "offset": 1088,
+        "elapsed_ms": 768.956
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 87,
+        "offset": 1576
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 87,
+        "offset": 1576,
+        "elapsed_ms": 759.327
+      },
+      {
+        "stage": "dml",
+        "code": "START",
+        "segment": "insert_statement",
+        "line": 116,
+        "offset": 2170
+      },
+      {
+        "stage": "dml",
+        "code": "END",
+        "segment": "insert_statement",
+        "line": 116,
+        "offset": 2170,
+        "elapsed_ms": 783.012
+      },
+      {
+        "stage": "layout",
+        "code": "END",
+        "segment": "procedure_definition",
+        "line": 1,
+        "offset": 0,
+        "elapsed_ms": 4765.393
+      },
+      {
+        "stage": "planner",
+        "code": "START"
+      },
+      {
+        "stage": "planner",
+        "code": "END",
+        "elapsed_ms": 0.172
+      },
+      {
+        "stage": "case",
+        "code": "START"
+      },
+      {
+        "stage": "case",
+        "code": "END",
+        "elapsed_ms": 0.289
+      },
+      {
+        "stage": "validate",
+        "code": "START"
+      },
+      {
+        "stage": "validate",
+        "code": "END",
+        "elapsed_ms": 76.247
+      },
+      {
+        "stage": "repeat",
+        "code": "END",
+        "elapsed_ms": 5475.389
+      }
+    ],
+    "adapter": {
+      "elapsed_s": 0.6967327920719981,
+      "stdout_sha256": "b7c28b6c3881dc8d2650c2a2487be234a24f96f93a6f1d276a545b2c55f1a578",
+      "stderr_bytes": 0,
+      "trace": [
+        {
+          "stage": "read",
+          "code": "START"
+        },
+        {
+          "stage": "read",
+          "code": "END",
+          "elapsed_ms": 0.495
+        },
+        {
+          "stage": "profile",
+          "code": "START"
+        },
+        {
+          "stage": "profile",
+          "code": "END",
+          "elapsed_ms": 0.097
+        },
+        {
+          "stage": "decode",
+          "code": "START"
+        },
+        {
+          "stage": "decode",
+          "code": "END",
+          "elapsed_ms": 0.24
+        },
+        {
+          "stage": "adapter_format",
+          "code": "START"
+        },
+        {
+          "stage": "adapter_format",
+          "code": "END",
+          "elapsed_ms": 365.889
+        },
+        {
+          "stage": "adapter_validate",
+          "code": "START"
+        },
+        {
+          "stage": "adapter_validate",
+          "code": "END",
+          "elapsed_ms": 63.549
+        }
+      ]
+    }
+  }
+}

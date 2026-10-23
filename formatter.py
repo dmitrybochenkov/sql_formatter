@@ -1,3 +1,5 @@
+from formatter_modules.formatter_request import proof_memo, request_scope
+from formatter_modules import formatter_runtime as _runtime
 import re
 import sys
 
@@ -810,11 +812,20 @@ def remove_formatter_where_prefix(tokens):
 
 
 def _validation_snapshot(source, alias_permissions=None):
+    tokens, comments, predicates, permissions = _validation_data(source)
+    if alias_permissions is not None:
+        alias_permissions.update(permissions)
+    return tokens, comments, predicates
+
+
+@proof_memo(lambda: _runtime.CONFIG_PATH)
+def _validation_data(source):
     """Keep clause ownership alongside exact tokens; never casefold SQL text."""
     tree = source_linter().parse_string(source).tree
     if tree is None or any(s.is_type('unparsable') for s in walk(tree)):
         raise ValueError('Не удалось разобрать SQL для проверки сохранности')
     tokens, comments, predicates, counts = [], [], {}, {}
+    alias_permissions = set()
     from formatter_modules.formatter_clause_gaps import table_alias_parts
     optional_as = ({keyword.pos_marker.source_slice.start
                     for _, _, keyword, _ in table_alias_parts(source, tree) if keyword is not None}
@@ -856,9 +867,10 @@ def _validation_snapshot(source, alias_permissions=None):
             tokens.append((kind, node.raw, context, header))
 
     collect(tree)
-    return tokens, comments, predicates
+    return tokens, comments, predicates, alias_permissions
 
 
+@request_scope
 def validate_sql_unchanged(original, formatted):
     """Validate exact tokens, scoped prefixes and CP01–CP05-proven case edits."""
     if original.startswith('\ufeff') or formatted.startswith('\ufeff'):
@@ -1041,6 +1053,7 @@ def remove_select_blank_lines(source):
     return source
 
 
+@request_scope
 def format_sql(source, diagnostics=None):
     from formatter_modules.formatter_dialect import is_procedure
     if is_procedure(source):

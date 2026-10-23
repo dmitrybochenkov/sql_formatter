@@ -6,6 +6,8 @@ from formatter_modules.formatter_protection import protected_spans
 from formatter_modules.formatter_runtime import CONFIG_PATH, SourceMap
 from formatter_modules.formatter_dialect import select_config
 
+from formatter_modules.formatter_request import proof_memo
+
 RULES = ('CP01', 'CP02', 'CP03', 'CP04', 'CP05')
 
 
@@ -29,6 +31,7 @@ def _tokens(tree):
     return result
 
 
+@proof_memo(lambda: CONFIG_PATH)
 def normalize_case(source):
     config = FluffConfig.from_path(
         str(CONFIG_PATH.parent), extra_config_path=str(CONFIG_PATH),
