@@ -47,10 +47,10 @@ class OptionalPersonalTests(unittest.TestCase):
         expected = adapter.PROFILE_FORMATTERS['corporate'](raw)
         # Every state is invoked twice: unchanged state must not repeat notice.
         states = [(None, 0, 0), ('schema_version=1', 0, 0),
-                  ('schema_version=1\n[case]\nkeywords="lower"', 1, 2),
-                  ('schema_version=1\n[case]\nkeywords="preserve"', 2, 4),
-                  ('invalid confidential TOML', 3, 4), ('schema_version=1', 4, 4),
-                  (None, 4, 4), ('schema_version=1', 4, 4)]
+                  ('schema_version=1\n[case]\nkeywords="lower"', 0, 2),
+                  ('schema_version=1\n[case]\nkeywords="preserve"', 0, 4),
+                  ('invalid confidential TOML', 1, 4), ('schema_version=1', 1, 4),
+                  (None, 1, 4), ('schema_version=1', 1, 4)]
         with patch('formatter_modules.profile_selector.show_profile_notice', show), \
              patch('formatter_modules.profile_selector.select_profile', choices):
             for body, count, selected in states:
@@ -84,8 +84,8 @@ class OptionalPersonalTests(unittest.TestCase):
         self.assertNotEqual(first, second)
         self.assertEqual(config.load_personal(), first)
         notices.notify_changed(notices.read_state(), show)
-        self.assertEqual(show.call_count, 2)
-        self.assertTrue((second_dir / 'profile_state.json').exists())
+        self.assertEqual(show.call_count, 0)
+        self.assertFalse((second_dir / 'profile_state.json').exists())
 
     def test_project_template_unc_and_cwd_never_supply_personal(self):
         fake_project = self.root / 'shared'

@@ -1,0 +1,43 @@
+{
+  "platform": "macOS",
+  "mode": "fresh adapter subprocess, absent Personal via test seam, no GUI/network VDI",
+  "repeats": 3,
+  "results": {
+    "py310_short": {
+      "samples_seconds": [
+        0.708726542070508,
+        0.5802574579138309,
+        0.5681116660125554
+      ],
+      "median_seconds": 0.5802574579138309,
+      "output_sha256": "4fcb81c968c65f8b2a89c46863424a9e40981a86841d72bcbd1d92105b0a19a1"
+    },
+    "py310_complex": {
+      "samples_seconds": [
+        1.6636848330963403,
+        1.682295999955386,
+        1.6670220419764519
+      ],
+      "median_seconds": 1.6670220419764519,
+      "output_sha256": "667c0641cd883c606a82db76d20c798e52e8ab128746e87cfe14b740a2668369"
+    },
+    "py312_short": {
+      "samples_seconds": [
+        1.0605035000480711,
+        0.9653527911286801,
+        0.9629343328997493
+      ],
+      "median_seconds": 0.9653527911286801,
+      "output_sha256": "4fcb81c968c65f8b2a89c46863424a9e40981a86841d72bcbd1d92105b0a19a1"
+    },
+    "py312_complex": {
+      "samples_seconds": [
+        2.012877583038062,
+        2.0172656250651926,
+        2.020108791999519
+      ],
+      "median_seconds": 2.0172656250651926,
+      "output_sha256": "667c0641cd883c606a82db76d20c798e52e8ab128746e87cfe14b740a2668369"
+    }
+  }
+}

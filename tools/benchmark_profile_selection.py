@@ -39,7 +39,7 @@ def main():
         def show(message):
             notices_seen.append(True)
             return True
-        def choose():
+        def choose(**kwargs):
             choices_seen.append(True)
             return 'corporate'
         with patch.object(config, 'personal_path', return_value=personal), \

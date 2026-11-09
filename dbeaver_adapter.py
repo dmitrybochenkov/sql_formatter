@@ -114,7 +114,10 @@ def select_and_format_bytes(original):
                     log_event('PROFILE-NOTICE', 'GuiUnavailable')
                     # No state is committed. Invalid/identical Personal can
                     # safely use Corporate headlessly; differences need choice.
-                profile = select_profile() if state.settings is not None and state.differences else 'corporate'
+                profile = (select_profile(
+                    timeout_seconds=state.settings.get('profile_selector', 'timeout_seconds'),
+                    difference_count=len(state.differences))
+                    if state.settings is not None and state.differences else 'corporate')
                 if state.error:
                     log_event('PROFILE-CONFIG', 'InvalidPersonal')
             output.flush()

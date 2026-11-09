@@ -1,3 +1,7 @@
+# Текущая проверка: Named Parameters / Selector / Python 3.10
+
+09.11.2026: работа в `feature/b10-5f-user-profiles`, база `0d8ad3e`. Поддержка bind-параметров, единственное окно выбора с таймером Personal, Python 3.10, безопасная parse-диагностика. SQL-правила Corporate сохранены. Полные проверки: Python 3.10.21 и 3.12.8 — по 430 tests / 778 subtests PASS; Corporate equivalence 73 + 43 + 4 PASS. Итог — [отчёт](archive/NAMED_PARAMETERS_SELECTOR_PY310_REPORT.md). После финальной проверки отдельно разрешены один commit и push текущей feature-ветки; merge/rebase/main исключены. Windows VDI требует ручной приёмки. Исторические результаты B10.5f ниже.
+
 # Roadmap
 
 Актуальное состояние B10.5f, 24.10.2026: 413 tests / 743 subtests PASS, включая финальное уточнение локального Personal; изменения готовы к ревью без коммита. База — B10.3d `79334d8`, 335 тестов, 0 FAIL / 0 ERROR. B10.4: 358 tests PASS. B10.5: 369 tests PASS; измерения, эквивалентность и ограничения — в [отчёте](archive/B105_REPORT.md). Статус реализации не означает завершённую ручную приёмку Windows.

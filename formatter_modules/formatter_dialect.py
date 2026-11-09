@@ -17,7 +17,10 @@ def is_procedure(source):
 
 def select_config(source, config):
     if not is_procedure(source):
-        return config
+        if ':' not in source:
+            return config
+        from formatter_modules.teradata_parameters import parameter_config
+        return parameter_config(config)
     from formatter_modules.teradata_procedure_grammar import procedure_config
     return procedure_config(config)
 

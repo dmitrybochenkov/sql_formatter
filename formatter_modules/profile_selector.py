@@ -1,21 +1,33 @@
-"""Optional Tk UI. Importing this module never imports Tk or opens a window."""
+"""Optional Tk UI; one event-loop-owned decision, no background timer threads."""
+from math import ceil
+from time import monotonic
 
 
-def select_profile():
+def select_profile(timeout_seconds=3, difference_count=0):
+    if type(timeout_seconds) is not int or not 1 <= timeout_seconds <= 60:
+        raise ValueError('Invalid selector timeout')
     import tkinter as tk
     from tkinter import ttk
 
     root = None
     selected = None
+    finished = False
     callback_failed = False
+    timer = None
     try:
         root = tk.Tk()
-        root.title('SQL Formatter')
+        root.title('SQL Formatter — Выбор профиля')
         root.resizable(False, False)
 
         def finish(profile=None):
-            nonlocal selected
+            nonlocal selected, finished, timer
+            if finished:
+                return
+            finished = True
             selected = profile
+            if timer is not None:
+                root.after_cancel(timer)
+                timer = None
             root.quit()
 
         def callback_error(*_):
@@ -35,12 +47,11 @@ def select_profile():
             return 'break'
 
         def focus():
-            # Windows may deny foreground activation; clickable buttons remain.
             try:
                 root.lift()
                 root.focus_force()
             except tk.TclError:
-                pass
+                pass  # Buttons remain available; timer behaviour is explicit.
 
         def release_topmost():
             try:
@@ -56,14 +67,33 @@ def select_profile():
         for label, profile in (('[1] Personal', 'personal'), ('[2] Corporate', 'corporate')):
             ttk.Button(panel, text=label, takefocus=False,
                        command=lambda value=profile: finish(value)).pack(fill='x', pady=4)
-        ttk.Label(panel, text='Esc — Cancel').pack(pady=(12, 0))
+        if difference_count:
+            ttk.Label(panel, text=f'Personal: {difference_count} отличий от Corporate').pack()
+        countdown = ttk.Label(panel)
+        countdown.pack(pady=(8, 0))
+        ttk.Label(panel, text='Esc — Cancel').pack(pady=(8, 0))
         root.update_idletasks()
-        x = max(0, (root.winfo_screenwidth() - 300) // 2)
-        y = max(0, (root.winfo_screenheight() - 180) // 2)
-        root.geometry(f'300x180+{x}+{y}')
+        x = max(0, (root.winfo_screenwidth() - 360) // 2)
+        y = max(0, (root.winfo_screenheight() - 240) // 2)
+        root.geometry(f'360x240+{x}+{y}')
         root.attributes('-topmost', True)
         root.after(300, release_topmost)
         root.after_idle(focus)
+        deadline = monotonic() + timeout_seconds
+
+        def tick():
+            nonlocal timer
+            timer = None
+            if finished:
+                return
+            remaining = deadline - monotonic()
+            if remaining <= 0:
+                finish('personal')
+                return
+            countdown.configure(text=f'Автоматически: Personal через {ceil(remaining)} с')
+            timer = root.after(100, tick)
+
+        tick()
         root.mainloop()
         if callback_failed:
             raise RuntimeError('Profile selector callback failed')

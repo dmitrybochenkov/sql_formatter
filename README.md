@@ -7,11 +7,11 @@
 - [Установка и подключение к DBeaver на Windows](docs/DBEAVER_WINDOWS_SETUP.md)
 - [Roadmap и статус ручной приёмки](docs/ROADMAP.md)
 
-Проверенная автоматизированная среда: Python 3.12.8 на macOS. Ручная приёмка Windows/VDI остаётся открытой.
+Проверенные автоматизированные среды: Python 3.10.21 и 3.12.8 на macOS; на каждой 430 tests / 778 subtests PASS. Ручная приёмка Windows/VDI остаётся открытой.
 
 ## Запуск
 
-Требуется Python 3.11+ (целевая версия 3.12). Создать локальное окружение и установить `requirements.txt` (на Windows использовать `.venv\Scripts\python.exe` вместо `.venv/bin/python`):
+Требуется Python 3.10+ (целевая версия 3.12). Создать локальное окружение и установить `requirements.txt` (на Windows использовать `.venv\Scripts\python.exe` вместо `.venv/bin/python`):
 
 ```sh
 python3 -m venv .venv
@@ -19,7 +19,7 @@ python3 -m venv .venv
 .venv/bin/python -B formatter.py input.sql
 ```
 
-`formatter.py` — headless CLI, SQL в stdout, диагностика в stderr. Для DBeaver использовать **только `dbeaver_adapter.py`**, команду и настройки из инструкции: его stdout содержит SQL, а диагностика идёт в локальный журнал. `tools/diagnose_formatter.py` не выводит SQL и не является адаптером редактора.
+`formatter.py -h` / `--help` показывают справку. `formatter.py` — headless CLI, SQL в stdout, диагностика в stderr. Для DBeaver использовать **только `dbeaver_adapter.py`**, команду и настройки из инструкции: его stdout содержит SQL, а диагностика идёт в локальный журнал. `tools/diagnose_formatter.py` не выводит SQL и не является адаптером редактора.
 
 ## Тесты
 
@@ -30,3 +30,5 @@ python3 -m venv .venv
 ```
 
 Не добавлять приватные SQL-файлы в репозиторий. Исторические отчёты сохранены в `docs/archive/`; актуальные правила находятся в трёх документах выше.
+
+Именованные bind-параметры Teradata `:Calc_Date` распознаются локальным расширением AST и сохраняют исходное написание. При валидных отличиях Personal появляется одно окно: `1` Personal, `2` Corporate; таймер (default 3 с) автоматически выбирает Personal, Esc отменяет. См. [ручную проверку](tests/manual/README.md).

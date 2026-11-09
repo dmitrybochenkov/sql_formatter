@@ -74,7 +74,7 @@ def main():
                         command=[sys.executable,'-c','import sys;sys.path.insert(0,sys.argv[1]);import formatter,dbeaver_adapter',str(root)]
                     elif mode=='cli':command=[sys.executable,str(root/'formatter.py'),str(sql)]
                     else:
-                        code='import sys;sys.path.insert(0,sys.argv[1]);import dbeaver_adapter as a;import formatter_modules.profile_selector as s;s.select_profile=lambda:"personal";sys.argv=["dbeaver_adapter.py",sys.argv[2]];raise SystemExit(a.main())'
+                        code='import sys;sys.path.insert(0,sys.argv[1]);import dbeaver_adapter as a;import formatter_modules.profile_selector as s;s.select_profile=lambda **kwargs:"personal";sys.argv=["dbeaver_adapter.py",sys.argv[2]];raise SystemExit(a.main())'
                         command=[sys.executable,'-c',code,str(root),str(sql)]
                     start=time.perf_counter();completed=subprocess.run(command,cwd=directory,env=env,capture_output=True,check=True)
                     values.append(time.perf_counter()-start)

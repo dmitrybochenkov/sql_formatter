@@ -97,7 +97,7 @@ class B103DiagnosisTests(unittest.TestCase):
         self.assertEqual(out.getvalue()+err.getvalue(),'')
         text=(self.base/'logs/diagnostic.jsonl').read_text()
         self.assertNotIn(secret,text)
-        allowed={'time','pid','stage','code','segment','line','offset','view','elapsed_ms','error_type'}
+        allowed={'time','pid','stage','code','segment','line','column','offset','view','elapsed_ms','error_type'}
         self.assertTrue(all(set(r)<=allowed for r in self.records()))
 
     def test_headless_diagnostic_and_merged_adapter(self):

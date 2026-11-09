@@ -37,6 +37,7 @@ def event(stage, code='END', *, node=None, position=None, elapsed=None, view=Non
             if node.pos_marker is not None:
                 if view in (None,'original'):
                     record['line']=int(node.pos_marker.line_no)
+                    record['column']=int(node.pos_marker.line_pos)
                 if position is None:
                     position=node.pos_marker.source_slice.start
         if position is not None:

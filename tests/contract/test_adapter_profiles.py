@@ -118,8 +118,8 @@ class B9AdapterTests(unittest.TestCase):
     def test_gui_failure_in_merged_subprocess(self):
         path = self.base/'input.sql'; path.write_bytes(self.RAW)
         for action in ('sys.modules["tkinter"]=None',
-                       'selector.select_profile=lambda: (_ for _ in ()).throw(RuntimeError("secret"))',
-                       'selector.select_profile=lambda: print("secret") or "personal"'):
+                       'selector.select_profile=lambda **kwargs: (_ for _ in ()).throw(RuntimeError("secret"))',
+                       'selector.select_profile=lambda **kwargs: print("secret") or "personal"'):
             code = ('import sys,runpy; from pathlib import Path; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
                     'import formatter_modules.profile_selector as selector; '

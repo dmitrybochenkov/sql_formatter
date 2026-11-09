@@ -70,6 +70,7 @@ class SourceMap:
 class OriginalMarker:
     source_slice: slice
     line_no: int
+    line_pos: int
 
 
 class OriginalSegment:
@@ -85,7 +86,7 @@ class OriginalSegment:
             raw = mapping.original[span]
             if not node.is_meta and raw.replace('\r\n', '\n').replace('\r', '\n') != node.raw:
                 raise ValueError('SQLFluff AST does not match the normalized source')
-            self.pos_marker = OriginalMarker(span, marker.line_no)
+            self.pos_marker = OriginalMarker(span, marker.line_no, marker.line_pos)
             if not node.is_meta:
                 self.raw = raw
 
@@ -133,6 +134,19 @@ class SourceLinter:
             raise ValueError('SQLFluff changed the parser-view source')
         if tree is not None and mapping.normalized != source:
             tree = OriginalSegment(tree, mapping)
+        if parsed.violations:
+            from formatter_modules.formatter_trace import event
+            def first_bad(node):
+                if node is None or node.is_type('unparsable'):
+                    return node
+                for child in node.segments:
+                    bad = first_bad(child)
+                    if bad is not None:
+                        return bad
+                return None
+            bad = first_bad(tree)
+            event('parse', 'UNPARSABLE' if bad is not None else 'LEXICAL_ERROR',
+                  node=bad, error_type='SQLParseError')
         return ParsedSource(tree, parsed.config, source, parsed.violations)
 
 

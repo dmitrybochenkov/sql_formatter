@@ -5,7 +5,10 @@ from dataclasses import dataclass
 from pathlib import Path
 import hashlib
 import json
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10
+    import tomli as tomllib
 import os
 import sys
 from pathlib import PureWindowsPath
@@ -53,7 +56,7 @@ class Settings:
 
     @property
     def fingerprint(self):
-        return hashlib.sha256(json.dumps(self.values, ensure_ascii=True).encode()).hexdigest()
+        return hashlib.sha256(json.dumps(tuple((k, v) for k, v in self.values if k != 'profile_selector'), ensure_ascii=True).encode()).hexdigest()
 
 
 def validate(data):
@@ -61,7 +64,7 @@ def validate(data):
         raise ConfigurationError('Personal: требуется таблица TOML')
     if type(data.get('schema_version')) is not int or data['schema_version'] != 1:
         raise ConfigurationError('schema_version: требуется целое число 1')
-    unknown = set(data) - set(PERSONAL_DEFAULTS) - {'schema_version'}
+    unknown = set(data) - set(PERSONAL_DEFAULTS) - {'schema_version', 'profile_selector'}
     if unknown:
         raise ConfigurationError('Personal: неизвестный раздел')
     result = []
@@ -92,6 +95,13 @@ def validate(data):
                     raise ConfigurationError(name + ': допустимы ' + ', '.join(choices))
             values.append((key, value))
         result.append((section, tuple(sorted(values))))
+    selector = data.get('profile_selector', {})
+    if not isinstance(selector, dict) or set(selector) - {'timeout_seconds'}:
+        raise ConfigurationError('[profile_selector]: неизвестный параметр или неверный тип')
+    timeout = selector.get('timeout_seconds', 3)
+    if type(timeout) is not int or not 1 <= timeout <= 60:
+        raise ConfigurationError('[profile_selector] timeout_seconds: требуется целое число от 1 до 60')
+    result.append(('profile_selector', (('timeout_seconds', timeout),)))
     return Settings(tuple(sorted(result)))
 
 
@@ -118,7 +128,7 @@ def load_personal():
 
 def differences(personal, corporate):
     return tuple(f'{section}.{key}' for section, values in personal.values for key, value in values
-                 if value != corporate.get(section, key))
+                 if section != 'profile_selector' and value != corporate.get(section, key))
 
 
 _CURRENT = ContextVar('sql_formatter_settings', default=None)

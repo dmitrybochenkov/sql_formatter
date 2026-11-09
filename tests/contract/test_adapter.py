@@ -158,7 +158,7 @@ class B7AdapterTests(unittest.TestCase):
         for target in ('os.write', 'pathlib.Path.read_bytes'):
             code = ('import runpy,sys; from pathlib import Path; from unittest.mock import patch; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
-                    'import formatter_modules.profile_selector as selector; selector.select_profile=lambda: "personal"; '
+                    'import formatter_modules.profile_selector as selector; selector.select_profile=lambda **kwargs: "personal"; '
                     'sys.argv=[sys.argv[1],sys.argv[2]]; '
                     f'context=patch({target!r},side_effect=PermissionError("secret")); '
                     'context.start(); runpy.run_path(sys.argv[0],run_name="__main__")')

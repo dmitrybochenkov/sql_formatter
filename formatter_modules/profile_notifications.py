@@ -46,7 +46,7 @@ def read_state():
     try:
         settings = config.parse_personal(raw)
         return PersonalState(settings, digest, config.differences(settings, CORPORATE), None)
-    except config.ConfigurationError as exc:
+    except config.ConfigurationError:
         return PersonalState(None, digest, (), 'personal.toml: недопустимая конфигурация')
 
 
@@ -95,18 +95,14 @@ def notify_changed(state, show):
     record = {'hash': state.digest, 'corporate': CORPORATE.fingerprint}
 
     def needs(previous):
-        if previous == record:
-            return False
-        if not state.present or (previous is None and not state.error and not state.differences):
-            return False
-        return True
+        return bool(state.error) and previous != record
 
     path = state_path()
     if path is None:
         if needs(None):
             return bool(show(state.message))
         return False
-    if not state.present and not path.exists():
+    if not state.error and not path.exists():
         return False
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -129,7 +125,7 @@ def notify_changed(state, show):
         needed = needs(previous)
         if needed and not show(state.message):
             return False
-        if state.present:
+        if state.error:
             if previous == record:
                 return False
             saved['installations'][installation] = record

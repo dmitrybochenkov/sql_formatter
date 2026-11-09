@@ -22,7 +22,7 @@ def main():
             source.write_bytes(workloads()['short'].encode())
             env=dict(os.environ,SQL_FORMATTER_TRACE='1',SQL_FORMATTER_LOG_DIR=directory,
                      PYTHONDONTWRITEBYTECODE='1')
-            code='import sys;sys.path.insert(0,sys.argv[1]);import dbeaver_adapter as a;import formatter_modules.profile_selector as s;s.select_profile=lambda:"personal";sys.argv=["dbeaver_adapter.py",sys.argv[2]];raise SystemExit(a.main())'
+            code='import sys;sys.path.insert(0,sys.argv[1]);import dbeaver_adapter as a;import formatter_modules.profile_selector as s;s.select_profile=lambda **kwargs:"personal";sys.argv=["dbeaver_adapter.py",sys.argv[2]];raise SystemExit(a.main())'
             start=perf_counter()
             completed=subprocess.run([sys.executable,'-c',code,str(args.root.resolve()),str(source)],
                                      env=env,cwd=directory,capture_output=True,check=True)

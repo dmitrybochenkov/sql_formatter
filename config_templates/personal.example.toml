@@ -4,37 +4,59 @@
 # Рядом с общим исходным кодом рабочий Personal не хранится.
 # Сохраните файл: изменения применятся при следующем форматировании DBeaver.
 # Файл можно целиком скопировать коллеге. Неизвестные параметры — ошибка.
+# Corporate: 1
 schema_version = 1
 
 # upper — верхний регистр, lower — нижний, preserve — исходный.
 # functions включает UDF; quoted identifiers, строки и комментарии защищены.
 [case]
+# Corporate: "upper"
 keywords = "upper"
+# Corporate: "upper"
 functions = "upper"
+# Corporate: "lower"
 identifiers = "lower"
+# Corporate: "upper"
 types = "upper"
+# Corporate: "upper"
 literals = "upper"
 
 # leading — запятая в начале следующей строки; trailing — в конце предыдущей.
 # В однострочных списках запятые всегда между элементами.
 [commas]
+# Corporate: "leading"
 select = "leading"
+# Corporate: "leading"
 from = "leading"
+# Corporate: "leading"
 group_by = "leading"
+# Corporate: "leading"
 order_by = "leading"
 
 # Одна пустая строка перед указанными блоками; [] — без дополнительных строк.
 # Допустимы from, join, where, group_by, having, qualify, order_by; без дублей.
 [spacing]
+# Corporate: ["join", "where", "group_by", "having", "qualify", "order_by"]
 blank_line_before = ["join", "where", "group_by", "having", "qualify", "order_by"]
 
 # true — разрешить прежнюю безопасную вставку при нескольких прямых AND.
 # false — не добавлять; существующее 1=1 не удаляется.
 [where]
+# Corporate: true
 insert_1_equals_1 = true
 
 # multiline — два и более элемента построчно; один всегда GROUP BY a.
 # inline — элементы на одной строке (кроме защищённых/неоднозначных границ).
 # preserve — сохранить переносы между элементами, применить выбранные запятые.
 [group_by]
+# Corporate: "multiline"
 layout = "multiline"
+
+# Только интерфейс; не считается отличием SQL-стиля от Corporate.
+# Диапазон 1–60 секунд; для старых файлов без раздела — 3.
+# При отличиях: 1 — Personal, 2 — Corporate; таймер выбирает Personal.
+# Esc / крестик отменяет форматирование. Exec timeout DBeaver включает
+# ожидание этого окна И форматирование: 3000 мс недостаточно для 3 с.
+[profile_selector]
+# Corporate: 3 (служебный default; без Personal окно не открывается)
+timeout_seconds = 3

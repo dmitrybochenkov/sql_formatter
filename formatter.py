@@ -1341,6 +1341,11 @@ def format_sql(source, diagnostics=None):
 
 
 def main():
+    if len(sys.argv) == 2 and sys.argv[1] in ('-h', '--help'):
+        print('Usage: formatter.py [SQL_FILE]\n'
+              'Format UTF-8 SQL to stdout. Default SQL_FILE: input.sql.\n'
+              'Diagnostics go to stderr. This CLI does not open the profile selector.')
+        return
     # Настраиваем UTF-8 только для CLI, не меняя stdout при импорте.
     sys.stdout.reconfigure(encoding="utf-8", newline="")
     filename = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("input.sql")

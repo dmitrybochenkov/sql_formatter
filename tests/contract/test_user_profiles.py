@@ -27,7 +27,7 @@ class ProfileNotificationTests(unittest.TestCase):
     def test_first_shipped_no_notice_or_state(self):
         show=Mock()
         n.notify_changed(n.read_state(),show)
-        show.assert_not_called();self.assertTrue(n.state_path().exists())
+        show.assert_not_called();self.assertFalse(n.state_path().exists())
 
     def test_change_repeat_error_fix_and_return_to_shipped(self):
         shipped=self.path.read_bytes();show=Mock(return_value=True)
@@ -35,19 +35,19 @@ class ProfileNotificationTests(unittest.TestCase):
             self.path.write_bytes(raw)
             state=n.read_state();before=show.call_count
             n.notify_changed(state,show);n.notify_changed(state,show)
-            self.assertEqual(show.call_count,before+1)
+            self.assertEqual(show.call_count,before + int(state.error is not None))
         saved=n.state_path().read_text()
         self.assertNotIn('keywords',saved);self.assertNotIn('wrong',saved)
         self.assertEqual(set(json.loads(saved)),{'version','installations'})
 
     def test_gui_failure_does_not_record_delivery(self):
-        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="lower"')
+        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="invalid"')
         with self.assertRaises(RuntimeError):n.notify_changed(n.read_state(),Mock(side_effect=RuntimeError()))
         self.assertFalse(n.state_path().exists())
         n.notify_changed(n.read_state(),Mock(return_value=False));self.assertFalse(n.state_path().exists())
 
     def test_parallel_notice_and_atomic_valid_state(self):
-        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="lower"')
+        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="invalid"')
         show=Mock(return_value=True);state=n.read_state()
         with ThreadPoolExecutor(max_workers=4) as pool:
             list(pool.map(lambda _: n.notify_changed(state,show),range(12)))
@@ -55,7 +55,7 @@ class ProfileNotificationTests(unittest.TestCase):
         self.assertEqual(len(json.loads(n.state_path().read_text())['installations']),1)
 
     def test_installations_and_corporate_update(self):
-        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="lower"');show=Mock(return_value=True)
+        self.path.write_bytes(b'schema_version=1\n[case]\nkeywords="invalid"');show=Mock(return_value=True)
         n.notify_changed(n.read_state(),show)
         other=self.root/'other.toml';other.write_bytes(self.path.read_bytes())
         with patch.object(c,'personal_path',return_value=other):n.notify_changed(n.read_state(),show)
@@ -82,20 +82,20 @@ class ProfileNotificationTests(unittest.TestCase):
             self.path.write_text('schema_version=1\n[case]\nkeywords="lower"')
             personal=adapter.select_and_format_bytes(raw)
             self.assertTrue(personal.startswith(b'select\n'));choose.assert_called_once()
-            self.assertEqual(adapter.select_and_format_bytes(raw),personal);self.assertEqual(notice.call_count,1)
+            self.assertEqual(adapter.select_and_format_bytes(raw),personal);self.assertEqual(notice.call_count,0)
             self.path.write_text('schema_version=1\n[case]\nkeywords="wrong"');choose.reset_mock()
             self.assertEqual(adapter.select_and_format_bytes(raw),expected);choose.assert_not_called()
-            self.assertEqual(notice.call_count,2)
+            self.assertEqual(notice.call_count,1)
 
     def test_cancel_gui_error_noisy_notice_and_invalid_headless(self):
         raw=b'\xef\xbb\xbfselect A from T;\r\n'
         self.path.write_text('schema_version=1\n[case]\nkeywords="lower"')
-        for action in (lambda:None,lambda:(_ for _ in ()).throw(RuntimeError())):
+        for action in (lambda **kwargs:None,lambda **kwargs:(_ for _ in ()).throw(RuntimeError())):
             with patch('formatter_modules.profile_selector.show_profile_notice',return_value=True),patch('formatter_modules.profile_selector.select_profile',side_effect=action):
                 self.assertEqual(adapter.select_and_format_bytes(raw),raw)
         def noisy(message):print('not SQL');return True
         with patch('formatter_modules.profile_selector.show_profile_notice',side_effect=noisy),patch('formatter_modules.profile_selector.select_profile',return_value='personal'):
-            self.path.write_text('schema_version=1\n[case]\nkeywords="preserve"')
+            self.path.write_text('invalid TOML')
             out,err=io.StringIO(),io.StringIO()
             with contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):self.assertEqual(adapter.select_and_format_bytes(raw),raw)
             self.assertEqual(out.getvalue()+err.getvalue(),'')
@@ -109,7 +109,7 @@ class ProfileNotificationTests(unittest.TestCase):
 
     def test_selected_snapshot_survives_edit_during_dialog(self):
         self.path.write_text('schema_version=1\n[case]\nkeywords="lower"')
-        def select():
+        def select(**kwargs):
             self.path.write_text('schema_version=1\n[case]\nkeywords="upper"')
             return 'personal'
         with patch('formatter_modules.profile_selector.select_profile',side_effect=select),patch('formatter_modules.profile_selector.show_profile_notice',return_value=True):
@@ -126,7 +126,7 @@ class ProfileNotificationTests(unittest.TestCase):
     def test_parallel_processes_deliver_only_one_notice(self):
         import subprocess
         import sys
-        self.path.write_text('schema_version=1\n[case]\nkeywords="lower"')
+        self.path.write_text('schema_version=1\n[case]\nkeywords="invalid"')
         delivered=self.root/'delivered'
         code='''import sys,time
 from pathlib import Path

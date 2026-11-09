@@ -118,7 +118,8 @@ def procedure_config(base_config=None):
     """Create a private expanded dialect; never register it globally."""
     if sqlfluff.__version__ != '4.4.0':
         raise RuntimeError('Procedure grammar requires SQLFluff 4.4.0')
-    dialect = load_raw_dialect('teradata').copy_as('teradata_procedure')
+    from formatter_modules.teradata_parameters import add_named_parameters
+    dialect = add_named_parameters(load_raw_dialect('teradata').copy_as('teradata_procedure'))
     dialect.sets('unreserved_keywords').update(
         {'PROCEDURE', 'INOUT', 'SECURITY', 'INVOKER', 'DECLARE', 'WHILE', 'DO', 'CALL'}
     )
