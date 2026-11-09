@@ -4,6 +4,7 @@ Only direct commas are list separators. Expressions are never rewritten;
 comment ownership is checked before proposing related gap edits.
 """
 import re
+from formatter_modules.formatter_config import current_settings
 from formatter_modules.formatter_edits import Edit
 from formatter_modules.formatter_protection import protected_spans, ambiguous_comment_spans
 
@@ -51,7 +52,7 @@ def clause_gap_edits(source, clause):
     base = source[line_start:start]
     if base.strip() or '\t' in base:
         return None
-    title = ' '.join(raw[:match.end()].split()).upper()
+    title = ' '.join(raw[:match.end()].split())
     if kind == 'from_clause':
         rendered = title + ' ' + items[0]
         for item in items[1:]:
@@ -583,7 +584,8 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
             base = ' ' * level
             for clause in clauses:
                 keyword = next(s for s in clause.segments if s.is_type('keyword'))
-                if keyword.raw_upper in ('SELECT', 'FROM', 'WHERE') and keyword.raw != keyword.raw_upper:
+                if (current_settings().get('case', 'keywords') == 'upper'
+                        and keyword.raw_upper in ('SELECT', 'FROM', 'WHERE') and keyword.raw != keyword.raw_upper):
                     for i, edit in enumerate(edits):
                         if (edit.group_id == group and edit.rule_id == 'NESTED-GAPS'
                                 and edit.start == edit.end == start(keyword)):
@@ -687,7 +689,7 @@ def nested_query_gap_edits(source, tree, include_simple=False, include_joins=Fal
                     prefix = [s.raw for s in code_leaves if stop(s) <= start(ands[0])]
                 has_prefix = prefix == ['1', '=', '1']
                 gap(stop(keyword), start(expression),
-                    ' 1=1\n' + base + '    AND ' if vertical and not has_prefix else ' ')
+                    ' 1=1\n' + base + '    AND ' if vertical and not has_prefix and current_settings().get('where', 'insert_1_equals_1') else ' ')
                 if vertical:
                     for operator in ands:
                         previous = next(s for s in reversed(code_leaves) if stop(s) <= start(operator))

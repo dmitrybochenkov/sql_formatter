@@ -1,5 +1,6 @@
 """Quiet file-to-UTF-8 transport for DBeaver's merged output stream."""
 import contextlib
+from contextvars import ContextVar
 from datetime import datetime, timezone
 import io
 import json
@@ -66,8 +67,32 @@ def format_bytes(original):
         errors.close()
 
 
-# Both explicit profile IDs deliberately use the same stable B8 engine.
-PROFILE_FORMATTERS = {'personal': format_bytes, 'corporate': format_bytes}
+_PERSONAL_SELECTION = ContextVar('selected_personal_snapshot', default=None)
+
+
+def _personal_bytes(original):
+    from formatter_modules.formatter_config import load_personal, use_settings
+    try:
+        # Interactive dispatch already resolved a snapshot. Headless direct
+        # profile calls resolve once here and never open GUI.
+        settings = _PERSONAL_SELECTION.get() or load_personal()
+        if settings is None:
+            return _corporate_bytes(original)
+        with use_settings(settings):
+            return format_bytes(original)
+    except Exception:
+        log_event('PROFILE-CONFIG', 'InvalidPersonal')
+        return original
+
+
+def _corporate_bytes(original):
+    from formatter_modules.corporate_profile import CORPORATE
+    from formatter_modules.formatter_config import use_settings
+    with use_settings(CORPORATE):
+        return format_bytes(original)
+
+
+PROFILE_FORMATTERS = {'personal': _personal_bytes, 'corporate': _corporate_bytes}
 
 
 def select_and_format_bytes(original):
@@ -77,9 +102,21 @@ def select_and_format_bytes(original):
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
             from formatter_modules.formatter_trace import stage
-            from formatter_modules.profile_selector import select_profile
+            from formatter_modules.profile_selector import select_profile, show_profile_notice
+            from formatter_modules.profile_notifications import read_state, notify_changed
+            from formatter_modules.formatter_config import use_settings
+            from formatter_modules.corporate_profile import CORPORATE
             with stage('profile'):
-                profile = select_profile()
+                state = read_state()
+                try:
+                    notify_changed(state, show_profile_notice)
+                except Exception:
+                    log_event('PROFILE-NOTICE', 'GuiUnavailable')
+                    # No state is committed. Invalid/identical Personal can
+                    # safely use Corporate headlessly; differences need choice.
+                profile = select_profile() if state.settings is not None and state.differences else 'corporate'
+                if state.error:
+                    log_event('PROFILE-CONFIG', 'InvalidPersonal')
             output.flush()
             errors.flush()
             if output.buffer.getvalue() or errors.buffer.getvalue():
@@ -92,7 +129,12 @@ def select_and_format_bytes(original):
                 log_event('ADAPTER-GUI', 'InvalidProfile')
                 return original
             log_event('ADAPTER-PROFILE', profile)
-            result = PROFILE_FORMATTERS[profile](original)
+            token = _PERSONAL_SELECTION.set(state.settings if profile == 'personal' else None)
+            try:
+                with use_settings(state.settings if profile == 'personal' else CORPORATE):
+                    result = PROFILE_FORMATTERS[profile](original)
+            finally:
+                _PERSONAL_SELECTION.reset(token)
             if not isinstance(result, bytes):
                 raise TypeError('Profile formatter must return bytes')
             output.flush()

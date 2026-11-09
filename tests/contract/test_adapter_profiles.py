@@ -26,6 +26,16 @@ class B9AdapterTests(unittest.TestCase):
         self.env_patch = patch.dict(os.environ, self.env)
         self.env_patch.start()
         self.addCleanup(self.env_patch.stop)
+        # B10.5f: these existing selector/transport tests exercise the branch
+        # where comparison has found a valid difference. SQL rules stay default.
+        from formatter_modules.profile_notifications import PersonalState
+        from formatter_modules.corporate_profile import CORPORATE
+        self.state_patch = patch('formatter_modules.profile_notifications.read_state',
+                                 return_value=PersonalState(CORPORATE, 'test', ('case.keywords',), None))
+        self.state_patch.start(); self.addCleanup(self.state_patch.stop)
+        self.notice_patch = patch('formatter_modules.profile_notifications.notify_changed')
+        self.notice_patch.start(); self.addCleanup(self.notice_patch.stop)
+
 
     def test_both_profile_routes_are_explicit(self):
         for profile in ('personal', 'corporate'):
@@ -40,7 +50,7 @@ class B9AdapterTests(unittest.TestCase):
                 other.assert_not_called()
 
     def test_profiles_match_b8_and_are_idempotent(self):
-        self.assertIs(adapter.PROFILE_FORMATTERS['personal'], adapter.PROFILE_FORMATTERS['corporate'])
+        self.assertEqual(set(adapter.PROFILE_FORMATTERS), {'personal', 'corporate'})
         for profile in adapter.PROFILE_FORMATTERS:
             with patch('formatter_modules.profile_selector.select_profile', return_value=profile):
                 first = adapter.select_and_format_bytes(self.RAW)
@@ -85,7 +95,7 @@ class B9AdapterTests(unittest.TestCase):
         for profile, expected in [('personal',self.EXPECTED), ('corporate',self.EXPECTED), ('cancel',self.RAW)]:
             path.write_bytes(self.RAW)
             for _ in range(2):
-                result = subprocess.run(adapter_command(ROOT/'dbeaver_adapter.py',path,profile),
+                result = subprocess.run(adapter_command(ROOT/'dbeaver_adapter.py',path,profile, interactive=True),
                                         env=self.env, cwd=self.base, stdout=subprocess.PIPE,
                                         stderr=subprocess.STDOUT, timeout=30)
                 self.assertEqual(result.returncode,0)
@@ -112,7 +122,11 @@ class B9AdapterTests(unittest.TestCase):
                        'selector.select_profile=lambda: print("secret") or "personal"'):
             code = ('import sys,runpy; from pathlib import Path; '
                     'sys.path.insert(0,str(Path(sys.argv[1]).parent)); '
-                    'import formatter_modules.profile_selector as selector; ' + action + '; '
+                    'import formatter_modules.profile_selector as selector; '
+                    'import formatter_modules.profile_notifications as notices; '
+                    'from formatter_modules.corporate_profile import CORPORATE; '
+                    'notices.read_state=lambda: notices.PersonalState(CORPORATE, "test", ("case.keywords",), None); '
+                    'notices.notify_changed=lambda *a: None; ' + action + '; '
                     'sys.argv=sys.argv[1:]; runpy.run_path(sys.argv[0],run_name="__main__")')
             result = subprocess.run([sys.executable,'-c',code,str(ROOT/'dbeaver_adapter.py'),str(path)],
                                     env=self.env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)

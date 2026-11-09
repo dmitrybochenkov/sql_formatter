@@ -84,3 +84,18 @@ class ProfileSelectorTests(unittest.TestCase):
         with patch.object(fake, 'Tk', side_effect=fake.TclError('no display')), \
              patch.dict(sys.modules, tkinter=fake), self.assertRaises(fake.TclError):
             select_profile()
+
+    def test_notice_acknowledgement_and_failure_destroy_root(self):
+        from formatter_modules.profile_selector import show_profile_notice
+        from unittest.mock import Mock
+        for failure in (False, True):
+            fake=FakeTk()
+            fake.withdraw=lambda:None
+            fake.messagebox=SimpleNamespace(showinfo=Mock(side_effect=RuntimeError() if failure else None))
+            with patch.dict(sys.modules,tkinter=fake):
+                if failure:
+                    with self.assertRaises(RuntimeError):show_profile_notice('Настройки корректны')
+                else:
+                    self.assertTrue(show_profile_notice('Настройки корректны'))
+            self.assertTrue(fake.closed)
+            fake.messagebox.showinfo.assert_called_once()

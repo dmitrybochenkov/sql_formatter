@@ -106,7 +106,7 @@ class B103DiagnosisTests(unittest.TestCase):
         path.write_bytes(raw)
         for profile in ('personal','corporate'):
             env=dict(os.environ)
-            command=[sys.executable,str(ROOT/'diagnose_formatter.py'),str(path),profile,str(self.base/'logs')]
+            command=[sys.executable,str(ROOT/'tools'/'diagnose_formatter.py'),str(path),profile,str(self.base/'logs')]
             run=subprocess.run(command,cwd=self.base,env=env,capture_output=True,timeout=60)
             self.assertEqual(run.returncode,0)
             self.assertEqual(run.stdout+run.stderr,b'')

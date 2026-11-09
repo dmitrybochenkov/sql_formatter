@@ -1,0 +1,40 @@
+# SQL FORMATTER — PERSONAL PROFILE
+# Неактивный шаблон. Не влияет на встроенный Corporate.
+# Windows: скопируйте как %LOCALAPPDATA%\SQLFormatter\personal.toml.
+# Рядом с общим исходным кодом рабочий Personal не хранится.
+# Сохраните файл: изменения применятся при следующем форматировании DBeaver.
+# Файл можно целиком скопировать коллеге. Неизвестные параметры — ошибка.
+schema_version = 1
+
+# upper — верхний регистр, lower — нижний, preserve — исходный.
+# functions включает UDF; quoted identifiers, строки и комментарии защищены.
+[case]
+keywords = "upper"
+functions = "upper"
+identifiers = "lower"
+types = "upper"
+literals = "upper"
+
+# leading — запятая в начале следующей строки; trailing — в конце предыдущей.
+# В однострочных списках запятые всегда между элементами.
+[commas]
+select = "leading"
+from = "leading"
+group_by = "leading"
+order_by = "leading"
+
+# Одна пустая строка перед указанными блоками; [] — без дополнительных строк.
+# Допустимы from, join, where, group_by, having, qualify, order_by; без дублей.
+[spacing]
+blank_line_before = ["join", "where", "group_by", "having", "qualify", "order_by"]
+
+# true — разрешить прежнюю безопасную вставку при нескольких прямых AND.
+# false — не добавлять; существующее 1=1 не удаляется.
+[where]
+insert_1_equals_1 = true
+
+# multiline — два и более элемента построчно; один всегда GROUP BY a.
+# inline — элементы на одной строке (кроме защищённых/неоднозначных границ).
+# preserve — сохранить переносы между элементами, применить выбранные запятые.
+[group_by]
+layout = "multiline"

@@ -1,5 +1,5 @@
+from formatter_modules.formatter_config import current_settings
 from formatter_modules.formatter_request import proof_memo, request_scope
-from formatter_modules import formatter_runtime as _runtime
 import re
 import sys
 
@@ -64,6 +64,7 @@ def format_list_clause(source, clause):
     if match is None:
         return None
 
+    keyword = ' '.join(match.group().split())
     body_start = start + match.end()
 
     # Отступ относительно строки, на которой стоит SELECT/GROUP BY.
@@ -73,7 +74,7 @@ def format_list_clause(source, clause):
     item_indent = base_indent + INDENT
 
     # GROUP BY с одним выражением оставляем горизонтальным.
-    if keyword in ("GROUP BY", "ORDER BY") and not commas:
+    if clause.is_type("groupby_clause", "orderby_clause") and not commas:
         expression = source[body_start:end].strip()
         return start, end, f"{keyword} {expression}"
 
@@ -168,6 +169,7 @@ def format_commented_group_order(source, clause):
     if match is None or any(seg.is_type("block_comment") for seg in walk(clause)):
         return None
 
+    keyword = ' '.join(match.group().split())
     # Если список уже начинается с новой строки после ключевого слова,
     # не перестраиваем его повторно.
     # Это предотвращает накопление отступов при повторном форматировании.
@@ -390,10 +392,10 @@ def format_join_clause(source, clause):
 
         conditions.append(source[cursor:expression_end].strip())
 
-        formatted = join_header + "\n" + base_indent + "ON " + conditions[0]
+        formatted = join_header + "\n" + base_indent + source[on_start:expression_start].strip() + " " + conditions[0]
 
-        for condition in conditions[1:]:
-            formatted += "\n" + base_indent + INDENT + "AND " + condition
+        for operator, condition in zip(and_segments, conditions[1:]):
+            formatted += "\n" + base_indent + INDENT + operator.raw + " " + condition
 
         # Если перед JOIN стоит комментарий, не вставляем
     # пустую строку между комментарием и JOIN.
@@ -543,7 +545,7 @@ def format_where_clause(source, clause):
     # Одно условие: WHERE condition
     if not and_segments:
         condition = source[expression_start:expression_end].strip()
-        return start, end, "WHERE " + condition
+        return start, end, source[start:expression_start].strip() + " " + condition
 
     conditions = []
     cursor = expression_start
@@ -560,14 +562,14 @@ def format_where_clause(source, clause):
     if any(not condition for condition in conditions):
         return None
 
-    # Не дублируем существующее WHERE 1=1.
-    if re.fullmatch(r"1\s*=\s*1", conditions[0]):
-        conditions = conditions[1:]
-
-    formatted = "WHERE 1=1"
-
-    for condition in conditions:
-        formatted += "\n" + base_indent + INDENT + "AND " + condition
+    header = next(seg.raw for seg in clause.segments if seg.is_type('keyword'))
+    has_prefix = bool(re.fullmatch(r"1\s*=\s*1", conditions[0]))
+    insert_prefix = current_settings().get('where', 'insert_1_equals_1') and not has_prefix
+    formatted = header + (' 1=1' if insert_prefix or has_prefix else ' ' + conditions[0])
+    if insert_prefix:
+        formatted += "\n" + base_indent + INDENT + "AND " + conditions[0]
+    for operator, condition in zip(and_segments, conditions[1:]):
+        formatted += "\n" + base_indent + INDENT + operator.raw + " " + condition
 
     return start, end, formatted
 
@@ -818,7 +820,7 @@ def _validation_snapshot(source, alias_permissions=None):
     return tokens, comments, predicates
 
 
-@proof_memo(lambda: _runtime.CONFIG_PATH)
+@proof_memo()
 def _validation_data(source):
     """Keep clause ownership alongside exact tokens; never casefold SQL text."""
     tree = source_linter().parse_string(source).tree
@@ -849,7 +851,9 @@ def _validation_data(source):
                          if s.is_type('binary_operator')] if expression is not None else []
             # Direct expression children exclude BETWEEN's keyword AND and
             # ANDs inside brackets/subqueries. Existing prefixes stay exact.
-            predicates[context] = (len(tokens) + 1, 'AND' in operators and 'OR' not in operators)
+            predicates[context] = (len(tokens) + 1, 'AND' in operators and 'OR' not in operators
+                                   and (not node.is_type('where_clause')
+                                        or current_settings().get('where', 'insert_1_equals_1')))
         if node.segments:
             for child in node.segments:
                 collect(child, context, node)
@@ -896,7 +900,11 @@ def validate_sql_unchanged(original, formatted):
         values = [(t[0], t[1]) for t in tokens[offset:offset + 4]]
         if existing and len(values) == 4 and values[3][0] == 'binary_operator':
             values[3] = (values[3][0], values[3][1].upper())
-        return values == prefix
+        expected = list(prefix)
+        if not existing and current_settings().get('case', 'keywords') == 'lower':
+            if len(values) == 4 and values[3] == ('binary_operator', 'and'):
+                expected[3] = ('binary_operator', 'and')
+        return values == expected
 
     removed = set()
     for context, (offset, eligible) in original_predicates.items():
@@ -1319,6 +1327,12 @@ def format_sql(source, diagnostics=None):
         else:
             emit_diagnostics(pass_warnings)
 
+    from formatter_modules.profile_layout import apply_profile_layout
+    result, profile_warnings = apply_profile_layout(result, original_source)
+    if diagnostics is not None:
+        diagnostics.extend(profile_warnings)
+    else:
+        emit_diagnostics(profile_warnings)
     validate_sql_unchanged(original_source, result)
 
     result = normalize_case(result.rstrip("\n") + "\n")

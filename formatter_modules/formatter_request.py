@@ -40,12 +40,13 @@ def request_scope(function):
     return call
 
 
-def proof_memo(config_path):
-    """Cache only successful value results for exact SQL + exact config bytes.
+def proof_memo(config_path=None):
+    """Cache successful values for exact SQL + immutable effective settings.
 
     Caller results are defensive copies, including the first return. Source
     text and CR/LF are never canonicalized in a key. No cross-request retention.
-    config_path is resolved lazily so test overrides and file edits invalidate.
+    Optional config_path adds a lazy file namespace for standalone consumers;
+    production uses only the resolved policy fingerprint, without file reads.
     """
     def decorate(function):
         @wraps(function)
@@ -55,8 +56,10 @@ def proof_memo(config_path):
                     or len(source) > _MAX_ENTRY_CHARS):
                 return function(source)
             try:
-                path = config_path()
-                key = (function, str(path.resolve()), path.read_bytes(), source)
+                from formatter_modules.formatter_config import current_settings
+                path = config_path() if config_path is not None else None
+                namespace = (str(path.resolve()), path.read_bytes()) if path is not None else ()
+                key = (function, namespace, current_settings().fingerprint, source)
             except OSError:
                 # Fingerprinting is optional work: preserve the original
                 # loader's success/failure semantics (including its cache).

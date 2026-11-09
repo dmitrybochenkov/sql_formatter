@@ -1,9 +1,9 @@
 """SQLFluff CP01–CP05 proposals, applied only through the atomic edit planner."""
-from sqlfluff.core import FluffConfig, Linter
+from sqlfluff.core import Linter
 
 from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans
-from formatter_modules.formatter_runtime import CONFIG_PATH, SourceMap
+from formatter_modules.formatter_runtime import SourceMap
 from formatter_modules.formatter_dialect import select_config
 
 from formatter_modules.formatter_request import proof_memo
@@ -31,17 +31,18 @@ def _tokens(tree):
     return result
 
 
-@proof_memo(lambda: CONFIG_PATH)
+@proof_memo()
 def normalize_case(source):
-    config = FluffConfig.from_path(
-        str(CONFIG_PATH.parent), extra_config_path=str(CONFIG_PATH),
-        ignore_local_config=True, overrides={
-            'dialect': 'teradata', 'templater': 'raw', 'rules': ','.join(RULES),
-            'exclude_rules': '', 'disable_noqa': True})
+    from formatter_modules.sqlfluff_config_adapter import build_config, active_rules, RULE_SETTINGS
+    from formatter_modules.formatter_config import current_settings
+    enabled = active_rules()
+    if not enabled:
+        return source
+    config = build_config(case=True)
     config = select_config(source, config)
     linter = Linter(config=config)
     pack = linter.get_rulepack()
-    if {r.code for r in pack.rules} != set(RULES):
+    if {r.code for r in pack.rules} != set(enabled):
         raise ValueError('Unexpected case rule pack')
     mapping = SourceMap.build(source)
     def parse(text):
@@ -58,7 +59,7 @@ def normalize_case(source):
     edits = {}
     for violation in linted.violations:
         code = violation.rule_code()
-        if code not in RULES:
+        if code not in enabled:
             raise ValueError('Unexpected case diagnostic')
         for fix in violation.fixes:
             anchor = fix.anchor
@@ -66,7 +67,8 @@ def normalize_case(source):
             old = mapping.normalized[span]
             replacement = ''.join(segment.raw for segment in fix.edit)
             leaf = leaves.get((span.start, span.stop))
-            target = old.lower() if code == 'CP02' else old.upper()
+            policy = current_settings().get('case', RULE_SETTINGS[code][0])
+            target = old.lower() if policy == 'lower' else old.upper()
             if (fix.edit_type != 'replace' or anchor.segments or not leaf
                     or leaf[0][-1] != anchor.get_type()
                     or leaf[1] != old or anchor.raw != old or replacement != target

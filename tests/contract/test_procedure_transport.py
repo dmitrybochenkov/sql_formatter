@@ -45,7 +45,7 @@ class ProcedureTransportTests(unittest.TestCase):
         raw=b'\xef\xbb\xbf'+SIMPLE_INPUT.encode()
         for profile in ('personal','corporate','cancel'):
             path.write_bytes(raw)
-            result=subprocess.run(adapter_command(ROOT/'dbeaver_adapter.py',path,profile),
+            result=subprocess.run(adapter_command(ROOT/'dbeaver_adapter.py',path,profile,interactive=True),
                 cwd=self.base,env=self.env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30)
             self.assertEqual(result.returncode,0)
             self.assertEqual(result.stdout,raw if profile=='cancel' else b'\xef\xbb\xbf'+SIMPLE_EXPECTED.encode())

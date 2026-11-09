@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from sqlfluff.core import FluffConfig, Linter
+from sqlfluff.core import Linter
 
 from formatter_modules.formatter_edits import Edit, apply_edits, plan_edits
 from formatter_modules.formatter_protection import protected_spans
@@ -12,10 +12,8 @@ CONFIG_PATH = Path(__file__).resolve().parent.parent / '.sqlfluff'
 
 
 def project_config():
-    # ignore_local_config disables home/appdir, cwd and ancestor discovery.
-    return FluffConfig.from_path(
-        str(CONFIG_PATH.parent), extra_config_path=str(CONFIG_PATH),
-        ignore_local_config=True, overrides={'dialect': 'teradata', 'templater': 'raw'})
+    from formatter_modules.sqlfluff_config_adapter import build_config
+    return build_config()
 
 
 @dataclass(frozen=True)

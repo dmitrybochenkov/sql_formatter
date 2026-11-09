@@ -74,3 +74,19 @@ def select_profile():
                 root.destroy()
             except tk.TclError:
                 pass
+
+
+def show_profile_notice(message):
+    """Explicit modal acknowledgement; successful return permits state commit."""
+    import tkinter as tk
+    from tkinter import messagebox
+    root = None
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        messagebox.showinfo('SQL Formatter — Personal', message, parent=root)
+        return True
+    finally:
+        if root is not None:
+            root.destroy()
