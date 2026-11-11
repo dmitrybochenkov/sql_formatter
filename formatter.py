@@ -1336,6 +1336,12 @@ def format_sql(source, diagnostics=None):
     validate_sql_unchanged(original_source, result)
 
     result = normalize_case(result.rstrip("\n") + "\n")
+    from formatter_modules.parenthesized_lists import format_parenthesized_lists
+    result, list_warnings = format_parenthesized_lists(result)
+    if diagnostics is not None:
+        diagnostics.extend(list_warnings)
+    else:
+        emit_diagnostics(list_warnings)
     validate_sql_unchanged(original_source, result)
     return result
 

@@ -189,7 +189,8 @@ def format_procedure(source, format_dml, validate, diagnostics, *, _checking=Fal
 
         def dml(node, level):
             ds = []
-            with stage('dml', node=node):
+            from formatter_modules.parenthesized_lists import procedural_list_indent
+            with stage('dml', node=node), procedural_list_indent(level):
                 candidate = format_dml(local_dml_fragment(source, node) + ';', diagnostics=ds)
             for diagnostic in ds:
                 event('dml', diagnostic.code, node=node)

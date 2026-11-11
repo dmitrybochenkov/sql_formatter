@@ -60,3 +60,15 @@ layout = "multiline"
 [profile_selector]
 # Corporate: 3 (служебный default; без Personal окно не открывается)
 timeout_seconds = 3
+
+# Необязательная новая настройка B10.6. Пока строки ниже закомментированы,
+# сохраняется прежняя раскладка Corporate (новый default ещё не утверждён).
+# Раскомментируйте раздел и mode для явного выбора Personal.
+# single_line — одна строка без soft limit; multiline — элемент на строку;
+# adaptive — упаковка целых простых элементов, ведущие запятые на новых строках.
+# Комментарии/сложные выражения требуют безопасной структурной формы.
+# IN (SELECT ...) всегда остаётся подзапросом. Аргументы функций не затрагиваются.
+# max_line_length: целое 20–1000, default 100; учитывается только adaptive.
+# [layout.parenthesized_lists]
+# mode = "adaptive"
+# max_line_length = 100

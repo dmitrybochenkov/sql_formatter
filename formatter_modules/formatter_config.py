@@ -64,7 +64,7 @@ def validate(data):
         raise ConfigurationError('Personal: требуется таблица TOML')
     if type(data.get('schema_version')) is not int or data['schema_version'] != 1:
         raise ConfigurationError('schema_version: требуется целое число 1')
-    unknown = set(data) - set(PERSONAL_DEFAULTS) - {'schema_version', 'profile_selector'}
+    unknown = set(data) - set(PERSONAL_DEFAULTS) - {'schema_version', 'profile_selector', 'layout'}
     if unknown:
         raise ConfigurationError('Personal: неизвестный раздел')
     result = []
@@ -95,6 +95,20 @@ def validate(data):
                     raise ConfigurationError(name + ': допустимы ' + ', '.join(choices))
             values.append((key, value))
         result.append((section, tuple(sorted(values))))
+    layout = data.get('layout', {})
+    if not isinstance(layout, dict) or set(layout) - {'parenthesized_lists'}:
+        raise ConfigurationError('[layout]: неизвестный параметр или неверный тип')
+    lists = layout.get('parenthesized_lists', {})
+    if not isinstance(lists, dict) or set(lists) - {'mode', 'max_line_length'}:
+        raise ConfigurationError('[layout.parenthesized_lists]: неверные параметры')
+    mode = lists.get('mode')
+    if 'mode' in lists and (type(mode) is not str or mode not in ('single_line', 'multiline', 'adaptive')):
+        raise ConfigurationError('parenthesized_lists.mode: single_line, multiline или adaptive')
+    limit = lists.get('max_line_length', 100)
+    if type(limit) is not int or not 20 <= limit <= 1000:
+        raise ConfigurationError('parenthesized_lists.max_line_length: целое число от 20 до 1000')
+    # None is an internal compatibility sentinel, never a fourth public mode.
+    result.append(('parenthesized_lists', (('max_line_length', limit if mode == 'adaptive' else 100), ('mode', mode))))
     selector = data.get('profile_selector', {})
     if not isinstance(selector, dict) or set(selector) - {'timeout_seconds'}:
         raise ConfigurationError('[profile_selector]: неизвестный параметр или неверный тип')
