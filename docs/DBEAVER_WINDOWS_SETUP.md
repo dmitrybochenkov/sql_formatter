@@ -1,6 +1,6 @@
 # Установка и DBeaver на Windows VDI
 
-Автоматизированные проверки выполнены на macOS, Python 3.10.21 и 3.12.8, SQLFluff 4.4.0: 430 tests / 778 subtests PASS на каждой версии. Реальная Windows/VDI и интерактивный DBeaver пока не приняты. Проверить шаги на копии SQL; [границы гарантий](FORMATTER_CONTRACT.md#интеграция-ошибки-и-диагностика) относятся и к корпоративной среде.
+Автоматизированные проверки выполнены на macOS, Python 3.10.21 и 3.12.8, SQLFluff 4.4.0: 541 tests / 777 subtests PASS на каждой версии. Реальная Windows/VDI и интерактивный DBeaver пока не приняты. Проверить шаги на копии SQL; [границы гарантий](FORMATTER_CONTRACT.md#интеграция-ошибки-и-диагностика) относятся и к корпоративной среде.
 
 ## Python, зависимости и файлы
 
@@ -194,3 +194,63 @@ set "SQL_FORMATTER_LOG_DIR="
 Personal по умолчанию отсутствует. Для настройки скопируйте `config_templates/personal.example.toml` через Проводник в `%LOCALAPPDATA%\SQLFormatter\personal.toml`; подробные шаги без терминала — [здесь](USER_CONFIGURATION.md). Не редактируйте шаблон в общей папке: он не применяется. Состояние уведомлений локальное, рядом с Personal. Если LOCALAPPDATA отсутствует или относительный, применяется Corporate без fallback и без предупреждения об отсутствии Personal.
 
 Проверьте два разных пользователя: изменения одного не влияют на другого. Также проверьте изменение → ошибка → исправление → удаление, повторный вызов, недоступный локальный каталог, пути с пробелами и msvcrt-lock при параллельных вызовах. Не переносите личный TOML в ZIP исходного проекта.
+
+## B10.6: PowerShell 5.1, Python 3.10 и UTF-8
+
+В локальном каталоге установки/окружения (не создавать venv на общей UNC-папке):
+
+```powershell
+py -0p
+python --version
+py -3.10 -m venv .venv
+# Альтернатива при выбранном правильном python.exe:
+# python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+# Необязательная активация:
+.\.venv\Scripts\Activate.ps1
+```
+
+Если исходники на сетевой папке, передайте полный UNC-путь к requirements.txt.
+При запрещённых скриптах активация не нужна: вызывайте python.exe из venv напрямую.
+Unix-команды `python3` и `.venv/bin/python` к Windows не относятся.
+
+В DBeaver: **Formatter = External**, **Use temp file = включено**,
+**Exec timeout = 10000 ms** для начальной проверки коротких SQL. Команда:
+
+```text
+"C:\path\to\sql_formatter\.venv\Scripts\python.exe" "C:\path\to\sql_formatter\dbeaver_adapter.py" "${file}"
+```
+
+При общем исходном коде второй путь заменяется UNC-путём; Python/venv локальные.
+Без Use temp file адаптер не получает исходные байты, и не может вернуть их
+редактору. DBeaver может заменить текст пустым выводом даже при ненулевом exit code.
+Это **неподдерживаемая конфигурация**, не используйте её. При штатной передаче
+читаемого файла ошибки форматирования возвращают именно исходные байты.
+Файл не перезаписывается. Ошибки до чтения или принудительное завершение процесса
+не позволяют гарантировать возврат SQL; ручную проверку делайте на копии.
+
+CLI явно выдаёт stdout и stderr в UTF-8, без настройки потоков при импорте.
+Для чтения traceback в интерактивной PowerShell 5.1 согласуйте кодировку терминала:
+
+```powershell
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+$OutputEncoding = [Console]::OutputEncoding
+$env:PYTHONIOENCODING = 'utf-8'
+.\.venv\Scripts\python.exe formatter.py .\sample.sql
+```
+
+Не используйте `>`/`Out-File` для побайтной проверки SQL: Windows PowerShell 5.1
+может перекодировать результат в UTF-16LE. См. [Microsoft: Character Encoding](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding?view=powershell-5.1).
+Проверенный автоматическими тестами способ диагностики без зависимости от консоли:
+
+```powershell
+.\.venv\Scripts\python.exe tools\diagnose_formatter.py .\sample.sql corporate "$env:LOCALAPPDATA\SQLFormatter\logs"
+Get-Content -LiteralPath "$env:LOCALAPPDATA\SQLFormatter\logs\diagnostic.jsonl" -Encoding UTF8
+```
+
+Журнал UTF-8 содержит JSON с ASCII-совместимыми кодами, этапом, типом ошибки,
+типом сегмента, строкой/позицией/смещением для найденного unparsable. Полный SQL,
+имена, литералы и проблемный фрагмент не записываются ради конфиденциальности.
+Исключения CLI не подавляются; DBeaver по-прежнему получает только SQL.
+Реальная отрисовка PowerShell 5.1, Windows/Tk focus, UNC и конкретная версия
+DBeaver требуют ручной приёмки; subprocess-тесты на macOS это не заменяют.

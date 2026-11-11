@@ -7,11 +7,22 @@
 - [Установка и подключение к DBeaver на Windows](docs/DBEAVER_WINDOWS_SETUP.md)
 - [Roadmap и статус ручной приёмки](docs/ROADMAP.md)
 
-Проверенные автоматизированные среды: Python 3.10.21 и 3.12.8 на macOS; на каждой 430 tests / 778 subtests PASS. Ручная приёмка Windows/VDI остаётся открытой.
+Проверенные автоматизированные среды: Python 3.10.21 и 3.12.8 на macOS; на каждой 541 tests / 777 subtests PASS. Ручная приёмка Windows/VDI остаётся открытой.
 
 ## Запуск
 
-Требуется Python 3.10+ (целевая версия 3.12). Создать локальное окружение и установить `requirements.txt` (на Windows использовать `.venv\Scripts\python.exe` вместо `.venv/bin/python`):
+Требуется Python 3.10+ (целевая версия 3.12). Создать локальное окружение и установить `requirements.txt`. Windows / PowerShell:
+
+```powershell
+py -0p
+python --version
+py -3.10 -m venv .venv
+# Альтернатива: python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe formatter.py input.sql
+```
+
+macOS/Linux:
 
 ```sh
 python3 -m venv .venv
@@ -23,7 +34,7 @@ python3 -m venv .venv
 
 ## Тесты
 
-В dev-окружении нужен pytest (он не является runtime-зависимостью). Из корня проекта:
+В dev-окружении нужен pytest (он не является runtime-зависимостью). Windows: `.\.venv\Scripts\python.exe -m pytest tests -q`. macOS/Linux из корня проекта:
 
 ```sh
 .venv/bin/python -B -m pytest tests -q
@@ -32,3 +43,5 @@ python3 -m venv .venv
 Не добавлять приватные SQL-файлы в репозиторий. Исторические отчёты сохранены в `docs/archive/`; актуальные правила находятся в трёх документах выше.
 
 Именованные bind-параметры Teradata `:Calc_Date` распознаются локальным расширением AST и сохраняют исходное написание. При валидных отличиях Personal появляется одно окно: `1` Personal, `2` Corporate; таймер (default 3 с) автоматически выбирает Personal, Esc отменяет. См. [ручную проверку](tests/manual/README.md).
+
+B10.6 добавляет явные Personal-режимы IN/VALUES (`single_line`, `multiline`, `adaptive`) и сохраняет Unicode-идентификаторы. Corporate без новой настройки остаётся прежним. См. [настройки](docs/USER_CONFIGURATION.md) и [Windows/UTF-8](docs/DBEAVER_WINDOWS_SETUP.md).

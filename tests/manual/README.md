@@ -36,3 +36,21 @@
 `C:\Temp\synthetic.sql` — локальная копия `tests/manual/input.sql`; не сохраняйте приватные образцы в репозитории. Для проверки Personal замените только аргумент профиля. Инструмент headless, stdout/stderr пусты; trace содержит этап/код/type/позицию AST и elapsed_ms, без SQL, имён, значений и путей. Для parse error координата указывает начало `unparsable`-сегмента, а не обязательно отдельный ошибочный символ. Включение trace не меняет rollback.
 
 Зафиксируйте версии Python/SQLFluff/DBeaver, профиль, timeout, elapsed и PASS/FAIL. Отдельно измерьте время CLI, headless диагностики и Ctrl+Shift+F с таймером. Реальный SQL и персональные пути в отчёт не включайте.
+
+## B10.6: списки и Unicode
+
+1. External / Use temp file включено / UTF-8 / Exec timeout 10000 ms.
+2. Без Personal проверить `SELECT COUNT(id) AS Количество FROM events;`:
+   алиас сохраняется, второй вызов идентичен первому.
+3. В локальном Personal раскомментировать `[layout.parenthesized_lists]`,
+   по очереди single_line / multiline / adaptive с max_line_length=40.
+   Пример: `SELECT id FROM events WHERE id IN (1,2,3,4,5,6,7,8,9,10);`.
+4. Проверить NOT IN и `INSERT INTO target VALUES (1,'a'),(2,'b');`, комментарий
+   между элементами и `IN (SELECT id FROM other)`. Подзапрос остаётся подзапросом.
+5. Personal отличается — селектор появляется; 1 выбирает новый режим, 2 сохраняет
+   Corporate, Esc/крестик возвращают исходные байты. Проверить таймер и повторный вызов.
+6. На копии ошибочного SQL проверить fail-safe и UTF-8-журнал по инструкции Windows.
+   Не выключать Use temp file: это не поддерживаемый stdin-транспорт.
+
+Python/venv локальные, исходники могут находиться на UNC. Реальная Windows,
+PowerShell 5.1, фокус Tk и DBeaver требуют ручного подтверждения.
