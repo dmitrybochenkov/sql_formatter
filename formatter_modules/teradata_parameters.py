@@ -3,6 +3,8 @@ from sqlfluff.core.parser import CodeSegment, Ref, RegexLexer, Sequence, TypedPa
 
 
 def add_named_parameters(dialect):
+    from formatter_modules.teradata_unicode import add_unicode_identifiers
+    add_unicode_identifiers(dialect)
     # Runs after quote/comment/casting lexers, before the bare colon fallback.
     # A bind is one indivisible token; CP02 cannot treat its name as an identifier.
     dialect.insert_lexer_matchers([

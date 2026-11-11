@@ -87,8 +87,12 @@ class B8CaseTests(unittest.TestCase):
         # Preserve it instead of guessing classification from its spelling.
         self.check_case('select DB.MyFunc(T.ID) as RESULT from DB.T T;',
                         'SELECT DB.MyFunc(t.id) AS result FROM db.t t;')
-        # Lowercasing U+0130 expands to two code points; never guess coordinates.
-        for source in ('SELECT İ FROM T;', 'select from;'):
+        # B10.6 preserves Unicode identifiers exactly, including U+0130.
+        # No expanding CP02 replacement is authorized.
+        self.assertEqual(normalize_case('SELECT İ FROM T;'), 'SELECT İ FROM t;')
+        with self.assertRaises(ValueError):
+            validate_sql_unchanged('SELECT İ FROM T;', 'SELECT i\u0307 FROM t;')
+        for source in ('select from;',):
             with self.subTest(source=source), self.assertRaises(ValueError):
                 normalize_case(source)
             self.assertEqual(format_bytes(source.encode()), source.encode())

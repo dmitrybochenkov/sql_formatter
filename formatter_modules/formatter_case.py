@@ -65,6 +65,9 @@ def normalize_case(source):
             anchor = fix.anchor
             span = anchor.pos_marker.source_slice
             old = mapping.normalized[span]
+            # Unicode identifiers retain exact spelling, including mixed ASCII.
+            if not old.isascii() and anchor.is_type('naked_identifier', 'function_name_identifier'):
+                continue
             replacement = ''.join(segment.raw for segment in fix.edit)
             leaf = leaves.get((span.start, span.stop))
             policy = current_settings().get('case', RULE_SETTINGS[code][0])
